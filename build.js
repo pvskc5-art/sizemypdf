@@ -7,6 +7,24 @@
 
 const fs = require('fs');
 const path = require('path');
+const crypto = require('crypto');
+
+/* Cache busting. Cloudflare serves our CSS and JS with max-age=14400, and that
+   applies to the visitor's own browser too - so after an update a returning
+   visitor kept the old stylesheet for up to four hours, with new markup and
+   old rules. Purging Cloudflare does not fix that; only a different URL does.
+   Every local asset reference therefore carries a hash of its own contents,
+   which changes exactly when the file does. */
+function ver(rel) {
+  try {
+    const h = crypto.createHash('sha1')
+      .update(fs.readFileSync(path.join(__dirname, rel)))
+      .digest('hex').slice(0, 8);
+    return `${rel}?v=${h}`;
+  } catch (e) {
+    return rel;   // asset missing at build time - emit the plain path
+  }
+}
 
 const SITE = 'https://sizemypdf.com';
 const NAME = 'SizeMyPDF';
@@ -59,7 +77,7 @@ ${p.noindex
 <link rel="manifest" href="site.webmanifest">
 <meta name="theme-color" content="#2f6df6">
 ${(p.scripts || []).some(s => s.indexOf('cdnjs') === 0 || s.indexOf('https://cdnjs') === 0)
-  ? '<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>\n' : ''}<link rel="stylesheet" href="css/style.css">
+  ? '<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>\n' : ''}<link rel="stylesheet" href="${ver('css/style.css')}">
 ${p.faq ? faqSchema(p.faq) : ''}${p.breadcrumb === false ? '' : crumbSchema(p)}
 </head>
 <body>
@@ -98,9 +116,11 @@ const foot = (p) => `
 </footer>
 ${(p.scripts || []).map(s => {
   const sri = SRI[s];
-  return sri
-    ? `<script src="${s}" integrity="${sri}" crossorigin="anonymous" referrerpolicy="no-referrer"></script>`
-    : `<script src="${s}"></script>`;
+  if (sri) {
+    return `<script src="${s}" integrity="${sri}" crossorigin="anonymous" referrerpolicy="no-referrer"></script>`;
+  }
+  // local script: version it so an update is picked up immediately
+  return `<script src="${s.indexOf('http') === 0 ? s : ver(s)}"></script>`;
 }).join('\n')}
 <script>document.getElementById('yr').textContent=new Date().getFullYear()</script>
 </body>
@@ -729,6 +749,22 @@ for (const p of pages) {
   fs.writeFileSync(path.join(root, p.slug), head(p) + p.body + foot(p), 'utf8');
   written++;
   console.log('  wrote ' + p.slug);
+}
+
+/* index.html is hand-written rather than generated, but its local asset
+   references still need the cache-busting version stamp, so rewrite them in
+   place. Matches an existing ?v= stamp too, so rebuilds stay idempotent. */
+{
+  const p = path.join(root, 'index.html');
+  let html = fs.readFileSync(p, 'utf8');
+  let changed = 0;
+  for (const asset of ['css/style.css', 'js/app.js']) {
+    const re = new RegExp(asset.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '(\\?v=[a-f0-9]+)?', 'g');
+    const next = html.replace(re, () => { changed++; return ver(asset); });
+    html = next;
+  }
+  fs.writeFileSync(p, html, 'utf8');
+  console.log('  stamped index.html (' + changed + ' asset refs)');
 }
 
 /* sitemap - index first, then generated pages, excluding noindex */

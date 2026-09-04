@@ -18,7 +18,7 @@ const POLICY_UPDATED = '4 September 2026';
 
 /* Public contact address. AdSense requires a working one, and it must be
    reachable - review does send mail to it. */
-const CONTACT_EMAIL = 'REPLACE-WITH-YOUR-EMAIL@example.com';
+const CONTACT_EMAIL = 'hello@sizemypdf.com';
 
 /* ------------------------------------------------------------------ shell */
 

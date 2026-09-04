@@ -20,6 +20,18 @@ const POLICY_UPDATED = '4 September 2026';
    reachable - review does send mail to it. */
 const CONTACT_EMAIL = 'hello@sizemypdf.com';
 
+/* Subresource Integrity for the CDN libraries. Dependabot cannot help here -
+   these come from a CDN, not from npm - so pinning the exact bytes is the only
+   thing standing between a compromised CDN and arbitrary code running against
+   documents in a visitor's browser. Recompute if a version is ever bumped:
+     curl -s <url> | openssl dgst -sha384 -binary | openssl base64 -A          */
+const SRI = {
+  'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js':
+    'sha384-/1qUCSGwTur9vjf/z9lmu/eCUYbpOTgSjmpbMQZ1/CtX2v/WcAIKqRv+U1DUCG6e',
+  'https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js':
+    'sha384-weMABwrltA6jWR8DDe9Jp5blk+tZQh7ugpCsF3JwSA53WZM9/14PjS5LAJNHNjAI'
+};
+
 /* ------------------------------------------------------------------ shell */
 
 const head = (p) => `<!doctype html>
@@ -84,7 +96,12 @@ const foot = (p) => `
     <div class="copy">&copy; <span id="yr">2026</span> ${NAME} &middot; Files are processed in your browser and never uploaded.</div>
   </div>
 </footer>
-${(p.scripts || []).map(s => `<script src="${s}"></script>`).join('\n')}
+${(p.scripts || []).map(s => {
+  const sri = SRI[s];
+  return sri
+    ? `<script src="${s}" integrity="${sri}" crossorigin="anonymous" referrerpolicy="no-referrer"></script>`
+    : `<script src="${s}"></script>`;
+}).join('\n')}
 <script>document.getElementById('yr').textContent=new Date().getFullYear()</script>
 </body>
 </html>

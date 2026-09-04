@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>About SizeMyPDF</title>
+<meta name="description" content="Who runs SizeMyPDF, why it processes files in the browser, and how the site is funded.">
+<link rel="canonical" href="https://sizemypdf.com/about.html">
+<meta property="og:title" content="About SizeMyPDF">
+<meta property="og:description" content="Who runs SizeMyPDF, why it processes files in the browser, and how the site is funded.">
+<meta property="og:url" content="https://sizemypdf.com/about.html">
+<meta property="og:type" content="article">
+<link rel="stylesheet" href="/css/style.css">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://sizemypdf.com/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "About SizeMyPDF",
+      "item": "https://sizemypdf.com/about.html"
+    }
+  ]
+}
+</script>
+
+</head>
+<body>
+
+<header class="site">
+  <div class="wrap">
+    <a class="logo" href="/">Size<span>My</span>PDF</a>
+    <nav class="main">
+      <a href="/compress-pdf-to-100kb.html">100&nbsp;KB</a>
+      <a href="/compress-pdf-to-200kb.html">200&nbsp;KB</a>
+      <a href="/compress-pdf-for-email.html">For email</a>
+      <a href="/about.html">About</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+
+<h1>About SizeMyPDF</h1>
+
+<h2>What this site is</h2>
+<p>SizeMyPDF is a free tool for compressing PDF files to a specific size. It exists because the common case &mdash; "this form will not accept anything over 200 KB" &mdash; is handled badly by most compressors, which offer vague quality sliders instead of the one number you actually care about.</p>
+
+<h2>Why it runs in your browser</h2>
+<p>Every other compressor uploads your document to a server, processes it there, and asks you to trust a privacy policy about what happens next. That is a genuinely bad deal when the document is a passport scan, a bank statement or a signed contract.</p>
+<p>SizeMyPDF does the work on your own device using JavaScript and WebAssembly. There is no upload endpoint. There is no storage bucket. There is no server that could be breached, subpoenaed or sold, because there is no server in the path at all.</p>
+<p>You do not have to take that on faith. Load the page, disconnect from the internet, and compress a file. It will still work.</p>
+
+<h2>How the site is funded</h2>
+<p>Hosting is paid for by advertising. The ads are clearly marked, kept away from the tool itself, and never disguised as download buttons &mdash; a pattern common on free file-tool sites that this one deliberately avoids.</p>
+<p>There is no premium tier, no account, no file size cap and no watermark, because none of those would make the tool better; they would just make it worse in a way that pressures you to pay.</p>
+
+<h2>Limitations, stated plainly</h2>
+<ul>
+  <li><strong>Target Size mode flattens text.</strong> Guaranteeing a hard byte limit requires converting pages to images. Text stops being selectable. Lossless mode avoids this but cannot promise a specific size.</li>
+  <li><strong>No OCR.</strong> The tool does not add a searchable text layer to scans.</li>
+  <li><strong>Encrypted PDFs are not handled.</strong> Remove the password yourself first; bypassing document encryption is deliberately out of scope.</li>
+  <li><strong>Very large files depend on your device.</strong> There is no server limit, but a 100 MB scan may exhaust memory on a phone.</li>
+</ul>
+
+<h2>Contact</h2>
+<p>Corrections, bug reports and feature requests are welcome via the <a href="/contact.html">contact page</a>.</p>
+
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <nav>
+      <a href="/about.html">About</a>
+      <a href="/contact.html">Contact</a>
+      <a href="/privacy.html">Privacy Policy</a>
+      <a href="/terms.html">Terms</a>
+    </nav>
+    <div class="copy">&copy; <span id="yr">2026</span> SizeMyPDF &middot; Files are processed in your browser and never uploaded.</div>
+  </div>
+</footer>
+<script>document.getElementById('yr').textContent=new Date().getFullYear()</script>
+</body>
+</html>

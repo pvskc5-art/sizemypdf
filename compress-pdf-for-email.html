@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Compress a PDF for Email — Get Under the 25 MB Limit | SizeMyPDF</title>
+<meta name="description" content="Shrink a PDF so it fits an email attachment limit. Covers the real Gmail and Outlook ceilings and the base64 overhead that catches people out. Runs in your browser.">
+<link rel="canonical" href="https://sizemypdf.com/compress-pdf-for-email.html">
+<meta property="og:title" content="Compress a PDF for Email — Get Under the 25 MB Limit | SizeMyPDF">
+<meta property="og:description" content="Shrink a PDF so it fits an email attachment limit. Covers the real Gmail and Outlook ceilings and the base64 overhead that catches people out. Runs in your browser.">
+<meta property="og:url" content="https://sizemypdf.com/compress-pdf-for-email.html">
+<meta property="og:type" content="article">
+<link rel="stylesheet" href="/css/style.css">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What is the Gmail attachment limit?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Gmail allows attachments up to 25 MB. Above that it offers to send a Google Drive link instead. The 25 MB ceiling counts the encoded size, so a file slightly under 25 MB on disk can still be refused."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What is the Outlook attachment limit?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Outlook.com allows 20 MB per message. Microsoft 365 and Exchange accounts default to 25 MB, but many company administrators lower it to 10 MB, which is why a file that sends fine from your personal account can bounce from your work one."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Why was my 24 MB attachment rejected?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Email encodes attachments in base64, which inflates them by roughly 33%. A 24 MB file becomes about 32 MB on the wire. Aim for around 18 MB of actual file to stay safely inside a 25 MB limit."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Should I just use a Drive or Dropbox link instead?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "For anything above about 10 MB, usually yes. It avoids attachment limits entirely, lets you revoke access later, and does not clog the recipient's mailbox. Compression is the better answer when the recipient needs the file itself, such as a form submission or a legal filing."
+      }
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://sizemypdf.com/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Compress a PDF for email",
+      "item": "https://sizemypdf.com/compress-pdf-for-email.html"
+    }
+  ]
+}
+</script>
+
+</head>
+<body>
+
+<header class="site">
+  <div class="wrap">
+    <a class="logo" href="/">Size<span>My</span>PDF</a>
+    <nav class="main">
+      <a href="/compress-pdf-to-100kb.html">100&nbsp;KB</a>
+      <a href="/compress-pdf-to-200kb.html">200&nbsp;KB</a>
+      <a href="/compress-pdf-for-email.html">For email</a>
+      <a href="/about.html">About</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+
+<h1>Compress a PDF for email</h1>
+<p class="lede">Attachment limits are lower than they look, because email inflates every file it carries. Here is what the real ceilings are and how to get under them.</p>
+
+<div class="privacy-badge">&#128274; Your file never leaves this device</div>
+
+<div class="card" style="text-align:center;margin:26px 0">
+  <p style="margin-bottom:14px"><strong>The compressor is on the front page.</strong> Set your target and go &mdash; nothing is uploaded.</p>
+  <a class="btn" href="/">Open the compressor</a>
+</div>
+
+<h2>The limits that actually apply</h2>
+<table>
+  <thead><tr><th>Service</th><th>Stated limit</th><th>Safe file size</th></tr></thead>
+  <tbody>
+    <tr><td>Gmail</td><td>25 MB</td><td>~18 MB</td></tr>
+    <tr><td>Outlook.com</td><td>20 MB</td><td>~14 MB</td></tr>
+    <tr><td>Microsoft 365 / Exchange</td><td>25 MB (often lowered to 10 MB)</td><td>~7 MB</td></tr>
+    <tr><td>Yahoo Mail</td><td>25 MB</td><td>~18 MB</td></tr>
+    <tr><td>Corporate mail servers</td><td>Frequently 10 MB</td><td>~7 MB</td></tr>
+  </tbody>
+</table>
+
+<h2>Why the safe size is lower than the stated limit</h2>
+<p>Email cannot carry raw binary data, so attachments are encoded in base64 before sending. That encoding uses four characters for every three bytes, inflating the attachment by roughly a third. A 24 MB PDF arrives at the mail server as about 32 MB, which is why it bounces against a 25 MB limit that it appears to satisfy.</p>
+<p>There is a second trap: the limit usually applies to the <em>entire message</em>, not each attachment. Three 8 MB files plus a signature image will exceed a 25 MB ceiling even though no single file comes close.</p>
+<p>The practical rule is to target about 70% of the stated limit. For Gmail that means aiming for 18 MB, which is what the safe column above reflects.</p>
+
+<div class="adslot">ad slot &mdash; replace after AdSense approval</div>
+
+<h2>How to compress for email</h2>
+<ol>
+  <li>Work out your recipient's limit, not just your own. Your message has to pass through their server too, and corporate servers are usually the strictest link in the chain.</li>
+  <li>Open the <a href="/">compressor</a> and load your PDF.</li>
+  <li>Set the target in KB &mdash; 18 MB is <strong>18000</strong> KB.</li>
+  <li>Compress, download, and attach the result.</li>
+</ol>
+
+<div class="note"><strong>When compression is the wrong tool:</strong> if the document is a high-resolution scan that the recipient needs to read carefully, squeezing it to fit an attachment limit degrades the thing they actually need. Send a Drive or OneDrive link instead. Compression is for when the file itself must travel.</div>
+
+<h2>Common questions</h2>
+<details><summary>What is the Gmail attachment limit?</summary><p>Gmail allows attachments up to 25 MB. Above that it offers to send a Google Drive link instead. The 25 MB ceiling counts the encoded size, so a file slightly under 25 MB on disk can still be refused.</p></details>
+<details><summary>What is the Outlook attachment limit?</summary><p>Outlook.com allows 20 MB per message. Microsoft 365 and Exchange accounts default to 25 MB, but many company administrators lower it to 10 MB, which is why a file that sends fine from your personal account can bounce from your work one.</p></details>
+<details><summary>Why was my 24 MB attachment rejected?</summary><p>Email encodes attachments in base64, which inflates them by roughly 33%. A 24 MB file becomes about 32 MB on the wire. Aim for around 18 MB of actual file to stay safely inside a 25 MB limit.</p></details>
+<details><summary>Should I just use a Drive or Dropbox link instead?</summary><p>For anything above about 10 MB, usually yes. It avoids attachment limits entirely, lets you revoke access later, and does not clog the recipient's mailbox. Compression is the better answer when the recipient needs the file itself, such as a form submission or a legal filing.</p></details>
+
+<h2>Need a specific size instead?</h2>
+<div class="grid">
+  <a href="/compress-pdf-to-100kb.html"><strong>Compress to 100 KB</strong><small>For exam boards, scholarship portals and older government forms.</small></a>
+  <a href="/compress-pdf-to-200kb.html"><strong>Compress to 200 KB</strong><small>For the majority of government and university upload forms worldwide.</small></a>
+  <a href="/compress-pdf-to-500kb.html"><strong>Compress to 500 KB</strong><small>For job applications, visa portals and document management systems.</small></a>
+</div>
+
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <nav>
+      <a href="/about.html">About</a>
+      <a href="/contact.html">Contact</a>
+      <a href="/privacy.html">Privacy Policy</a>
+      <a href="/terms.html">Terms</a>
+    </nav>
+    <div class="copy">&copy; <span id="yr">2026</span> SizeMyPDF &middot; Files are processed in your browser and never uploaded.</div>
+  </div>
+</footer>
+<script>document.getElementById('yr').textContent=new Date().getFullYear()</script>
+</body>
+</html>

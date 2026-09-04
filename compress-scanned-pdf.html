@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Compress a Scanned PDF Without Losing Legibility | SizeMyPDF</title>
+<meta name="description" content="Scanned PDFs are photographs of paper, which is why they are enormous. Here is how to shrink one without making it unreadable. Runs in your browser, no upload.">
+<link rel="canonical" href="https://sizemypdf.com/compress-scanned-pdf.html">
+<meta property="og:title" content="Compress a Scanned PDF Without Losing Legibility | SizeMyPDF">
+<meta property="og:description" content="Scanned PDFs are photographs of paper, which is why they are enormous. Here is how to shrink one without making it unreadable. Runs in your browser, no upload.">
+<meta property="og:url" content="https://sizemypdf.com/compress-scanned-pdf.html">
+<meta property="og:type" content="article">
+<link rel="stylesheet" href="/css/style.css">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Why is my scanned PDF so large?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "A scan is not text. It is a photograph of text, stored as a full-colour image for every page. A single colour page scanned at 600 DPI can occupy several megabytes on its own, while the same page as real text would be a few kilobytes."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Will compressing a scan make it unreadable?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Not if you stop at a sensible point. Documents stay comfortably legible down to about 150 DPI. Problems appear with small print, fine handwriting and detailed stamps or seals, so check those areas in the output before you submit it."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I make the text in a scan searchable?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "That requires OCR, which is a different operation from compression. This tool does not perform OCR. If you need searchable text, run OCR first, then compress the result in Lossless mode to keep the text layer intact."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Greyscale or colour?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Unless colour carries meaning in your document - a coloured stamp, a signature in blue ink that must be provably not a photocopy - greyscale is almost always the right choice. It removes two of the three colour channels and typically halves the file size."
+      }
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://sizemypdf.com/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Compress a scanned PDF",
+      "item": "https://sizemypdf.com/compress-scanned-pdf.html"
+    }
+  ]
+}
+</script>
+
+</head>
+<body>
+
+<header class="site">
+  <div class="wrap">
+    <a class="logo" href="/">Size<span>My</span>PDF</a>
+    <nav class="main">
+      <a href="/compress-pdf-to-100kb.html">100&nbsp;KB</a>
+      <a href="/compress-pdf-to-200kb.html">200&nbsp;KB</a>
+      <a href="/compress-pdf-for-email.html">For email</a>
+      <a href="/about.html">About</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+
+<h1>Compress a scanned PDF</h1>
+<p class="lede">Scans are where the real savings live &mdash; a 40 MB scanned document can often reach 300 KB and stay perfectly readable. Here is how far you can push it before quality genuinely suffers.</p>
+
+<div class="privacy-badge">&#128274; Your file never leaves this device</div>
+
+<div class="card" style="text-align:center;margin:26px 0">
+  <p style="margin-bottom:14px"><strong>The compressor is on the front page.</strong> Set your target and go &mdash; nothing is uploaded.</p>
+  <a class="btn" href="/">Open the compressor</a>
+</div>
+
+<h2>Why scans are so much bigger than documents</h2>
+<p>When you type a document, the PDF stores your words as text plus a reference to a font. A page of writing costs a few kilobytes. When you scan a document, the PDF stores a photograph of the paper &mdash; millions of individual pixels, most of them describing blank white space in painstaking detail.</p>
+<p>This is why a ten-page typed report might be 80 KB while a ten-page scan of the same report is 40 MB. It is also why scans compress so dramatically: nearly all of those bytes are describing detail that no human reader will ever use.</p>
+
+<h2>The resolution that matters</h2>
+<table>
+  <thead><tr><th>DPI</th><th>Relative size</th><th>Suitable for</th></tr></thead>
+  <tbody>
+    <tr><td>600</td><td>16&times;</td><td>Archival reproduction, fine art</td></tr>
+    <tr><td>300</td><td>4&times;</td><td>Printing, documents with small print</td></tr>
+    <tr><td>150</td><td>1&times;</td><td>Screen reading, form uploads &mdash; the sweet spot</td></tr>
+    <tr><td>72</td><td>0.25&times;</td><td>Thumbnails only; body text starts to break down</td></tr>
+  </tbody>
+</table>
+<p>Most scanners default to 300 or 600 DPI. For a document that will be read on a screen or checked by a clerk, 150 DPI is sufficient and roughly a quarter the size of 300 DPI, because the saving scales with the square of the resolution.</p>
+
+<div class="adslot">ad slot &mdash; replace after AdSense approval</div>
+
+<h2>Getting the best result</h2>
+<ol>
+  <li><strong>Start from the best original you have.</strong> Compressing an already-compressed scan stacks artefacts on top of artefacts. If you still have the source, rescan it in greyscale at 150 DPI and you may not need this tool at all.</li>
+  <li><strong>Use Target size mode.</strong> Lossless mode cannot help with a scan, because a scan is almost entirely image data and Lossless mode deliberately never touches image data.</li>
+  <li><strong>Set a target and check the output.</strong> Zoom into the smallest text, any handwritten signature, and any official stamp. Those three things fail first.</li>
+  <li><strong>Back off if it looks wrong.</strong> If 100 KB turns a signature to mush, try 250 KB. A slightly larger file that a human can actually read is the better outcome.</li>
+</ol>
+
+<div class="note"><strong>A warning about identity documents:</strong> passports, licences and certificates are often rejected for being illegible after over-compression, and some verification systems reject them automatically. For these, compress conservatively and inspect the result at 100% zoom before submitting.</div>
+
+<h2>Common questions</h2>
+<details><summary>Why is my scanned PDF so large?</summary><p>A scan is not text. It is a photograph of text, stored as a full-colour image for every page. A single colour page scanned at 600 DPI can occupy several megabytes on its own, while the same page as real text would be a few kilobytes.</p></details>
+<details><summary>Will compressing a scan make it unreadable?</summary><p>Not if you stop at a sensible point. Documents stay comfortably legible down to about 150 DPI. Problems appear with small print, fine handwriting and detailed stamps or seals, so check those areas in the output before you submit it.</p></details>
+<details><summary>Can I make the text in a scan searchable?</summary><p>That requires OCR, which is a different operation from compression. This tool does not perform OCR. If you need searchable text, run OCR first, then compress the result in Lossless mode to keep the text layer intact.</p></details>
+<details><summary>Greyscale or colour?</summary><p>Unless colour carries meaning in your document - a coloured stamp, a signature in blue ink that must be provably not a photocopy - greyscale is almost always the right choice. It removes two of the three colour channels and typically halves the file size.</p></details>
+
+<h2>Compress to a specific limit</h2>
+<div class="grid">
+  <a href="/compress-pdf-to-100kb.html"><strong>Compress to 100 KB</strong><small>For exam boards, scholarship portals and older government forms.</small></a>
+  <a href="/compress-pdf-to-200kb.html"><strong>Compress to 200 KB</strong><small>For the majority of government and university upload forms worldwide.</small></a>
+  <a href="/compress-pdf-to-500kb.html"><strong>Compress to 500 KB</strong><small>For job applications, visa portals and document management systems.</small></a>
+</div>
+
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <nav>
+      <a href="/about.html">About</a>
+      <a href="/contact.html">Contact</a>
+      <a href="/privacy.html">Privacy Policy</a>
+      <a href="/terms.html">Terms</a>
+    </nav>
+    <div class="copy">&copy; <span id="yr">2026</span> SizeMyPDF &middot; Files are processed in your browser and never uploaded.</div>
+  </div>
+</footer>
+<script>document.getElementById('yr').textContent=new Date().getFullYear()</script>
+</body>
+</html>

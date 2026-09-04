@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Compress PDF to an Exact File Size (KB) — Free, In Your Browser | SizeMyPDF</title>
+<meta name="description" content="Compress a PDF to an exact target size in KB — 100KB, 200KB, 500KB or any number you type. Runs entirely in your browser, so your file is never uploaded. Free, no signup, no watermark.">
+<link rel="canonical" href="https://sizemypdf.com/">
+<meta property="og:title" content="Compress PDF to an Exact File Size (KB) — Free">
+<meta property="og:description" content="Type the size you need. Get a PDF under it. Nothing is uploaded.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://sizemypdf.com/">
+<link rel="stylesheet" href="/css/style.css">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "SizeMyPDF",
+  "url": "https://sizemypdf.com/",
+  "applicationCategory": "UtilitiesApplication",
+  "operatingSystem": "Any (web browser)",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+  "description": "Compress a PDF to an exact target file size in KB, entirely inside the browser."
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    { "@type": "Question", "name": "Is my PDF uploaded to a server?",
+      "acceptedAnswer": { "@type": "Answer", "text": "No. The compression runs in your own browser using JavaScript and WebAssembly. Your file never leaves your device, which is why the tool still works if you disconnect from the internet after the page loads." } },
+    { "@type": "Question", "name": "Can I compress a PDF to exactly 200KB?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Yes. Type 200 into the target size box. The tool searches image scale and JPEG quality settings until the output fits under your target, then gives you the highest-quality version that still fits." } },
+    { "@type": "Question", "name": "Will the text still be selectable after compression?",
+      "acceptedAnswer": { "@type": "Answer", "text": "In Target Size mode, no. Pages are rasterised into images to hit a hard size limit, so text becomes part of the picture. If you need selectable text, use Lossless mode instead, which keeps the document structure but saves less space." } },
+    { "@type": "Question", "name": "Is there a file size limit?",
+      "acceptedAnswer": { "@type": "Answer", "text": "There is no server limit because there is no server. The practical limit is your device's memory. Files up to about 50MB are comfortable on a typical laptop; very large scanned documents may be slow on older phones." } }
+  ]
+}
+</script>
+</head>
+<body>
+
+<header class="site">
+  <div class="wrap">
+    <a class="logo" href="/">Size<span>My</span>PDF</a>
+    <nav class="main">
+      <a href="/compress-pdf-to-100kb.html">100&nbsp;KB</a>
+      <a href="/compress-pdf-to-200kb.html">200&nbsp;KB</a>
+      <a href="/compress-pdf-for-email.html">For email</a>
+      <a href="/about.html">About</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <h1>Compress a PDF to an exact file size</h1>
+  <p class="lede">Type the number of kilobytes you are allowed. Get a PDF that fits under it. No upload, no signup, no watermark.</p>
+
+  <div class="privacy-badge">🔒 Your file never leaves this device</div>
+
+  <div class="tool">
+    <div class="drop" id="drop">
+      <strong>Choose a PDF or drop it here</strong>
+      <small>Nothing is uploaded — processing happens in your browser</small>
+    </div>
+    <input type="file" id="file" accept="application/pdf,.pdf">
+
+    <div class="controls" id="controls">
+      <div class="row">
+        <div class="field">
+          <label for="mode">Method</label>
+          <select id="mode">
+            <option value="target">Target size — hit an exact KB limit</option>
+            <option value="lossless">Lossless — keep text selectable</option>
+          </select>
+        </div>
+        <div class="field" id="targetField">
+          <label for="target">Target size (KB)</label>
+          <input type="number" id="target" min="10" step="10" placeholder="200">
+        </div>
+        <div>
+          <button class="btn" id="go">Compress</button>
+        </div>
+      </div>
+
+      <div class="bar" id="bar"><i id="barFill"></i></div>
+      <div class="status" id="status"></div>
+
+      <div class="result" id="result">
+        <div class="big" id="rBig"></div>
+        <div class="meta" id="rMeta"></div>
+        <button class="btn" id="dl">Download PDF</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="adslot">ad slot — replace after AdSense approval</div>
+
+  <h2>Why an exact size, and not just "smaller"?</h2>
+  <p>Most compressors give you a slider labelled low, medium and high, then hand back whatever size happens to come out. That is fine when you just want a smaller email attachment. It is useless when a form tells you the upload must be <strong>under 200 KB</strong> and rejects 214 KB without explanation.</p>
+  <p>Government portals, university applications, visa systems and job boards all enforce hard limits like this. Guessing at a quality slider and re-checking the file size in your file manager is a miserable loop. This tool closes the loop for you: it repeatedly re-encodes the document, measuring the real output size each time, and returns the best-looking version that still fits under the number you typed.</p>
+
+  <h2>How it works</h2>
+  <ol>
+    <li>The PDF is read into memory in your browser. It is never transmitted anywhere.</li>
+    <li>Each page is rendered to a canvas at a chosen resolution.</li>
+    <li>Pages are re-encoded as JPEG images and reassembled into a new PDF.</li>
+    <li>The tool binary-searches the quality setting, and steps the resolution down if needed, until the result fits under your target.</li>
+    <li>You get the highest quality version that fits — not just the first one that happens to be small enough.</li>
+  </ol>
+
+  <div class="note"><strong>Trade-off worth understanding:</strong> Target Size mode converts pages to images, so text stops being selectable or searchable. That is the only way to guarantee a hard size ceiling. If you need the text layer preserved, pick Lossless mode — it strips metadata and repacks the file structure, which typically saves 5–25% and never touches quality.</div>
+
+  <h2>Pick your target</h2>
+  <div class="grid">
+    <a href="/compress-pdf-to-100kb.html"><strong>Compress to 100 KB</strong><small>The tightest limit most forms use. Realistic for text documents up to a few pages.</small></a>
+    <a href="/compress-pdf-to-200kb.html"><strong>Compress to 200 KB</strong><small>The most common government upload limit worldwide.</small></a>
+    <a href="/compress-pdf-for-email.html"><strong>Compress for email</strong><small>Get under the 25 MB Gmail and Outlook attachment ceiling.</small></a>
+    <a href="/compress-scanned-pdf.html"><strong>Compress a scanned PDF</strong><small>Scans are mostly photographs — where the biggest savings hide.</small></a>
+  </div>
+
+  <h2>What size should I aim for?</h2>
+  <table>
+    <thead><tr><th>Situation</th><th>Typical limit</th><th>Realistic for</th></tr></thead>
+    <tbody>
+      <tr><td>Government / exam form upload</td><td>100–300 KB</td><td>1–5 text pages</td></tr>
+      <tr><td>University application</td><td>500 KB – 2 MB</td><td>10–30 pages</td></tr>
+      <tr><td>Gmail / Outlook attachment</td><td>25 MB</td><td>Almost anything</td></tr>
+      <tr><td>Web upload / contact form</td><td>2–5 MB</td><td>Most scanned documents</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Questions people actually ask</h2>
+
+  <details><summary>Is my PDF uploaded anywhere?</summary>
+    <p>No. Everything runs in your browser. You can verify it yourself: load this page, turn off your Wi-Fi, and compress a file. It still works, because there is nothing to talk to.</p></details>
+
+  <details><summary>Why did my file only shrink a little?</summary>
+    <p>You were probably in Lossless mode, which cannot touch image data. A PDF that is mostly scanned photographs is nearly all image bytes, and the only way to make it meaningfully smaller is to re-encode those images — which is what Target Size mode does.</p></details>
+
+  <details><summary>Why can it not reach my target?</summary>
+    <p>A 400-page document has a floor: even at minimum quality, each page costs some bytes. If the tool reports the smallest achievable size, that is a genuine physical limit, not a paywall. Splitting the document into parts is usually the answer.</p></details>
+
+  <details><summary>Does it work on a phone?</summary>
+    <p>Yes, though large files are slower because compression uses your device's processor. A 5 MB file on a mid-range phone takes a few seconds. A 50 MB scan may take a minute or run out of memory.</p></details>
+
+  <details><summary>What about password-protected PDFs?</summary>
+    <p>Remove the password first, in whatever application you used to open it. The tool deliberately does not attempt to bypass document encryption.</p></details>
+
+  <div class="adslot">ad slot — replace after AdSense approval</div>
+
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <nav>
+      <a href="/about.html">About</a>
+      <a href="/contact.html">Contact</a>
+      <a href="/privacy.html">Privacy Policy</a>
+      <a href="/terms.html">Terms</a>
+    </nav>
+    <div class="copy">© <span id="yr">2026</span> SizeMyPDF · Files are processed in your browser and never uploaded.</div>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+<script src="/js/app.js"></script>
+<script>document.getElementById('yr').textContent=new Date().getFullYear()</script>
+</body>
+</html>

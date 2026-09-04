@@ -1,0 +1,3 @@
+# Replace pub-0000000000000000 with your AdSense publisher ID after approval.
+# Until then this file is a harmless placeholder.
+google.com, pub-0000000000000000, DIRECT, f08c47fec0942fa0

@@ -11,6 +11,15 @@ const path = require('path');
 const SITE = 'https://sizemypdf.com';
 const NAME = 'SizeMyPDF';
 
+/* Shown on the privacy policy and terms. Bump this whenever either changes
+   materially - a policy dated years ago reads as abandoned, and AdSense
+   review treats a stale or placeholder date as a red flag. */
+const POLICY_UPDATED = '4 September 2026';
+
+/* Public contact address. AdSense requires a working one, and it must be
+   reachable - review does send mail to it. */
+const CONTACT_EMAIL = 'REPLACE-WITH-YOUR-EMAIL@example.com';
+
 /* ------------------------------------------------------------------ shell */
 
 const head = (p) => `<!doctype html>
@@ -378,7 +387,7 @@ pages.push({
 
 <div class="card">
   <h3 style="margin-top:0">Email</h3>
-  <p style="margin-bottom:0"><strong>REPLACE-WITH-YOUR-EMAIL@example.com</strong></p>
+  <p style="margin-bottom:0"><strong><a href="mailto:${CONTACT_EMAIL}">${CONTACT_EMAIL}</a></strong></p>
 </div>
 
 <h2>If you are reporting a problem</h2>
@@ -407,7 +416,7 @@ pages.push({
   h1: 'Privacy Policy',
   body: `
 <h1>Privacy Policy</h1>
-<p class="lede">Last updated: <strong>REPLACE-WITH-DATE</strong></p>
+<p class="lede">Last updated: <strong>${POLICY_UPDATED}</strong></p>
 
 <div class="note"><strong>The short version:</strong> your PDF files are never uploaded to us, because there is no server that receives them. Advertising and analytics do involve third parties, and that is described in full below.</div>
 
@@ -451,7 +460,7 @@ pages.push({
   h1: 'Terms of Use',
   body: `
 <h1>Terms of Use</h1>
-<p class="lede">Last updated: <strong>REPLACE-WITH-DATE</strong></p>
+<p class="lede">Last updated: <strong>${POLICY_UPDATED}</strong></p>
 
 <h2>1. Acceptance</h2>
 <p>By using this site you agree to these terms. If you do not agree, please do not use it.</p>

@@ -163,7 +163,11 @@ const TOOL_CTA = `
   <a class="btn" href="index.html">Open the compressor</a>
 </div>`;
 
-const AD = `<div class="adslot">ad slot &mdash; replace after AdSense approval</div>`;
+/* Ad placeholders are deliberately empty until AdSense approval. Showing
+   empty "ad slot" boxes makes a content site look like a shell built around
+   advertising, which is exactly the profile AdSense review penalises.
+   After approval, put the real <ins class="adsbygoogle"> unit here. */
+const AD = '';
 
 const faqBlock = (items) =>
   items.map(([q, a]) => `<details><summary>${q}</summary><p>${a}</p></details>`).join('\n');

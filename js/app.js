@@ -273,6 +273,20 @@
 
     go.disabled = true;
     result.classList.remove('on', 'miss');
+
+    /* A file already under the target needs no work. Rasterising it anyway
+       can return something LARGER than the original - a 20 KB text PDF comes
+       back as a 26 KB image - which is the opposite of what was asked for. */
+    if (mode !== 'lossless' && srcSize <= Math.max(10, targetKB) * 1024) {
+      outBlob = new Blob([srcBytes.slice(0)], { type: 'application/pdf' });
+      $('#rBig').textContent = 'Already ' + fmt(srcSize) + ' — no compression needed';
+      $('#rMeta').textContent = 'This file is under your ' + targetKB +
+        ' KB target, so it is unchanged. Compressing it further would only lose quality.';
+      result.classList.add('on');
+      say(''); bar.classList.remove('on'); go.disabled = false;
+      return;
+    }
+
     prog(5);
     say('Reading the PDF…');
 

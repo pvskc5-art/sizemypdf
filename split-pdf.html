@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Split PDF — Extract Pages Free, No Upload | SizeMyPDF</title>
+<meta name="description" content="Extract specific pages from a PDF, or split one document into several files. Runs entirely in your browser, so nothing is uploaded. Free, no signup, no watermark.">
+<link rel="canonical" href="https://sizemypdf.com/split-pdf.html">
+<meta property="og:title" content="Split PDF — Extract Pages Free, No Upload | SizeMyPDF">
+<meta property="og:description" content="Extract specific pages from a PDF, or split one document into several files. Runs entirely in your browser, so nothing is uploaded. Free, no signup, no watermark.">
+<meta property="og:url" content="https://sizemypdf.com/split-pdf.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="SizeMyPDF">
+<meta property="og:image" content="https://sizemypdf.com/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="alternate icon" href="favicon-32.png" sizes="32x32">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="manifest" href="site.webmanifest">
+<meta name="theme-color" content="#2f6df6">
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+<link rel="stylesheet" href="css/style.css">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "How do I extract just a few pages?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Choose Extract pages and type the ones you want, such as 1-3, 7, 10-12. The result is a single PDF containing exactly those pages, in that order."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I split a PDF into single pages?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. Choose Split into files and set pages per file to 1. You get one file per page, each with its own download button."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does splitting reduce quality?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. Splitting copies page objects rather than re-encoding them, so text stays selectable and images keep their original resolution. Nothing is degraded."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Why do I get download buttons instead of a ZIP?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Building a ZIP would mean loading another library for something most people do not need. Individual buttons also let you take only the pieces you actually want."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is the document uploaded to a server?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. Everything happens in your browser. The file never leaves your device."
+      }
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://sizemypdf.com/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Split a PDF",
+      "item": "https://sizemypdf.com/split-pdf.html"
+    }
+  ]
+}
+</script>
+
+</head>
+<body>
+
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site">
+  <div class="wrap">
+    <a class="logo" href="index.html">Size<span>My</span>PDF</a>
+    <nav class="main">
+      <a href="compress-pdf-to-100kb.html">100&nbsp;KB</a>
+      <a href="compress-pdf-to-200kb.html">200&nbsp;KB</a>
+      <a href="merge-pdf.html">Merge</a>
+      <a href="split-pdf.html">Split</a>
+      <a href="about.html">About</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap" id="main">
+
+<h1>Split a PDF</h1>
+<p class="lede">Pull out the pages you need, or break one document into several files. Quality is untouched, and nothing is uploaded.</p>
+
+<div class="privacy-badge">&#128274; Your file never leaves this device</div>
+
+<div class="tool">
+  <div class="drop" id="drop">
+    <strong>Choose a PDF or drop it here</strong>
+    <small>Nothing is uploaded &mdash; splitting happens in your browser</small>
+  </div>
+  <input type="file" id="file" accept="application/pdf,.pdf">
+
+  <div class="controls" id="controls">
+    <p class="note" id="info" style="margin-top:0"></p>
+    <div class="row">
+      <div class="field">
+        <label for="mode">Method</label>
+        <select id="mode">
+          <option value="range">Extract pages &mdash; one file</option>
+          <option value="chunks">Split into files &mdash; several</option>
+        </select>
+      </div>
+      <div class="field" id="rangeField">
+        <label for="range">Pages</label>
+        <input type="text" id="range" placeholder="1-3, 5, 8-10">
+      </div>
+      <div class="field" id="chunkField" style="display:none">
+        <label for="chunk">Pages per file</label>
+        <input type="number" id="chunk" min="1" value="1">
+      </div>
+      <div><button class="btn" id="go">Split</button></div>
+    </div>
+
+    <div class="bar" id="bar"><i id="barFill"></i></div>
+    <div class="status" id="status"></div>
+    <div class="outputs" id="outputs"></div>
+  </div>
+</div>
+
+<div class="adslot">ad slot &mdash; replace after AdSense approval</div>
+
+<h2>Which method you want</h2>
+<table>
+  <thead><tr><th>You want</th><th>Method</th><th>Type</th></tr></thead>
+  <tbody>
+    <tr><td>Only pages 1 to 3 of a contract</td><td>Extract pages</td><td><code>1-3</code></td></tr>
+    <tr><td>The cover and the last page</td><td>Extract pages</td><td><code>1, 24</code></td></tr>
+    <tr><td>Everything except the appendix</td><td>Extract pages</td><td><code>1-18</code></td></tr>
+    <tr><td>Every page as its own file</td><td>Split into files</td><td>1 per file</td></tr>
+    <tr><td>A 40-page book in 10-page parts</td><td>Split into files</td><td>10 per file</td></tr>
+  </tbody>
+</table>
+<p>Ranges can be listed in any combination &mdash; <code>1-3, 7, 10-12</code> is valid &mdash; and pages come out in the order you type them, so <code>5, 1</code> genuinely puts page 5 first.</p>
+
+<h2>Splitting keeps quality intact</h2>
+<p>Unlike compression, splitting is lossless. The pages you extract are the original page objects copied into a new document, so text remains selectable and searchable, images keep their full resolution, and nothing is re-encoded.</p>
+<p>One consequence worth knowing: an extracted page is not necessarily small. If page 3 of your document contains a full-page scan, extracting it alone still carries that scan's weight. To make it smaller, <a href="index.html">compress the extracted file</a> afterwards.</p>
+
+<div class="note"><strong>Why split at all?</strong> The most common reason is an upload limit that no amount of compression can beat. A 40-page scanned document cannot reach 200 KB while staying readable &mdash; but the three pages the form actually asks for can, comfortably.</div>
+
+<h2>Common questions</h2>
+<details><summary>How do I extract just a few pages?</summary><p>Choose Extract pages and type the ones you want, such as 1-3, 7, 10-12. The result is a single PDF containing exactly those pages, in that order.</p></details>
+<details><summary>Can I split a PDF into single pages?</summary><p>Yes. Choose Split into files and set pages per file to 1. You get one file per page, each with its own download button.</p></details>
+<details><summary>Does splitting reduce quality?</summary><p>No. Splitting copies page objects rather than re-encoding them, so text stays selectable and images keep their original resolution. Nothing is degraded.</p></details>
+<details><summary>Why do I get download buttons instead of a ZIP?</summary><p>Building a ZIP would mean loading another library for something most people do not need. Individual buttons also let you take only the pieces you actually want.</p></details>
+<details><summary>Is the document uploaded to a server?</summary><p>No. Everything happens in your browser. The file never leaves your device.</p></details>
+
+<h2>Other tools</h2>
+<div class="grid">
+  <a href="merge-pdf.html"><strong>Merge PDFs</strong><small>Combine several files into one, in your chosen order.</small></a>
+  <a href="index.html"><strong>Compress a PDF</strong><small>Hit an exact size limit for a form upload.</small></a>
+  <a href="compress-scanned-pdf.html"><strong>Compress a scan</strong><small>Where the biggest savings are.</small></a>
+</div>
+
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <nav>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+      <a href="privacy.html">Privacy Policy</a>
+      <a href="terms.html">Terms</a>
+    </nav>
+    <div class="copy">&copy; <span id="yr">2026</span> SizeMyPDF &middot; Files are processed in your browser and never uploaded.</div>
+  </div>
+</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+<script src="js/split.js"></script>
+<script>document.getElementById('yr').textContent=new Date().getFullYear()</script>
+</body>
+</html>

@@ -10,6 +10,16 @@
 <meta property="og:description" content="Who runs SizeMyPDF, why it processes files in the browser, and how the site is funded.">
 <meta property="og:url" content="https://sizemypdf.com/about.html">
 <meta property="og:type" content="article">
+<meta property="og:site_name" content="SizeMyPDF">
+<meta property="og:image" content="https://sizemypdf.com/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="alternate icon" href="favicon-32.png" sizes="32x32">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="manifest" href="site.webmanifest">
+<meta name="theme-color" content="#2f6df6">
 <link rel="stylesheet" href="css/style.css">
 <script type="application/ld+json">
 {
@@ -35,19 +45,22 @@
 </head>
 <body>
 
+<a class="skip" href="#main">Skip to content</a>
+
 <header class="site">
   <div class="wrap">
     <a class="logo" href="index.html">Size<span>My</span>PDF</a>
     <nav class="main">
       <a href="compress-pdf-to-100kb.html">100&nbsp;KB</a>
       <a href="compress-pdf-to-200kb.html">200&nbsp;KB</a>
-      <a href="compress-pdf-for-email.html">For email</a>
+      <a href="merge-pdf.html">Merge</a>
+      <a href="split-pdf.html">Split</a>
       <a href="about.html">About</a>
     </nav>
   </div>
 </header>
 
-<main class="wrap">
+<main class="wrap" id="main">
 
 <h1>About SizeMyPDF</h1>
 
@@ -87,6 +100,7 @@
     <div class="copy">&copy; <span id="yr">2026</span> SizeMyPDF &middot; Files are processed in your browser and never uploaded.</div>
   </div>
 </footer>
+
 <script>document.getElementById('yr').textContent=new Date().getFullYear()</script>
 </body>
 </html>

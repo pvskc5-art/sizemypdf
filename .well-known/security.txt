@@ -1,0 +1,9 @@
+Contact: mailto:hello@sizemypdf.com
+Expires: 2027-09-04T00:00:00.000Z
+Preferred-Languages: en
+Canonical: https://sizemypdf.com/.well-known/security.txt
+
+# SizeMyPDF processes every file in the visitor's own browser.
+# There is no server-side file handling, no database and no user accounts,
+# so the realistic attack surface is this static site and its dependencies.
+# Reports about the site itself, its headers or its DNS are welcome.

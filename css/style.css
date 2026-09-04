@@ -107,3 +107,31 @@ footer.site a{color:var(--muted)}
   nav.main{gap:13px;font-size:13.5px}
   .drop{padding:30px 16px}
 }
+
+/* ---- file list (merge) ---- */
+.filelist{list-style:none;margin:0 0 16px;padding:0;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.filelist li{display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--surface);border-bottom:1px solid var(--line);font-size:14.5px}
+.filelist li:last-child{border-bottom:0}
+.filelist .nm{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.filelist .sz{color:var(--muted);font-size:13px;font-variant-numeric:tabular-nums}
+.filelist .pg{color:var(--muted);font-size:13px;white-space:nowrap}
+.iconbtn{border:1px solid var(--line);background:var(--surface);color:var(--muted);border-radius:6px;
+  width:26px;height:26px;line-height:1;font-size:14px;cursor:pointer;padding:0;flex:none}
+.iconbtn:hover:not(:disabled){border-color:var(--brand);color:var(--brand)}
+.iconbtn:disabled{opacity:.35;cursor:not-allowed}
+.iconbtn.del:hover{border-color:#c9424a;color:#c9424a}
+
+/* ---- split outputs ---- */
+.outputs{display:flex;flex-wrap:wrap;gap:9px;margin-top:14px}
+.outputs button{border:1px solid var(--line);background:var(--surface);border-radius:7px;
+  padding:9px 13px;font:500 14px/1 inherit;color:var(--brand);cursor:pointer}
+.outputs button:hover{border-color:var(--brand);background:#f2f6ff}
+
+/* ---- accessibility ---- */
+.skip{position:absolute;left:-9999px;top:0;z-index:100;background:var(--brand);color:#fff;
+  padding:10px 16px;border-radius:0 0 8px 0;font-weight:600;font-size:14px}
+.skip:focus{left:0;text-decoration:none}
+:focus-visible{outline:2px solid var(--brand);outline-offset:2px;border-radius:4px}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}
+}

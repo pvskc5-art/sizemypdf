@@ -36,10 +36,23 @@ ${p.noindex
 <meta property="og:description" content="${p.desc}">
 <meta property="og:url" content="${SITE}/${p.slug}">
 <meta property="og:type" content="article">
-<link rel="stylesheet" href="css/style.css">
+<meta property="og:site_name" content="${NAME}">
+<meta property="og:image" content="${SITE}/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="alternate icon" href="favicon-32.png" sizes="32x32">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="manifest" href="site.webmanifest">
+<meta name="theme-color" content="#2f6df6">
+${(p.scripts || []).some(s => s.indexOf('cdnjs') === 0 || s.indexOf('https://cdnjs') === 0)
+  ? '<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>\n' : ''}<link rel="stylesheet" href="css/style.css">
 ${p.faq ? faqSchema(p.faq) : ''}${p.breadcrumb === false ? '' : crumbSchema(p)}
 </head>
 <body>
+
+<a class="skip" href="#main">Skip to content</a>
 
 <header class="site">
   <div class="wrap">
@@ -47,16 +60,17 @@ ${p.faq ? faqSchema(p.faq) : ''}${p.breadcrumb === false ? '' : crumbSchema(p)}
     <nav class="main">
       <a href="compress-pdf-to-100kb.html">100&nbsp;KB</a>
       <a href="compress-pdf-to-200kb.html">200&nbsp;KB</a>
-      <a href="compress-pdf-for-email.html">For email</a>
+      <a href="merge-pdf.html">Merge</a>
+      <a href="split-pdf.html">Split</a>
       <a href="about.html">About</a>
     </nav>
   </div>
 </header>
 
-<main class="wrap">
+<main class="wrap" id="main">
 `;
 
-const foot = `
+const foot = (p) => `
 </main>
 
 <footer class="site">
@@ -70,6 +84,7 @@ const foot = `
     <div class="copy">&copy; <span id="yr">2026</span> ${NAME} &middot; Files are processed in your browser and never uploaded.</div>
   </div>
 </footer>
+${(p.scripts || []).map(s => `<script src="${s}"></script>`).join('\n')}
 <script>document.getElementById('yr').textContent=new Date().getFullYear()</script>
 </body>
 </html>
@@ -341,6 +356,179 @@ ${targets.map(o =>
 `
 });
 
+/* ---- merge tool ---- */
+
+const mergeFaq = [
+  ['Is there a limit on how many PDFs I can merge?',
+   'There is no server limit because there is no server. The practical limit is your device memory. Dozens of ordinary documents are fine; merging many large scans at once may be slow on a phone.'],
+  ['Does merging reduce quality?',
+   'No. Merging copies the page objects across untouched, so text stays selectable, images keep their original resolution and links survive. It is a lossless operation, unlike compression.'],
+  ['Can I change the order of the files?',
+   'Yes. Use the arrows next to each file to move it up or down. Pages are merged strictly in the order shown on screen.'],
+  ['Are my documents uploaded anywhere?',
+   'No. The merge happens in your browser using JavaScript. Your files never leave your device, which is why the tool still works if you disconnect from the internet after the page loads.'],
+  ['Why does my file say unreadable?',
+   'The PDF is either password-protected or damaged. Remove the password in whatever application opens it, then try again.']
+];
+
+pages.push({
+  slug: 'merge-pdf.html',
+  title: `Merge PDF Files — Free, No Upload, No Signup | ${NAME}`,
+  desc: 'Combine several PDFs into one file, in the order you choose. Runs entirely in your browser, so nothing is uploaded. Free, no signup, no watermark, no page limit.',
+  h1: 'Merge PDF files',
+  faq: mergeFaq,
+  scripts: ['https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js', 'js/merge.js'],
+  body: `
+<h1>Merge PDF files</h1>
+<p class="lede">Combine any number of PDFs into a single document, in whatever order you want. Nothing is uploaded and nothing is added to the output.</p>
+
+<div class="privacy-badge">&#128274; Your files never leave this device</div>
+
+<div class="tool">
+  <div class="drop" id="drop">
+    <strong>Choose PDFs or drop them here</strong>
+    <small>Nothing is uploaded &mdash; merging happens in your browser</small>
+  </div>
+  <input type="file" id="file" accept="application/pdf,.pdf" multiple>
+
+  <div class="controls" id="controls">
+    <ul class="filelist" id="list"></ul>
+    <button class="btn" id="go">Merge PDFs</button>
+
+    <div class="bar" id="bar"><i id="barFill"></i></div>
+    <div class="status" id="status"></div>
+
+    <div class="result" id="result">
+      <div class="big" id="rBig"></div>
+      <div class="meta" id="rMeta"></div>
+      <button class="btn" id="dl">Download merged PDF</button>
+    </div>
+  </div>
+</div>
+
+${AD}
+
+<h2>Merging is lossless &mdash; compression is not</h2>
+<p>This is worth understanding, because it is the difference between the two tools on this site. Merging does not re-encode anything. It copies the page objects from each source document into a new one, so your text stays selectable, images keep every pixel of their original resolution, and internal links keep working.</p>
+<p>That means the merged file is roughly the sum of its parts. If the result is too large for wherever you are sending it, merge first and then <a href="index.html">compress the merged file</a> &mdash; in that order. Compressing each piece first, then merging, stacks compression artefacts for no benefit.</p>
+
+<h2>How to merge</h2>
+<ol>
+  <li>Choose your PDFs, or drag them onto the box above. You can add more at any time.</li>
+  <li>Check the order in the list. Use the arrows to move a file up or down, or the &times; to remove it.</li>
+  <li>Press Merge. The output follows the order shown on screen, top to bottom.</li>
+  <li>Download the result.</li>
+</ol>
+
+<div class="note"><strong>File order is not alphabetical.</strong> Files appear in the order your browser hands them over, which for a multi-select is usually alphabetical but is not guaranteed &mdash; and alphabetical rarely matches document order anyway, since <em>page10</em> sorts before <em>page2</em>. Always check the list before merging.</div>
+
+<h2>Common questions</h2>
+${faqBlock(mergeFaq)}
+
+<h2>Other tools</h2>
+<div class="grid">
+  <a href="split-pdf.html"><strong>Split a PDF</strong><small>Pull out specific pages, or break one file into several.</small></a>
+  <a href="index.html"><strong>Compress a PDF</strong><small>Hit an exact size limit for a form upload.</small></a>
+  <a href="compress-pdf-for-email.html"><strong>Compress for email</strong><small>Get a merged file under an attachment limit.</small></a>
+</div>
+`
+});
+
+/* ---- split tool ---- */
+
+const splitFaq = [
+  ['How do I extract just a few pages?',
+   'Choose Extract pages and type the ones you want, such as 1-3, 7, 10-12. The result is a single PDF containing exactly those pages, in that order.'],
+  ['Can I split a PDF into single pages?',
+   'Yes. Choose Split into files and set pages per file to 1. You get one file per page, each with its own download button.'],
+  ['Does splitting reduce quality?',
+   'No. Splitting copies page objects rather than re-encoding them, so text stays selectable and images keep their original resolution. Nothing is degraded.'],
+  ['Why do I get download buttons instead of a ZIP?',
+   'Building a ZIP would mean loading another library for something most people do not need. Individual buttons also let you take only the pieces you actually want.'],
+  ['Is the document uploaded to a server?',
+   'No. Everything happens in your browser. The file never leaves your device.']
+];
+
+pages.push({
+  slug: 'split-pdf.html',
+  title: `Split PDF — Extract Pages Free, No Upload | ${NAME}`,
+  desc: 'Extract specific pages from a PDF, or split one document into several files. Runs entirely in your browser, so nothing is uploaded. Free, no signup, no watermark.',
+  h1: 'Split a PDF',
+  faq: splitFaq,
+  scripts: ['https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js', 'js/split.js'],
+  body: `
+<h1>Split a PDF</h1>
+<p class="lede">Pull out the pages you need, or break one document into several files. Quality is untouched, and nothing is uploaded.</p>
+
+<div class="privacy-badge">&#128274; Your file never leaves this device</div>
+
+<div class="tool">
+  <div class="drop" id="drop">
+    <strong>Choose a PDF or drop it here</strong>
+    <small>Nothing is uploaded &mdash; splitting happens in your browser</small>
+  </div>
+  <input type="file" id="file" accept="application/pdf,.pdf">
+
+  <div class="controls" id="controls">
+    <p class="note" id="info" style="margin-top:0"></p>
+    <div class="row">
+      <div class="field">
+        <label for="mode">Method</label>
+        <select id="mode">
+          <option value="range">Extract pages &mdash; one file</option>
+          <option value="chunks">Split into files &mdash; several</option>
+        </select>
+      </div>
+      <div class="field" id="rangeField">
+        <label for="range">Pages</label>
+        <input type="text" id="range" placeholder="1-3, 5, 8-10">
+      </div>
+      <div class="field" id="chunkField" style="display:none">
+        <label for="chunk">Pages per file</label>
+        <input type="number" id="chunk" min="1" value="1">
+      </div>
+      <div><button class="btn" id="go">Split</button></div>
+    </div>
+
+    <div class="bar" id="bar"><i id="barFill"></i></div>
+    <div class="status" id="status"></div>
+    <div class="outputs" id="outputs"></div>
+  </div>
+</div>
+
+${AD}
+
+<h2>Which method you want</h2>
+<table>
+  <thead><tr><th>You want</th><th>Method</th><th>Type</th></tr></thead>
+  <tbody>
+    <tr><td>Only pages 1 to 3 of a contract</td><td>Extract pages</td><td><code>1-3</code></td></tr>
+    <tr><td>The cover and the last page</td><td>Extract pages</td><td><code>1, 24</code></td></tr>
+    <tr><td>Everything except the appendix</td><td>Extract pages</td><td><code>1-18</code></td></tr>
+    <tr><td>Every page as its own file</td><td>Split into files</td><td>1 per file</td></tr>
+    <tr><td>A 40-page book in 10-page parts</td><td>Split into files</td><td>10 per file</td></tr>
+  </tbody>
+</table>
+<p>Ranges can be listed in any combination &mdash; <code>1-3, 7, 10-12</code> is valid &mdash; and pages come out in the order you type them, so <code>5, 1</code> genuinely puts page 5 first.</p>
+
+<h2>Splitting keeps quality intact</h2>
+<p>Unlike compression, splitting is lossless. The pages you extract are the original page objects copied into a new document, so text remains selectable and searchable, images keep their full resolution, and nothing is re-encoded.</p>
+<p>One consequence worth knowing: an extracted page is not necessarily small. If page 3 of your document contains a full-page scan, extracting it alone still carries that scan's weight. To make it smaller, <a href="index.html">compress the extracted file</a> afterwards.</p>
+
+<div class="note"><strong>Why split at all?</strong> The most common reason is an upload limit that no amount of compression can beat. A 40-page scanned document cannot reach 200 KB while staying readable &mdash; but the three pages the form actually asks for can, comfortably.</div>
+
+<h2>Common questions</h2>
+${faqBlock(splitFaq)}
+
+<h2>Other tools</h2>
+<div class="grid">
+  <a href="merge-pdf.html"><strong>Merge PDFs</strong><small>Combine several files into one, in your chosen order.</small></a>
+  <a href="index.html"><strong>Compress a PDF</strong><small>Hit an exact size limit for a form upload.</small></a>
+  <a href="compress-scanned-pdf.html"><strong>Compress a scan</strong><small>Where the biggest savings are.</small></a>
+</div>
+`
+});
+
 /* ---- legal / trust pages ---- */
 
 pages.push({
@@ -521,7 +709,7 @@ const root = __dirname;
 let written = 0;
 
 for (const p of pages) {
-  fs.writeFileSync(path.join(root, p.slug), head(p) + p.body + foot, 'utf8');
+  fs.writeFileSync(path.join(root, p.slug), head(p) + p.body + foot(p), 'utf8');
   written++;
   console.log('  wrote ' + p.slug);
 }

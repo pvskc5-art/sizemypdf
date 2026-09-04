@@ -10,6 +10,17 @@
 <meta property="og:description" content="Type the size you need. Get a PDF under it. Nothing is uploaded.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://sizemypdf.com/">
+<meta property="og:site_name" content="SizeMyPDF">
+<meta property="og:image" content="https://sizemypdf.com/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="alternate icon" href="favicon-32.png" sizes="32x32">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="manifest" href="site.webmanifest">
+<meta name="theme-color" content="#2f6df6">
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
 <link rel="stylesheet" href="css/style.css">
 <script type="application/ld+json">
 {
@@ -20,7 +31,27 @@
   "applicationCategory": "UtilitiesApplication",
   "operatingSystem": "Any (web browser)",
   "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
-  "description": "Compress a PDF to an exact target file size in KB, entirely inside the browser."
+  "description": "Compress a PDF to an exact target file size in KB, entirely inside the browser.",
+  "featureList": [
+    "Compress a PDF to an exact size in KB",
+    "Merge several PDFs into one",
+    "Split a PDF or extract specific pages"
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "SizeMyPDF",
+  "url": "https://sizemypdf.com/",
+  "publisher": {
+    "@type": "Organization",
+    "name": "SizeMyPDF",
+    "url": "https://sizemypdf.com/",
+    "logo": "https://sizemypdf.com/apple-touch-icon.png",
+    "email": "hello@sizemypdf.com"
+  }
 }
 </script>
 <script type="application/ld+json">
@@ -42,19 +73,22 @@
 </head>
 <body>
 
+<a class="skip" href="#main">Skip to content</a>
+
 <header class="site">
   <div class="wrap">
     <a class="logo" href="index.html">Size<span>My</span>PDF</a>
     <nav class="main">
       <a href="compress-pdf-to-100kb.html">100&nbsp;KB</a>
       <a href="compress-pdf-to-200kb.html">200&nbsp;KB</a>
-      <a href="compress-pdf-for-email.html">For email</a>
+      <a href="merge-pdf.html">Merge</a>
+      <a href="split-pdf.html">Split</a>
       <a href="about.html">About</a>
     </nav>
   </div>
 </header>
 
-<main class="wrap">
+<main class="wrap" id="main">
 
   <h1>Compress a PDF to an exact file size</h1>
   <p class="lede">Type the number of kilobytes you are allowed. Get a PDF that fits under it. No upload, no signup, no watermark.</p>
@@ -120,6 +154,13 @@
     <a href="compress-pdf-to-200kb.html"><strong>Compress to 200 KB</strong><small>The most common government upload limit worldwide.</small></a>
     <a href="compress-pdf-for-email.html"><strong>Compress for email</strong><small>Get under the 25 MB Gmail and Outlook attachment ceiling.</small></a>
     <a href="compress-scanned-pdf.html"><strong>Compress a scanned PDF</strong><small>Scans are mostly photographs — where the biggest savings hide.</small></a>
+  </div>
+
+  <h2>Other PDF tools</h2>
+  <p>Both run in your browser like the compressor, and both are lossless — they copy page objects rather than re-encoding them, so text stays selectable and images keep their full resolution.</p>
+  <div class="grid">
+    <a href="merge-pdf.html"><strong>Merge PDFs</strong><small>Combine several files into one, in the order you choose. No page limit.</small></a>
+    <a href="split-pdf.html"><strong>Split a PDF</strong><small>Extract specific pages, or break one document into several files.</small></a>
   </div>
 
   <h2>What size should I aim for?</h2>

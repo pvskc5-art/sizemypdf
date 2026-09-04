@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Merge PDF Files — Free, No Upload, No Signup | SizeMyPDF</title>
+<meta name="description" content="Combine several PDFs into one file, in the order you choose. Runs entirely in your browser, so nothing is uploaded. Free, no signup, no watermark, no page limit.">
+<link rel="canonical" href="https://sizemypdf.com/merge-pdf.html">
+<meta property="og:title" content="Merge PDF Files — Free, No Upload, No Signup | SizeMyPDF">
+<meta property="og:description" content="Combine several PDFs into one file, in the order you choose. Runs entirely in your browser, so nothing is uploaded. Free, no signup, no watermark, no page limit.">
+<meta property="og:url" content="https://sizemypdf.com/merge-pdf.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="SizeMyPDF">
+<meta property="og:image" content="https://sizemypdf.com/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="alternate icon" href="favicon-32.png" sizes="32x32">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="manifest" href="site.webmanifest">
+<meta name="theme-color" content="#2f6df6">
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+<link rel="stylesheet" href="css/style.css">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Is there a limit on how many PDFs I can merge?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "There is no server limit because there is no server. The practical limit is your device memory. Dozens of ordinary documents are fine; merging many large scans at once may be slow on a phone."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does merging reduce quality?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. Merging copies the page objects across untouched, so text stays selectable, images keep their original resolution and links survive. It is a lossless operation, unlike compression."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I change the order of the files?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. Use the arrows next to each file to move it up or down. Pages are merged strictly in the order shown on screen."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Are my documents uploaded anywhere?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. The merge happens in your browser using JavaScript. Your files never leave your device, which is why the tool still works if you disconnect from the internet after the page loads."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Why does my file say unreadable?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The PDF is either password-protected or damaged. Remove the password in whatever application opens it, then try again."
+      }
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://sizemypdf.com/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Merge PDF files",
+      "item": "https://sizemypdf.com/merge-pdf.html"
+    }
+  ]
+}
+</script>
+
+</head>
+<body>
+
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site">
+  <div class="wrap">
+    <a class="logo" href="index.html">Size<span>My</span>PDF</a>
+    <nav class="main">
+      <a href="compress-pdf-to-100kb.html">100&nbsp;KB</a>
+      <a href="compress-pdf-to-200kb.html">200&nbsp;KB</a>
+      <a href="merge-pdf.html">Merge</a>
+      <a href="split-pdf.html">Split</a>
+      <a href="about.html">About</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap" id="main">
+
+<h1>Merge PDF files</h1>
+<p class="lede">Combine any number of PDFs into a single document, in whatever order you want. Nothing is uploaded and nothing is added to the output.</p>
+
+<div class="privacy-badge">&#128274; Your files never leave this device</div>
+
+<div class="tool">
+  <div class="drop" id="drop">
+    <strong>Choose PDFs or drop them here</strong>
+    <small>Nothing is uploaded &mdash; merging happens in your browser</small>
+  </div>
+  <input type="file" id="file" accept="application/pdf,.pdf" multiple>
+
+  <div class="controls" id="controls">
+    <ul class="filelist" id="list"></ul>
+    <button class="btn" id="go">Merge PDFs</button>
+
+    <div class="bar" id="bar"><i id="barFill"></i></div>
+    <div class="status" id="status"></div>
+
+    <div class="result" id="result">
+      <div class="big" id="rBig"></div>
+      <div class="meta" id="rMeta"></div>
+      <button class="btn" id="dl">Download merged PDF</button>
+    </div>
+  </div>
+</div>
+
+<div class="adslot">ad slot &mdash; replace after AdSense approval</div>
+
+<h2>Merging is lossless &mdash; compression is not</h2>
+<p>This is worth understanding, because it is the difference between the two tools on this site. Merging does not re-encode anything. It copies the page objects from each source document into a new one, so your text stays selectable, images keep every pixel of their original resolution, and internal links keep working.</p>
+<p>That means the merged file is roughly the sum of its parts. If the result is too large for wherever you are sending it, merge first and then <a href="index.html">compress the merged file</a> &mdash; in that order. Compressing each piece first, then merging, stacks compression artefacts for no benefit.</p>
+
+<h2>How to merge</h2>
+<ol>
+  <li>Choose your PDFs, or drag them onto the box above. You can add more at any time.</li>
+  <li>Check the order in the list. Use the arrows to move a file up or down, or the &times; to remove it.</li>
+  <li>Press Merge. The output follows the order shown on screen, top to bottom.</li>
+  <li>Download the result.</li>
+</ol>
+
+<div class="note"><strong>File order is not alphabetical.</strong> Files appear in the order your browser hands them over, which for a multi-select is usually alphabetical but is not guaranteed &mdash; and alphabetical rarely matches document order anyway, since <em>page10</em> sorts before <em>page2</em>. Always check the list before merging.</div>
+
+<h2>Common questions</h2>
+<details><summary>Is there a limit on how many PDFs I can merge?</summary><p>There is no server limit because there is no server. The practical limit is your device memory. Dozens of ordinary documents are fine; merging many large scans at once may be slow on a phone.</p></details>
+<details><summary>Does merging reduce quality?</summary><p>No. Merging copies the page objects across untouched, so text stays selectable, images keep their original resolution and links survive. It is a lossless operation, unlike compression.</p></details>
+<details><summary>Can I change the order of the files?</summary><p>Yes. Use the arrows next to each file to move it up or down. Pages are merged strictly in the order shown on screen.</p></details>
+<details><summary>Are my documents uploaded anywhere?</summary><p>No. The merge happens in your browser using JavaScript. Your files never leave your device, which is why the tool still works if you disconnect from the internet after the page loads.</p></details>
+<details><summary>Why does my file say unreadable?</summary><p>The PDF is either password-protected or damaged. Remove the password in whatever application opens it, then try again.</p></details>
+
+<h2>Other tools</h2>
+<div class="grid">
+  <a href="split-pdf.html"><strong>Split a PDF</strong><small>Pull out specific pages, or break one file into several.</small></a>
+  <a href="index.html"><strong>Compress a PDF</strong><small>Hit an exact size limit for a form upload.</small></a>
+  <a href="compress-pdf-for-email.html"><strong>Compress for email</strong><small>Get a merged file under an attachment limit.</small></a>
+</div>
+
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <nav>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+      <a href="privacy.html">Privacy Policy</a>
+      <a href="terms.html">Terms</a>
+    </nav>
+    <div class="copy">&copy; <span id="yr">2026</span> SizeMyPDF &middot; Files are processed in your browser and never uploaded.</div>
+  </div>
+</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+<script src="js/merge.js"></script>
+<script>document.getElementById('yr').textContent=new Date().getFullYear()</script>
+</body>
+</html>

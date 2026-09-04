@@ -25,19 +25,19 @@ ${p.noindex ? '<meta name="robots" content="noindex,follow">\n' : ''}<meta prope
 <meta property="og:description" content="${p.desc}">
 <meta property="og:url" content="${SITE}/${p.slug}">
 <meta property="og:type" content="article">
-<link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="css/style.css">
 ${p.faq ? faqSchema(p.faq) : ''}${p.breadcrumb === false ? '' : crumbSchema(p)}
 </head>
 <body>
 
 <header class="site">
   <div class="wrap">
-    <a class="logo" href="/">Size<span>My</span>PDF</a>
+    <a class="logo" href="index.html">Size<span>My</span>PDF</a>
     <nav class="main">
-      <a href="/compress-pdf-to-100kb.html">100&nbsp;KB</a>
-      <a href="/compress-pdf-to-200kb.html">200&nbsp;KB</a>
-      <a href="/compress-pdf-for-email.html">For email</a>
-      <a href="/about.html">About</a>
+      <a href="compress-pdf-to-100kb.html">100&nbsp;KB</a>
+      <a href="compress-pdf-to-200kb.html">200&nbsp;KB</a>
+      <a href="compress-pdf-for-email.html">For email</a>
+      <a href="about.html">About</a>
     </nav>
   </div>
 </header>
@@ -51,10 +51,10 @@ const foot = `
 <footer class="site">
   <div class="wrap">
     <nav>
-      <a href="/about.html">About</a>
-      <a href="/contact.html">Contact</a>
-      <a href="/privacy.html">Privacy Policy</a>
-      <a href="/terms.html">Terms</a>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+      <a href="privacy.html">Privacy Policy</a>
+      <a href="terms.html">Terms</a>
     </nav>
     <div class="copy">&copy; <span id="yr">2026</span> ${NAME} &middot; Files are processed in your browser and never uploaded.</div>
   </div>
@@ -97,7 +97,7 @@ ${JSON.stringify({
 const TOOL_CTA = `
 <div class="card" style="text-align:center;margin:26px 0">
   <p style="margin-bottom:14px"><strong>The compressor is on the front page.</strong> Set your target and go &mdash; nothing is uploaded.</p>
-  <a class="btn" href="/">Open the compressor</a>
+  <a class="btn" href="index.html">Open the compressor</a>
 </div>`;
 
 const AD = `<div class="adslot">ad slot &mdash; replace after AdSense approval</div>`;
@@ -166,7 +166,7 @@ ${t.extra}
 
 <h2>How to do it</h2>
 <ol>
-  <li>Open the <a href="/">compressor on the front page</a> and choose your PDF.</li>
+  <li>Open the <a href="index.html">compressor on the front page</a> and choose your PDF.</li>
   <li>Leave the method on <strong>Target size</strong>.</li>
   <li>Type <strong>${t.kb}</strong> into the target box.</li>
   <li>Press Compress. The tool tries progressively lower resolutions and quality levels, measuring the real output each time.</li>
@@ -192,8 +192,8 @@ ${faqBlock(faq)}
 <h2>Other size targets</h2>
 <div class="grid">
 ${targets.filter(o => o.kb !== t.kb).map(o =>
-  `  <a href="/compress-pdf-to-${o.kb}kb.html"><strong>Compress to ${o.kb} KB</strong><small>For ${o.who}.</small></a>`).join('\n')}
-  <a href="/compress-pdf-for-email.html"><strong>Compress for email</strong><small>Get under the 25 MB Gmail and Outlook ceiling.</small></a>
+  `  <a href="compress-pdf-to-${o.kb}kb.html"><strong>Compress to ${o.kb} KB</strong><small>For ${o.who}.</small></a>`).join('\n')}
+  <a href="compress-pdf-for-email.html"><strong>Compress for email</strong><small>Get under the 25 MB Gmail and Outlook ceiling.</small></a>
 </div>
 `
   });
@@ -247,7 +247,7 @@ ${AD}
 <h2>How to compress for email</h2>
 <ol>
   <li>Work out your recipient's limit, not just your own. Your message has to pass through their server too, and corporate servers are usually the strictest link in the chain.</li>
-  <li>Open the <a href="/">compressor</a> and load your PDF.</li>
+  <li>Open the <a href="index.html">compressor</a> and load your PDF.</li>
   <li>Set the target in KB &mdash; 18 MB is <strong>18000</strong> KB.</li>
   <li>Compress, download, and attach the result.</li>
 </ol>
@@ -260,7 +260,7 @@ ${faqBlock(emailFaq)}
 <h2>Need a specific size instead?</h2>
 <div class="grid">
 ${targets.map(o =>
-  `  <a href="/compress-pdf-to-${o.kb}kb.html"><strong>Compress to ${o.kb} KB</strong><small>For ${o.who}.</small></a>`).join('\n')}
+  `  <a href="compress-pdf-to-${o.kb}kb.html"><strong>Compress to ${o.kb} KB</strong><small>For ${o.who}.</small></a>`).join('\n')}
 </div>
 `
 });
@@ -325,7 +325,7 @@ ${faqBlock(scanFaq)}
 <h2>Compress to a specific limit</h2>
 <div class="grid">
 ${targets.map(o =>
-  `  <a href="/compress-pdf-to-${o.kb}kb.html"><strong>Compress to ${o.kb} KB</strong><small>For ${o.who}.</small></a>`).join('\n')}
+  `  <a href="compress-pdf-to-${o.kb}kb.html"><strong>Compress to ${o.kb} KB</strong><small>For ${o.who}.</small></a>`).join('\n')}
 </div>
 `
 });
@@ -361,7 +361,7 @@ pages.push({
 </ul>
 
 <h2>Contact</h2>
-<p>Corrections, bug reports and feature requests are welcome via the <a href="/contact.html">contact page</a>.</p>
+<p>Corrections, bug reports and feature requests are welcome via the <a href="contact.html">contact page</a>.</p>
 `
 });
 
@@ -426,7 +426,7 @@ pages.push({
 
 <h2>5. Visitors in the European Economic Area and United Kingdom</h2>
 <p>If you are located in the EEA, the UK or Switzerland, a consent prompt is shown before any non-essential cookies are set, and your choice is honoured. You may change or withdraw your consent at any time through the cookie settings link in the footer.</p>
-<p>You have the right to request access to, correction of, or deletion of personal data held about you, and to lodge a complaint with your local data protection authority. Requests may be sent to the address on the <a href="/contact.html">contact page</a>. Note that because your files never reach us, we hold no copies of your documents to disclose or delete.</p>
+<p>You have the right to request access to, correction of, or deletion of personal data held about you, and to lodge a complaint with your local data protection authority. Requests may be sent to the address on the <a href="contact.html">contact page</a>. Note that because your files never reach us, we hold no copies of your documents to disclose or delete.</p>
 
 <h2>6. Visitors in California</h2>
 <p>We do not sell personal information as defined by the California Consumer Privacy Act. You may request disclosure of the categories of personal information collected about you via the contact page.</p>
@@ -438,7 +438,7 @@ pages.push({
 <p>This policy may be updated. Material changes will be reflected in the date at the top of this page.</p>
 
 <h2>9. Contact</h2>
-<p>Questions about this policy can be sent via the <a href="/contact.html">contact page</a>.</p>
+<p>Questions about this policy can be sent via the <a href="contact.html">contact page</a>.</p>
 `
 });
 
@@ -478,7 +478,7 @@ pages.push({
 <p>These terms may be updated at any time. Continued use after a change constitutes acceptance of the revised terms.</p>
 
 <h2>9. Contact</h2>
-<p>Questions may be sent via the <a href="/contact.html">contact page</a>.</p>
+<p>Questions may be sent via the <a href="contact.html">contact page</a>.</p>
 `
 });
 
@@ -492,14 +492,14 @@ pages.push({
   body: `
 <h1>Page not found</h1>
 <p class="lede">That address does not exist on this site. It may have been renamed, or the link that brought you here may be wrong.</p>
-<p><a class="btn" href="/">Go to the compressor</a></p>
+<p><a class="btn" href="index.html">Go to the compressor</a></p>
 
 <h2>Popular pages</h2>
 <div class="grid">
-  <a href="/"><strong>PDF compressor</strong><small>Compress to an exact size, in your browser.</small></a>
-  <a href="/compress-pdf-to-200kb.html"><strong>Compress to 200 KB</strong><small>The most common upload limit.</small></a>
-  <a href="/compress-pdf-for-email.html"><strong>Compress for email</strong><small>Get under the 25 MB ceiling.</small></a>
-  <a href="/compress-scanned-pdf.html"><strong>Compress a scan</strong><small>Where the biggest savings are.</small></a>
+  <a href="index.html"><strong>PDF compressor</strong><small>Compress to an exact size, in your browser.</small></a>
+  <a href="compress-pdf-to-200kb.html"><strong>Compress to 200 KB</strong><small>The most common upload limit.</small></a>
+  <a href="compress-pdf-for-email.html"><strong>Compress for email</strong><small>Get under the 25 MB ceiling.</small></a>
+  <a href="compress-scanned-pdf.html"><strong>Compress a scan</strong><small>Where the biggest savings are.</small></a>
 </div>
 `
 });

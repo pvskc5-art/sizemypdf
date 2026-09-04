@@ -20,8 +20,10 @@ const head = (p) => `<!doctype html>
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>${p.title}</title>
 <meta name="description" content="${p.desc}">
-<link rel="canonical" href="${SITE}/${p.slug}">
-${p.noindex ? '<meta name="robots" content="noindex,follow">\n' : ''}<meta property="og:title" content="${p.title}">
+${p.noindex
+  ? '<meta name="robots" content="noindex,follow">'
+  : `<link rel="canonical" href="${SITE}/${p.slug}">`}
+<meta property="og:title" content="${p.title}">
 <meta property="og:description" content="${p.desc}">
 <meta property="og:url" content="${SITE}/${p.slug}">
 <meta property="og:type" content="article">

@@ -88,10 +88,10 @@ ${p.faq ? faqSchema(p.faq) : ''}${p.breadcrumb === false ? '' : crumbSchema(p)}
   <div class="wrap">
     <a class="logo" href="index.html">Size<span>My</span>PDF</a>
     <nav class="main">
-      <a href="compress-pdf-to-100kb.html">100&nbsp;KB</a>
-      <a href="compress-pdf-to-200kb.html">200&nbsp;KB</a>
+      <a href="tools.html">All&nbsp;tools</a>
       <a href="merge-pdf.html">Merge</a>
       <a href="split-pdf.html">Split</a>
+      <a href="jpg-to-pdf.html">Images</a>
       <a href="about.html">About</a>
     </nav>
   </div>
@@ -562,6 +562,334 @@ ${faqBlock(splitFaq)}
   <a href="merge-pdf.html"><strong>Merge PDFs</strong><small>Combine several files into one, in your chosen order.</small></a>
   <a href="index.html"><strong>Compress a PDF</strong><small>Hit an exact size limit for a form upload.</small></a>
   <a href="compress-scanned-pdf.html"><strong>Compress a scan</strong><small>Where the biggest savings are.</small></a>
+</div>
+`
+});
+
+/* ---- images to PDF ---- */
+
+const img2pdfFaq = [
+  ['Which image formats can I use?',
+   'JPG, PNG, GIF, BMP and WebP. Everything is re-encoded to JPEG on the way in, because PDF itself only carries a handful of image formats.'],
+  ['Can I control the page order?',
+   'Yes. Use the arrows beside each image to reorder them. Pages come out in the order shown on screen, not the order your browser happened to list the files in.'],
+  ['Should I pick A4 or match the image?',
+   'Match the image if the result is only going to be viewed on screen - there are no margins and nothing is cropped. Pick A4 if it will be printed, or if a form expects a standard page size.'],
+  ['Are my photos uploaded?',
+   'No. The PDF is assembled in your browser and the images never leave your device. That matters more than usual here, because photographed documents are often IDs and certificates.'],
+  ['Why is my PDF larger than the images?',
+   'It should be close to the sum of them. If it is much larger, the images were probably PNGs, which are lossless and big. Run the result through the compressor to bring it down.']
+];
+
+pages.push({
+  slug: 'jpg-to-pdf.html',
+  title: `JPG to PDF — Convert Images to PDF Free, No Upload | ${NAME}`,
+  desc: 'Turn JPG, PNG or other images into a single PDF, in the order you choose. Runs entirely in your browser, so your photos are never uploaded. Free, no signup.',
+  h1: 'Images to PDF',
+  faq: img2pdfFaq,
+  scripts: ['https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js', 'js/img2pdf.js'],
+  body: `
+<h1>Images to PDF</h1>
+<p class="lede">Turn photos or scans into one PDF, in the order you choose. Nothing is uploaded &mdash; which matters, because the images people convert are usually documents.</p>
+
+<div class="privacy-badge">&#128274; Your images never leave this device</div>
+
+<div class="tool">
+  <div class="drop" id="drop">
+    <strong>Choose images or drop them here</strong>
+    <small>JPG, PNG, GIF, BMP or WebP &mdash; nothing is uploaded</small>
+  </div>
+  <input type="file" id="file" accept="image/*" multiple>
+
+  <div class="controls" id="controls">
+    <ul class="filelist" id="list"></ul>
+    <div class="row">
+      <div class="field">
+        <label for="pagesize">Page size</label>
+        <select id="pagesize">
+          <option value="match">Match each image &mdash; no margins</option>
+          <option value="a4">A4 &mdash; centred, for printing</option>
+        </select>
+      </div>
+      <div><button class="btn" id="go">Create PDF</button></div>
+    </div>
+
+    <div class="bar" id="bar"><i id="barFill"></i></div>
+    <div class="status" id="status"></div>
+
+    <div class="result" id="result">
+      <div class="big" id="rBig"></div>
+      <div class="meta" id="rMeta"></div>
+      <button class="btn" id="dl">Download PDF</button>
+    </div>
+  </div>
+</div>
+
+${AD}
+
+<h2>Why people convert images to PDF</h2>
+<p>Almost always because something will only accept one file. A landlord wants proof of address, a university wants your certificates, a visa portal wants both sides of an ID &mdash; and each will take a single PDF but not four photos. Putting them in one document, in a sensible order, is the whole job.</p>
+<p>The second reason is that PDF fixes the order and the layout. A folder of photos arrives in whatever order the recipient's computer decides; a PDF arrives exactly as you built it.</p>
+
+<h2>Match the image, or A4?</h2>
+<table>
+  <thead><tr><th>Option</th><th>Page size</th><th>Best for</th></tr></thead>
+  <tbody>
+    <tr><td>Match each image</td><td>Exactly the image's dimensions</td><td>Screen viewing, uploads, no wasted space</td></tr>
+    <tr><td>A4</td><td>595&times;842 points, image centred</td><td>Printing, forms that expect standard pages</td></tr>
+  </tbody>
+</table>
+<p>Neither option crops anything. A4 fits the image inside the page and preserves its aspect ratio, so a landscape photo simply leaves white space above and below.</p>
+
+<div class="note"><strong>Photographing a document?</strong> Fill the frame with the page, keep the camera parallel to it, and use even light rather than flash. Getting this right beats any amount of processing afterwards &mdash; and if the result is too large, <a href="index.html">compress it</a> once it is a PDF.</div>
+
+<h2>Common questions</h2>
+${faqBlock(img2pdfFaq)}
+
+<h2>Other tools</h2>
+<div class="grid">
+  <a href="pdf-to-jpg.html"><strong>PDF to images</strong><small>The reverse &mdash; turn each page into a JPG or PNG.</small></a>
+  <a href="index.html"><strong>Compress a PDF</strong><small>Photo-heavy PDFs are exactly what this shrinks best.</small></a>
+  <a href="tools.html"><strong>All tools</strong><small>Everything on this site, in one list.</small></a>
+</div>
+`
+});
+
+/* ---- PDF to images ---- */
+
+const pdf2imgFaq = [
+  ['What resolution should I choose?',
+   'Screen (1x) is fine for viewing and sharing. Print (2x) roughly doubles the dimensions and suits printing or reading small text. High (3x) is for detail work and produces large files.'],
+  ['JPG or PNG?',
+   'JPG for anything photographic or scanned - far smaller files. PNG for diagrams, screenshots and line art, where its lossless compression keeps edges crisp.'],
+  ['Why one download button per page?',
+   'Building a ZIP would mean loading another library for something many people do not need, and separate buttons let you take only the pages you actually want.'],
+  ['Is there a page limit?',
+   'The tool refuses documents over 100 pages, because rendering that many images at full resolution will usually exhaust browser memory. Split the document first.'],
+  ['Is my PDF uploaded?',
+   'No. Pages are rendered in your browser and the file never leaves your device.']
+];
+
+pages.push({
+  slug: 'pdf-to-jpg.html',
+  title: `PDF to JPG — Convert PDF Pages to Images Free | ${NAME}`,
+  desc: 'Turn every page of a PDF into a JPG or PNG image. Choose the resolution. Runs entirely in your browser, so nothing is uploaded. Free, no signup, no watermark.',
+  h1: 'PDF to images',
+  faq: pdf2imgFaq,
+  scripts: ['https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js', 'js/pdf2img.js'],
+  body: `
+<h1>PDF to images</h1>
+<p class="lede">Turn each page into a JPG or PNG at the resolution you pick. Rendered in your browser &mdash; the document is never uploaded.</p>
+
+<div class="privacy-badge">&#128274; Your file never leaves this device</div>
+
+<div class="tool">
+  <div class="drop" id="drop">
+    <strong>Choose a PDF or drop it here</strong>
+    <small>Nothing is uploaded &mdash; pages are rendered in your browser</small>
+  </div>
+  <input type="file" id="file" accept="application/pdf,.pdf">
+
+  <div class="controls" id="controls">
+    <p class="note" id="info" style="margin-top:0"></p>
+    <div class="row">
+      <div class="field">
+        <label for="format">Format</label>
+        <select id="format">
+          <option value="image/jpeg">JPG &mdash; smaller, best for scans</option>
+          <option value="image/png">PNG &mdash; lossless, best for diagrams</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="quality">Resolution</label>
+        <select id="quality">
+          <option value="1">Screen &mdash; 1&times;</option>
+          <option value="2" selected>Print &mdash; 2&times;</option>
+          <option value="3">High &mdash; 3&times;</option>
+        </select>
+      </div>
+      <div><button class="btn" id="go">Convert</button></div>
+    </div>
+
+    <div class="bar" id="bar"><i id="barFill"></i></div>
+    <div class="status" id="status"></div>
+    <div class="outputs" id="outputs"></div>
+  </div>
+</div>
+
+${AD}
+
+<h2>Choosing format and resolution</h2>
+<table>
+  <thead><tr><th>Your page is</th><th>Format</th><th>Resolution</th></tr></thead>
+  <tbody>
+    <tr><td>A scan or photograph</td><td>JPG</td><td>Print (2&times;)</td></tr>
+    <tr><td>A diagram or screenshot</td><td>PNG</td><td>Print (2&times;)</td></tr>
+    <tr><td>Going into a slide deck</td><td>PNG</td><td>High (3&times;)</td></tr>
+    <tr><td>Just for viewing or sharing</td><td>JPG</td><td>Screen (1&times;)</td></tr>
+  </tbody>
+</table>
+<p>The multiplier is relative to the PDF's own page size, not a fixed DPI. A standard A4 page at 2&times; comes out around 1190&times;1684 pixels, which is roughly 150 DPI.</p>
+
+<h2>This is a one-way conversion</h2>
+<p>Rendering a page to an image throws away the text layer permanently. The words become pixels: not selectable, not searchable, and not recoverable by converting back. Keep the original PDF.</p>
+
+<div class="note"><strong>Only need one page as an image?</strong> <a href="split-pdf.html">Extract that page</a> first, then convert &mdash; much faster than rendering a whole document to get a single picture.</div>
+
+<h2>Common questions</h2>
+${faqBlock(pdf2imgFaq)}
+
+<h2>Other tools</h2>
+<div class="grid">
+  <a href="jpg-to-pdf.html"><strong>Images to PDF</strong><small>The reverse &mdash; combine photos into one PDF.</small></a>
+  <a href="split-pdf.html"><strong>Split a PDF</strong><small>Pull out the one page you actually need.</small></a>
+  <a href="tools.html"><strong>All tools</strong><small>Everything on this site, in one list.</small></a>
+</div>
+`
+});
+
+/* ---- rotate ---- */
+
+const rotateFaq = [
+  ['Does rotating reduce quality?',
+   'Not at all. Rotation is stored as a number in the page metadata rather than by redrawing anything, so the file comes out byte-for-byte as good as it went in.'],
+  ['Can I rotate only some pages?',
+   'Yes. Type the pages in the box - "all", or something like 1-3, 7. This is the common case for scanned documents where one sheet went through the feeder sideways.'],
+  ['Which direction is 90 degrees?',
+   'Clockwise. If a page is lying on its left side, 90 will stand it up. If it is upside down, use 180.'],
+  ['The rotation looks wrong in my viewer',
+   'Some viewers cache the previous rendering. Close and reopen the file. If a page already carried a rotation, this tool adds to it rather than replacing it, which is what you want when correcting a scan.'],
+  ['Is my file uploaded?',
+   'No. Everything happens in your browser.']
+];
+
+pages.push({
+  slug: 'rotate-pdf.html',
+  title: `Rotate PDF Pages — Free, No Upload, No Quality Loss | ${NAME}`,
+  desc: 'Rotate every page of a PDF, or only the ones you name. Lossless - rotation is metadata, nothing is re-encoded. Runs in your browser, nothing is uploaded.',
+  h1: 'Rotate a PDF',
+  faq: rotateFaq,
+  scripts: ['https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js', 'js/rotate.js'],
+  body: `
+<h1>Rotate a PDF</h1>
+<p class="lede">Turn every page, or just the sideways ones. Completely lossless &mdash; and nothing is uploaded.</p>
+
+<div class="privacy-badge">&#128274; Your file never leaves this device</div>
+
+<div class="tool">
+  <div class="drop" id="drop">
+    <strong>Choose a PDF or drop it here</strong>
+    <small>Nothing is uploaded &mdash; rotation happens in your browser</small>
+  </div>
+  <input type="file" id="file" accept="application/pdf,.pdf">
+
+  <div class="controls" id="controls">
+    <p class="note" id="info" style="margin-top:0"></p>
+    <div class="row">
+      <div class="field">
+        <label for="angle">Rotate by</label>
+        <select id="angle">
+          <option value="90">90&deg; clockwise</option>
+          <option value="180">180&deg; &mdash; upside down</option>
+          <option value="270">270&deg; &mdash; 90&deg; anticlockwise</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="pages">Pages</label>
+        <input type="text" id="pages" value="all" placeholder="all, or 1-3">
+      </div>
+      <div><button class="btn" id="go">Rotate</button></div>
+    </div>
+
+    <div class="status" id="status"></div>
+
+    <div class="result" id="result">
+      <div class="big" id="rBig"></div>
+      <div class="meta" id="rMeta"></div>
+      <button class="btn" id="dl">Download PDF</button>
+    </div>
+  </div>
+</div>
+
+${AD}
+
+<h2>Rotation costs nothing</h2>
+<p>Every PDF page carries a rotation value in its metadata &mdash; 0, 90, 180 or 270 &mdash; and viewers apply it when drawing the page. Changing that number is the entire operation. No pixels move, no image is re-encoded, no text is touched, and the file size barely changes.</p>
+<p>That makes this the safest tool on the site. Unlike compression, there is no trade-off to weigh: a rotated page is exactly as good as it was.</p>
+
+<h2>Fixing a scan</h2>
+<p>The usual situation is a document where most pages are upright but a few went through the scanner sideways. Rather than rotating everything and breaking the good pages, name just the offenders: type <code>4, 9-11</code> and only those move.</p>
+<p>If a page already had a rotation, this adds to it rather than overwriting it &mdash; so applying 90&deg; to a page already at 90&deg; gives you 180&deg;, which is what you would expect when nudging a page round step by step.</p>
+
+<h2>Common questions</h2>
+${faqBlock(rotateFaq)}
+
+<h2>Other tools</h2>
+<div class="grid">
+  <a href="split-pdf.html"><strong>Split a PDF</strong><small>Extract pages or break a document into parts.</small></a>
+  <a href="merge-pdf.html"><strong>Merge PDFs</strong><small>Combine several files into one.</small></a>
+  <a href="tools.html"><strong>All tools</strong><small>Everything on this site, in one list.</small></a>
+</div>
+`
+});
+
+/* ---- tools hub ---- */
+
+pages.push({
+  slug: 'tools.html',
+  title: `All PDF Tools — Free, In Your Browser, No Upload | ${NAME}`,
+  desc: 'Every tool on SizeMyPDF: compress to an exact size, merge, split, images to PDF, PDF to images and rotate. All free, all running in your browser with no upload.',
+  h1: 'All tools',
+  body: `
+<h1>All tools</h1>
+<p class="lede">Six tools, all free, all running entirely in your browser. No account, no upload, no watermark, no file size limit imposed by us.</p>
+
+<div class="privacy-badge">&#128274; Every tool here runs on your device</div>
+
+<div class="grid">
+  <a href="index.html"><strong>Compress PDF</strong><small>Hit an exact size in KB &mdash; 100, 200, 500 or any number a form demands.</small></a>
+  <a href="merge-pdf.html"><strong>Merge PDFs</strong><small>Combine any number of files into one, in the order you choose.</small></a>
+  <a href="split-pdf.html"><strong>Split PDF</strong><small>Extract specific pages, or break one document into several files.</small></a>
+  <a href="jpg-to-pdf.html"><strong>Images to PDF</strong><small>Turn JPGs, PNGs or photos of documents into a single PDF.</small></a>
+  <a href="pdf-to-jpg.html"><strong>PDF to images</strong><small>Render every page as a JPG or PNG at your chosen resolution.</small></a>
+  <a href="rotate-pdf.html"><strong>Rotate PDF</strong><small>Fix sideways pages. Lossless &mdash; rotation is only metadata.</small></a>
+</div>
+
+<h2>Which tools change your file, and which do not</h2>
+<p>Worth knowing before you pick one, because it is the difference between a reversible edit and a permanent one.</p>
+<table>
+  <thead><tr><th>Tool</th><th>Lossless?</th><th>What happens</th></tr></thead>
+  <tbody>
+    <tr><td>Merge</td><td>Yes</td><td>Page objects are copied between documents</td></tr>
+    <tr><td>Split</td><td>Yes</td><td>Page objects are copied into a new document</td></tr>
+    <tr><td>Rotate</td><td>Yes</td><td>A number in the page metadata changes</td></tr>
+    <tr><td>Compress &mdash; Lossless mode</td><td>Yes</td><td>Metadata stripped, file structure repacked</td></tr>
+    <tr><td>Compress &mdash; Target size</td><td><strong>No</strong></td><td>Pages become images; the text layer is lost</td></tr>
+    <tr><td>PDF to images</td><td><strong>No</strong></td><td>Pages become pixels; not reversible</td></tr>
+    <tr><td>Images to PDF</td><td><strong>No</strong></td><td>Images are re-encoded as JPEG</td></tr>
+  </tbody>
+</table>
+<p><strong>Always keep your original.</strong> The lossy operations cannot be undone by running them backwards &mdash; converting an image back to a PDF does not restore the text that rendering destroyed.</p>
+
+<h2>What is not here, and why</h2>
+<p>Everything on this site runs in your browser. That rules out a category of tools other sites offer, and it is worth being straight about which:</p>
+<ul>
+  <li><strong>PDF to Word, Excel or PowerPoint.</strong> Reconstructing an editable document needs layout analysis that is not practical in a browser tab. Any site offering it is uploading your file to a server.</li>
+  <li><strong>OCR.</strong> Making a scan searchable needs a recognition engine measured in tens of megabytes. Possible in principle, punishing to download.</li>
+  <li><strong>Password protection and unlocking.</strong> The library used here does not implement PDF encryption. Removing protection from documents is also not something this site wants to help with.</li>
+  <li><strong>Editing text.</strong> PDF was designed as a final format; genuine text editing means rebuilding the document.</li>
+</ul>
+<p>The trade is deliberate: fewer tools, but your documents never leave your device. For a passport scan or a bank statement that is the better bargain.</p>
+
+${AD}
+
+<h2>Common size limits</h2>
+<div class="grid">
+  <a href="compress-pdf-to-100kb.html"><strong>Compress to 100 KB</strong><small>The tightest limit forms use.</small></a>
+  <a href="compress-pdf-to-200kb.html"><strong>Compress to 200 KB</strong><small>The most common limit worldwide.</small></a>
+  <a href="compress-pdf-to-500kb.html"><strong>Compress to 500 KB</strong><small>Job and visa applications.</small></a>
+  <a href="compress-pdf-for-email.html"><strong>Compress for email</strong><small>Under the 25 MB attachment ceiling.</small></a>
+  <a href="compress-scanned-pdf.html"><strong>Compress a scan</strong><small>Where the biggest savings hide.</small></a>
 </div>
 `
 });

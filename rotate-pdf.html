@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Rotate PDF Pages — Free, No Upload, No Quality Loss | SizeMyPDF</title>
+<meta name="description" content="Rotate every page of a PDF, or only the ones you name. Lossless - rotation is metadata, nothing is re-encoded. Runs in your browser, nothing is uploaded.">
+<link rel="canonical" href="https://sizemypdf.com/rotate-pdf.html">
+<meta property="og:title" content="Rotate PDF Pages — Free, No Upload, No Quality Loss | SizeMyPDF">
+<meta property="og:description" content="Rotate every page of a PDF, or only the ones you name. Lossless - rotation is metadata, nothing is re-encoded. Runs in your browser, nothing is uploaded.">
+<meta property="og:url" content="https://sizemypdf.com/rotate-pdf.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="SizeMyPDF">
+<meta property="og:image" content="https://sizemypdf.com/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="alternate icon" href="favicon-32.png" sizes="32x32">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="manifest" href="site.webmanifest">
+<meta name="theme-color" content="#2f6df6">
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+<link rel="stylesheet" href="css/style.css?v=61800416">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Does rotating reduce quality?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Not at all. Rotation is stored as a number in the page metadata rather than by redrawing anything, so the file comes out byte-for-byte as good as it went in."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I rotate only some pages?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. Type the pages in the box - \"all\", or something like 1-3, 7. This is the common case for scanned documents where one sheet went through the feeder sideways."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Which direction is 90 degrees?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Clockwise. If a page is lying on its left side, 90 will stand it up. If it is upside down, use 180."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "The rotation looks wrong in my viewer",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Some viewers cache the previous rendering. Close and reopen the file. If a page already carried a rotation, this tool adds to it rather than replacing it, which is what you want when correcting a scan."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is my file uploaded?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. Everything happens in your browser."
+      }
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://sizemypdf.com/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Rotate a PDF",
+      "item": "https://sizemypdf.com/rotate-pdf.html"
+    }
+  ]
+}
+</script>
+
+</head>
+<body>
+
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site">
+  <div class="wrap">
+    <a class="logo" href="index.html">Size<span>My</span>PDF</a>
+    <nav class="main">
+      <a href="tools.html">All&nbsp;tools</a>
+      <a href="merge-pdf.html">Merge</a>
+      <a href="split-pdf.html">Split</a>
+      <a href="jpg-to-pdf.html">Images</a>
+      <a href="about.html">About</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap" id="main">
+
+<h1>Rotate a PDF</h1>
+<p class="lede">Turn every page, or just the sideways ones. Completely lossless &mdash; and nothing is uploaded.</p>
+
+<div class="privacy-badge">&#128274; Your file never leaves this device</div>
+
+<div class="tool">
+  <div class="drop" id="drop">
+    <strong>Choose a PDF or drop it here</strong>
+    <small>Nothing is uploaded &mdash; rotation happens in your browser</small>
+  </div>
+  <input type="file" id="file" accept="application/pdf,.pdf">
+
+  <div class="controls" id="controls">
+    <p class="note" id="info" style="margin-top:0"></p>
+    <div class="row">
+      <div class="field">
+        <label for="angle">Rotate by</label>
+        <select id="angle">
+          <option value="90">90&deg; clockwise</option>
+          <option value="180">180&deg; &mdash; upside down</option>
+          <option value="270">270&deg; &mdash; 90&deg; anticlockwise</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="pages">Pages</label>
+        <input type="text" id="pages" value="all" placeholder="all, or 1-3">
+      </div>
+      <div><button class="btn" id="go">Rotate</button></div>
+    </div>
+
+    <div class="status" id="status"></div>
+
+    <div class="result" id="result">
+      <div class="big" id="rBig"></div>
+      <div class="meta" id="rMeta"></div>
+      <button class="btn" id="dl">Download PDF</button>
+    </div>
+  </div>
+</div>
+
+<div class="adslot">ad slot &mdash; replace after AdSense approval</div>
+
+<h2>Rotation costs nothing</h2>
+<p>Every PDF page carries a rotation value in its metadata &mdash; 0, 90, 180 or 270 &mdash; and viewers apply it when drawing the page. Changing that number is the entire operation. No pixels move, no image is re-encoded, no text is touched, and the file size barely changes.</p>
+<p>That makes this the safest tool on the site. Unlike compression, there is no trade-off to weigh: a rotated page is exactly as good as it was.</p>
+
+<h2>Fixing a scan</h2>
+<p>The usual situation is a document where most pages are upright but a few went through the scanner sideways. Rather than rotating everything and breaking the good pages, name just the offenders: type <code>4, 9-11</code> and only those move.</p>
+<p>If a page already had a rotation, this adds to it rather than overwriting it &mdash; so applying 90&deg; to a page already at 90&deg; gives you 180&deg;, which is what you would expect when nudging a page round step by step.</p>
+
+<h2>Common questions</h2>
+<details><summary>Does rotating reduce quality?</summary><p>Not at all. Rotation is stored as a number in the page metadata rather than by redrawing anything, so the file comes out byte-for-byte as good as it went in.</p></details>
+<details><summary>Can I rotate only some pages?</summary><p>Yes. Type the pages in the box - "all", or something like 1-3, 7. This is the common case for scanned documents where one sheet went through the feeder sideways.</p></details>
+<details><summary>Which direction is 90 degrees?</summary><p>Clockwise. If a page is lying on its left side, 90 will stand it up. If it is upside down, use 180.</p></details>
+<details><summary>The rotation looks wrong in my viewer</summary><p>Some viewers cache the previous rendering. Close and reopen the file. If a page already carried a rotation, this tool adds to it rather than replacing it, which is what you want when correcting a scan.</p></details>
+<details><summary>Is my file uploaded?</summary><p>No. Everything happens in your browser.</p></details>
+
+<h2>Other tools</h2>
+<div class="grid">
+  <a href="split-pdf.html"><strong>Split a PDF</strong><small>Extract pages or break a document into parts.</small></a>
+  <a href="merge-pdf.html"><strong>Merge PDFs</strong><small>Combine several files into one.</small></a>
+  <a href="tools.html"><strong>All tools</strong><small>Everything on this site, in one list.</small></a>
+</div>
+
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <nav>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+      <a href="privacy.html">Privacy Policy</a>
+      <a href="terms.html">Terms</a>
+    </nav>
+    <div class="copy">&copy; <span id="yr">2026</span> SizeMyPDF &middot; Files are processed in your browser and never uploaded.</div>
+  </div>
+</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js" integrity="sha384-weMABwrltA6jWR8DDe9Jp5blk+tZQh7ugpCsF3JwSA53WZM9/14PjS5LAJNHNjAI" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="js/rotate.js?v=613bd78b"></script>
+<script>document.getElementById('yr').textContent=new Date().getFullYear()</script>
+</body>
+</html>

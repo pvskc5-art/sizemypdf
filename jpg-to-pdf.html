@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>JPG to PDF — Convert Images to PDF Free, No Upload | SizeMyPDF</title>
+<meta name="description" content="Turn JPG, PNG or other images into a single PDF, in the order you choose. Runs entirely in your browser, so your photos are never uploaded. Free, no signup.">
+<link rel="canonical" href="https://sizemypdf.com/jpg-to-pdf.html">
+<meta property="og:title" content="JPG to PDF — Convert Images to PDF Free, No Upload | SizeMyPDF">
+<meta property="og:description" content="Turn JPG, PNG or other images into a single PDF, in the order you choose. Runs entirely in your browser, so your photos are never uploaded. Free, no signup.">
+<meta property="og:url" content="https://sizemypdf.com/jpg-to-pdf.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="SizeMyPDF">
+<meta property="og:image" content="https://sizemypdf.com/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="alternate icon" href="favicon-32.png" sizes="32x32">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="manifest" href="site.webmanifest">
+<meta name="theme-color" content="#2f6df6">
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+<link rel="stylesheet" href="css/style.css?v=61800416">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Which image formats can I use?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "JPG, PNG, GIF, BMP and WebP. Everything is re-encoded to JPEG on the way in, because PDF itself only carries a handful of image formats."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I control the page order?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. Use the arrows beside each image to reorder them. Pages come out in the order shown on screen, not the order your browser happened to list the files in."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Should I pick A4 or match the image?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Match the image if the result is only going to be viewed on screen - there are no margins and nothing is cropped. Pick A4 if it will be printed, or if a form expects a standard page size."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Are my photos uploaded?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. The PDF is assembled in your browser and the images never leave your device. That matters more than usual here, because photographed documents are often IDs and certificates."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Why is my PDF larger than the images?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "It should be close to the sum of them. If it is much larger, the images were probably PNGs, which are lossless and big. Run the result through the compressor to bring it down."
+      }
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://sizemypdf.com/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Images to PDF",
+      "item": "https://sizemypdf.com/jpg-to-pdf.html"
+    }
+  ]
+}
+</script>
+
+</head>
+<body>
+
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site">
+  <div class="wrap">
+    <a class="logo" href="index.html">Size<span>My</span>PDF</a>
+    <nav class="main">
+      <a href="tools.html">All&nbsp;tools</a>
+      <a href="merge-pdf.html">Merge</a>
+      <a href="split-pdf.html">Split</a>
+      <a href="jpg-to-pdf.html">Images</a>
+      <a href="about.html">About</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap" id="main">
+
+<h1>Images to PDF</h1>
+<p class="lede">Turn photos or scans into one PDF, in the order you choose. Nothing is uploaded &mdash; which matters, because the images people convert are usually documents.</p>
+
+<div class="privacy-badge">&#128274; Your images never leave this device</div>
+
+<div class="tool">
+  <div class="drop" id="drop">
+    <strong>Choose images or drop them here</strong>
+    <small>JPG, PNG, GIF, BMP or WebP &mdash; nothing is uploaded</small>
+  </div>
+  <input type="file" id="file" accept="image/*" multiple>
+
+  <div class="controls" id="controls">
+    <ul class="filelist" id="list"></ul>
+    <div class="row">
+      <div class="field">
+        <label for="pagesize">Page size</label>
+        <select id="pagesize">
+          <option value="match">Match each image &mdash; no margins</option>
+          <option value="a4">A4 &mdash; centred, for printing</option>
+        </select>
+      </div>
+      <div><button class="btn" id="go">Create PDF</button></div>
+    </div>
+
+    <div class="bar" id="bar"><i id="barFill"></i></div>
+    <div class="status" id="status"></div>
+
+    <div class="result" id="result">
+      <div class="big" id="rBig"></div>
+      <div class="meta" id="rMeta"></div>
+      <button class="btn" id="dl">Download PDF</button>
+    </div>
+  </div>
+</div>
+
+<div class="adslot">ad slot &mdash; replace after AdSense approval</div>
+
+<h2>Why people convert images to PDF</h2>
+<p>Almost always because something will only accept one file. A landlord wants proof of address, a university wants your certificates, a visa portal wants both sides of an ID &mdash; and each will take a single PDF but not four photos. Putting them in one document, in a sensible order, is the whole job.</p>
+<p>The second reason is that PDF fixes the order and the layout. A folder of photos arrives in whatever order the recipient's computer decides; a PDF arrives exactly as you built it.</p>
+
+<h2>Match the image, or A4?</h2>
+<table>
+  <thead><tr><th>Option</th><th>Page size</th><th>Best for</th></tr></thead>
+  <tbody>
+    <tr><td>Match each image</td><td>Exactly the image's dimensions</td><td>Screen viewing, uploads, no wasted space</td></tr>
+    <tr><td>A4</td><td>595&times;842 points, image centred</td><td>Printing, forms that expect standard pages</td></tr>
+  </tbody>
+</table>
+<p>Neither option crops anything. A4 fits the image inside the page and preserves its aspect ratio, so a landscape photo simply leaves white space above and below.</p>
+
+<div class="note"><strong>Photographing a document?</strong> Fill the frame with the page, keep the camera parallel to it, and use even light rather than flash. Getting this right beats any amount of processing afterwards &mdash; and if the result is too large, <a href="index.html">compress it</a> once it is a PDF.</div>
+
+<h2>Common questions</h2>
+<details><summary>Which image formats can I use?</summary><p>JPG, PNG, GIF, BMP and WebP. Everything is re-encoded to JPEG on the way in, because PDF itself only carries a handful of image formats.</p></details>
+<details><summary>Can I control the page order?</summary><p>Yes. Use the arrows beside each image to reorder them. Pages come out in the order shown on screen, not the order your browser happened to list the files in.</p></details>
+<details><summary>Should I pick A4 or match the image?</summary><p>Match the image if the result is only going to be viewed on screen - there are no margins and nothing is cropped. Pick A4 if it will be printed, or if a form expects a standard page size.</p></details>
+<details><summary>Are my photos uploaded?</summary><p>No. The PDF is assembled in your browser and the images never leave your device. That matters more than usual here, because photographed documents are often IDs and certificates.</p></details>
+<details><summary>Why is my PDF larger than the images?</summary><p>It should be close to the sum of them. If it is much larger, the images were probably PNGs, which are lossless and big. Run the result through the compressor to bring it down.</p></details>
+
+<h2>Other tools</h2>
+<div class="grid">
+  <a href="pdf-to-jpg.html"><strong>PDF to images</strong><small>The reverse &mdash; turn each page into a JPG or PNG.</small></a>
+  <a href="index.html"><strong>Compress a PDF</strong><small>Photo-heavy PDFs are exactly what this shrinks best.</small></a>
+  <a href="tools.html"><strong>All tools</strong><small>Everything on this site, in one list.</small></a>
+</div>
+
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <nav>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+      <a href="privacy.html">Privacy Policy</a>
+      <a href="terms.html">Terms</a>
+    </nav>
+    <div class="copy">&copy; <span id="yr">2026</span> SizeMyPDF &middot; Files are processed in your browser and never uploaded.</div>
+  </div>
+</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js" integrity="sha384-weMABwrltA6jWR8DDe9Jp5blk+tZQh7ugpCsF3JwSA53WZM9/14PjS5LAJNHNjAI" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="js/img2pdf.js?v=45e2164d"></script>
+<script>document.getElementById('yr').textContent=new Date().getFullYear()</script>
+</body>
+</html>

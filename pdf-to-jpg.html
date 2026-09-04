@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>PDF to JPG — Convert PDF Pages to Images Free | SizeMyPDF</title>
+<meta name="description" content="Turn every page of a PDF into a JPG or PNG image. Choose the resolution. Runs entirely in your browser, so nothing is uploaded. Free, no signup, no watermark.">
+<link rel="canonical" href="https://sizemypdf.com/pdf-to-jpg.html">
+<meta property="og:title" content="PDF to JPG — Convert PDF Pages to Images Free | SizeMyPDF">
+<meta property="og:description" content="Turn every page of a PDF into a JPG or PNG image. Choose the resolution. Runs entirely in your browser, so nothing is uploaded. Free, no signup, no watermark.">
+<meta property="og:url" content="https://sizemypdf.com/pdf-to-jpg.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="SizeMyPDF">
+<meta property="og:image" content="https://sizemypdf.com/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="alternate icon" href="favicon-32.png" sizes="32x32">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="manifest" href="site.webmanifest">
+<meta name="theme-color" content="#2f6df6">
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+<link rel="stylesheet" href="css/style.css?v=61800416">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What resolution should I choose?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Screen (1x) is fine for viewing and sharing. Print (2x) roughly doubles the dimensions and suits printing or reading small text. High (3x) is for detail work and produces large files."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "JPG or PNG?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "JPG for anything photographic or scanned - far smaller files. PNG for diagrams, screenshots and line art, where its lossless compression keeps edges crisp."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Why one download button per page?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Building a ZIP would mean loading another library for something many people do not need, and separate buttons let you take only the pages you actually want."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is there a page limit?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The tool refuses documents over 100 pages, because rendering that many images at full resolution will usually exhaust browser memory. Split the document first."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is my PDF uploaded?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. Pages are rendered in your browser and the file never leaves your device."
+      }
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://sizemypdf.com/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "PDF to images",
+      "item": "https://sizemypdf.com/pdf-to-jpg.html"
+    }
+  ]
+}
+</script>
+
+</head>
+<body>
+
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site">
+  <div class="wrap">
+    <a class="logo" href="index.html">Size<span>My</span>PDF</a>
+    <nav class="main">
+      <a href="tools.html">All&nbsp;tools</a>
+      <a href="merge-pdf.html">Merge</a>
+      <a href="split-pdf.html">Split</a>
+      <a href="jpg-to-pdf.html">Images</a>
+      <a href="about.html">About</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap" id="main">
+
+<h1>PDF to images</h1>
+<p class="lede">Turn each page into a JPG or PNG at the resolution you pick. Rendered in your browser &mdash; the document is never uploaded.</p>
+
+<div class="privacy-badge">&#128274; Your file never leaves this device</div>
+
+<div class="tool">
+  <div class="drop" id="drop">
+    <strong>Choose a PDF or drop it here</strong>
+    <small>Nothing is uploaded &mdash; pages are rendered in your browser</small>
+  </div>
+  <input type="file" id="file" accept="application/pdf,.pdf">
+
+  <div class="controls" id="controls">
+    <p class="note" id="info" style="margin-top:0"></p>
+    <div class="row">
+      <div class="field">
+        <label for="format">Format</label>
+        <select id="format">
+          <option value="image/jpeg">JPG &mdash; smaller, best for scans</option>
+          <option value="image/png">PNG &mdash; lossless, best for diagrams</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="quality">Resolution</label>
+        <select id="quality">
+          <option value="1">Screen &mdash; 1&times;</option>
+          <option value="2" selected>Print &mdash; 2&times;</option>
+          <option value="3">High &mdash; 3&times;</option>
+        </select>
+      </div>
+      <div><button class="btn" id="go">Convert</button></div>
+    </div>
+
+    <div class="bar" id="bar"><i id="barFill"></i></div>
+    <div class="status" id="status"></div>
+    <div class="outputs" id="outputs"></div>
+  </div>
+</div>
+
+<div class="adslot">ad slot &mdash; replace after AdSense approval</div>
+
+<h2>Choosing format and resolution</h2>
+<table>
+  <thead><tr><th>Your page is</th><th>Format</th><th>Resolution</th></tr></thead>
+  <tbody>
+    <tr><td>A scan or photograph</td><td>JPG</td><td>Print (2&times;)</td></tr>
+    <tr><td>A diagram or screenshot</td><td>PNG</td><td>Print (2&times;)</td></tr>
+    <tr><td>Going into a slide deck</td><td>PNG</td><td>High (3&times;)</td></tr>
+    <tr><td>Just for viewing or sharing</td><td>JPG</td><td>Screen (1&times;)</td></tr>
+  </tbody>
+</table>
+<p>The multiplier is relative to the PDF's own page size, not a fixed DPI. A standard A4 page at 2&times; comes out around 1190&times;1684 pixels, which is roughly 150 DPI.</p>
+
+<h2>This is a one-way conversion</h2>
+<p>Rendering a page to an image throws away the text layer permanently. The words become pixels: not selectable, not searchable, and not recoverable by converting back. Keep the original PDF.</p>
+
+<div class="note"><strong>Only need one page as an image?</strong> <a href="split-pdf.html">Extract that page</a> first, then convert &mdash; much faster than rendering a whole document to get a single picture.</div>
+
+<h2>Common questions</h2>
+<details><summary>What resolution should I choose?</summary><p>Screen (1x) is fine for viewing and sharing. Print (2x) roughly doubles the dimensions and suits printing or reading small text. High (3x) is for detail work and produces large files.</p></details>
+<details><summary>JPG or PNG?</summary><p>JPG for anything photographic or scanned - far smaller files. PNG for diagrams, screenshots and line art, where its lossless compression keeps edges crisp.</p></details>
+<details><summary>Why one download button per page?</summary><p>Building a ZIP would mean loading another library for something many people do not need, and separate buttons let you take only the pages you actually want.</p></details>
+<details><summary>Is there a page limit?</summary><p>The tool refuses documents over 100 pages, because rendering that many images at full resolution will usually exhaust browser memory. Split the document first.</p></details>
+<details><summary>Is my PDF uploaded?</summary><p>No. Pages are rendered in your browser and the file never leaves your device.</p></details>
+
+<h2>Other tools</h2>
+<div class="grid">
+  <a href="jpg-to-pdf.html"><strong>Images to PDF</strong><small>The reverse &mdash; combine photos into one PDF.</small></a>
+  <a href="split-pdf.html"><strong>Split a PDF</strong><small>Pull out the one page you actually need.</small></a>
+  <a href="tools.html"><strong>All tools</strong><small>Everything on this site, in one list.</small></a>
+</div>
+
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <nav>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+      <a href="privacy.html">Privacy Policy</a>
+      <a href="terms.html">Terms</a>
+    </nav>
+    <div class="copy">&copy; <span id="yr">2026</span> SizeMyPDF &middot; Files are processed in your browser and never uploaded.</div>
+  </div>
+</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js" integrity="sha384-/1qUCSGwTur9vjf/z9lmu/eCUYbpOTgSjmpbMQZ1/CtX2v/WcAIKqRv+U1DUCG6e" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="js/pdf2img.js?v=e8740e34"></script>
+<script>document.getElementById('yr').textContent=new Date().getFullYear()</script>
+</body>
+</html>

@@ -1,0 +1,107 @@
+# Notify IndexNow (Bing, Yandex) when pages change.
+#
+# This runs after GitHub's own "pages-build-deployment" finishes rather than on
+# push. Pinging on push would tell Bing to come and look before the new content
+# is actually being served, so it would crawl the old page and we would have
+# spent the notification for nothing.
+name: IndexNow
+
+on:
+  workflow_run:
+    workflows: ["pages-build-deployment"]
+    types: [completed]
+  workflow_dispatch:
+    inputs:
+      all:
+        description: "Submit every URL in sitemap.xml instead of just changed pages"
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+jobs:
+  ping:
+    # Only when the deploy actually succeeded, and only for the live branch.
+    if: >
+      github.event_name == 'workflow_dispatch' ||
+      (github.event.workflow_run.conclusion == 'success' &&
+       github.event.workflow_run.head_branch == 'main')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the deployed commit
+        uses: actions/checkout@v4
+        with:
+          # the commit that was actually published, not whatever main is now
+          ref: ${{ github.event.workflow_run.head_sha || github.ref }}
+          # need the parent as well so we can diff what this push changed
+          fetch-depth: 2
+
+      - name: Work out which pages changed
+        id: changed
+        run: |
+          set -euo pipefail
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ] && \
+             [ "${{ inputs.all }}" = "true" ]; then
+            echo "mode=all" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          # No parent (first commit, or a shallow/force-push edge case) means we
+          # cannot tell what changed. Submitting everything would be wrong, so
+          # do nothing and say why.
+          if ! git rev-parse HEAD~1 >/dev/null 2>&1; then
+            echo "No parent commit to diff against - skipping."
+            echo "mode=none" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          # Added, modified, renamed or deleted .html at the repo root. Deleted
+          # pages are submitted too: a URL that now 404s is how IndexNow is told
+          # to drop it.
+          files=$(git diff --name-only --diff-filter=AMRD HEAD~1 HEAD -- '*.html' || true)
+          urls=""
+          for f in $files; do
+            case "$f" in
+              */*) continue ;;                 # only root-level pages are public
+              404.html) continue ;;            # noindex, never worth submitting
+              index.html) urls="$urls https://sizemypdf.com/" ;;
+              *) urls="$urls https://sizemypdf.com/$f" ;;
+            esac
+          done
+          urls=$(echo $urls | xargs -n1 2>/dev/null | sort -u | xargs 2>/dev/null || true)
+          echo "urls=$urls" >> "$GITHUB_OUTPUT"
+          if [ -z "$urls" ]; then
+            echo "No page changes in this deploy - nothing to submit."
+            echo "mode=none" >> "$GITHUB_OUTPUT"
+          else
+            echo "mode=some" >> "$GITHUB_OUTPUT"
+            echo "Changed pages: $urls"
+          fi
+
+      - name: Confirm the new content is actually live
+        if: steps.changed.outputs.mode != 'none'
+        run: |
+          set -euo pipefail
+          url=$(echo "${{ steps.changed.outputs.urls }}" | awk '{print $1}')
+          [ "${{ steps.changed.outputs.mode }}" = "all" ] && url="https://sizemypdf.com/"
+          for i in $(seq 1 20); do
+            code=$(curl -s -o /dev/null -w "%{http_code}" "$url" || true)
+            [ "$code" = "200" ] && { echo "$url is serving ($code)"; exit 0; }
+            sleep 15
+          done
+          echo "::warning::$url did not return 200 after 5 minutes; submitting anyway"
+
+      - uses: actions/setup-node@v4
+        if: steps.changed.outputs.mode != 'none'
+        with:
+          node-version: '20'
+
+      - name: Submit to IndexNow
+        if: steps.changed.outputs.mode != 'none'
+        run: |
+          if [ "${{ steps.changed.outputs.mode }}" = "all" ]; then
+            node scripts/indexnow.js --all
+          else
+            node scripts/indexnow.js ${{ steps.changed.outputs.urls }}
+          fi

@@ -22,7 +22,7 @@
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="manifest" href="site.webmanifest">
 <meta name="theme-color" content="#2f6df6">
-<link rel="stylesheet" href="css/style.css?v=04eeed72">
+<link rel="stylesheet" href="css/style.css?v=83e9cdce">
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5619759216593458" crossorigin="anonymous"></script>
 <script type="application/ld+json">
 {
@@ -152,7 +152,7 @@
 <p>That case is also exactly where uploading is least acceptable. CVs carry addresses and phone numbers; invoices carry bank details; ID scans carry everything. Compressing them in the browser means a folder of other people's personal data never leaves your machine &mdash; which is a materially easier thing to justify to whoever is responsible for it.</p>
 
 <h2>How the queue behaves</h2>
-<table>
+<div class="tablewrap"><table>
   <thead><tr><th>Situation</th><th>What happens</th></tr></thead>
   <tbody>
     <tr><td>File already under the target</td><td>Handed back untouched &mdash; no quality lost for nothing</td></tr>
@@ -161,7 +161,7 @@
     <tr><td>Target is impossible</td><td>Marked <strong>over target</strong>, smallest sensible version kept</td></tr>
     <tr><td>File is password-protected</td><td>Marked and skipped; the rest of the batch continues</td></tr>
   </tbody>
-</table>
+</table></div>
 <p>Files run one after another rather than together. Each one holds all of its pages as images while it works, so processing several at once is the fastest route to running a phone out of memory.</p>
 
 <div class="note"><strong>Large batches take real time.</strong> The work happens on your processor, not a server, so twenty scanned documents is minutes rather than seconds. The tab must stay open &mdash; but you can leave it in the background and come back to it.</div>

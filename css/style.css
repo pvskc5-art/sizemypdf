@@ -190,3 +190,8 @@ footer.site a{color:var(--muted)}
   width:40px;min-width:40px;height:52px;background:#f4f5f7;border-radius:3px;
   border:1px solid var(--line);overflow:hidden;line-height:0;margin-right:10px}
 .filelist .cover canvas{display:block;max-width:100%;height:auto}
+
+/* Tables scroll inside their own box instead of widening the page. width:100%
+   only acts as a floor for auto table layout, so a table that already fits is
+   untouched and nothing starts scrolling that did not need to. */
+.tablewrap{overflow-x:auto;-webkit-overflow-scrolling:touch}

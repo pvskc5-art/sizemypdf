@@ -1795,8 +1795,21 @@ pages.push({
 const root = __dirname;
 let written = 0;
 
+/* Wrap every table in a scroll container. A comparison table that grows a
+   long cell would otherwise widen the whole page and make it scroll sideways
+   on a phone - the failure the header nav just caused. Doing it at build time
+   means new tables get it automatically instead of relying on whoever adds
+   the next one remembering. Idempotent, so index.html can be rewritten in
+   place on every build. */
+function wrapTables(html) {
+  return html
+    .replace(/<div class="tablewrap">\s*(<table>[\s\S]*?<\/table>)\s*<\/div>/g, '$1')
+    .replace(/<table>([\s\S]*?)<\/table>/g,
+             '<div class="tablewrap"><table>$1</table></div>');
+}
+
 for (const p of pages) {
-  fs.writeFileSync(path.join(root, p.slug), head(p) + p.body + foot(p), 'utf8');
+  fs.writeFileSync(path.join(root, p.slug), head(p) + wrapTables(p.body) + foot(p), 'utf8');
   written++;
   console.log('  wrote ' + p.slug);
 }
@@ -1813,6 +1826,8 @@ for (const p of pages) {
     const next = html.replace(re, () => { changed++; return ver(asset); });
     html = next;
   }
+  html = wrapTables(html);
+
   // AdSense loader: insert once, after the stylesheet, if not already there
   let ads = 'present';
   if (html.indexOf('adsbygoogle.js?client=') === -1) {

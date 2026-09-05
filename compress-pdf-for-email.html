@@ -22,7 +22,7 @@
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="manifest" href="site.webmanifest">
 <meta name="theme-color" content="#2f6df6">
-<link rel="stylesheet" href="css/style.css?v=04eeed72">
+<link rel="stylesheet" href="css/style.css?v=83e9cdce">
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5619759216593458" crossorigin="anonymous"></script>
 <script type="application/ld+json">
 {
@@ -117,7 +117,7 @@
 </div>
 
 <h2>The limits that actually apply</h2>
-<table>
+<div class="tablewrap"><table>
   <thead><tr><th>Service</th><th>Stated limit</th><th>Safe file size</th></tr></thead>
   <tbody>
     <tr><td>Gmail</td><td>25 MB</td><td>~18 MB</td></tr>
@@ -126,7 +126,7 @@
     <tr><td>Yahoo Mail</td><td>25 MB</td><td>~18 MB</td></tr>
     <tr><td>Corporate mail servers</td><td>Frequently 10 MB</td><td>~7 MB</td></tr>
   </tbody>
-</table>
+</table></div>
 
 <h2>Why the safe size is lower than the stated limit</h2>
 <p>Email cannot carry raw binary data, so attachments are encoded in base64 before sending. That encoding uses four characters for every three bytes, inflating the attachment by roughly a third. A 24 MB PDF arrives at the mail server as about 32 MB, which is why it bounces against a 25 MB limit that it appears to satisfy.</p>

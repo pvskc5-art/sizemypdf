@@ -27,6 +27,41 @@
       result = $('#result'), go = $('#go');
 
   var srcBytes = null, srcName = '', srcSize = 0, outBlob = null;
+  var lastKeptText = true;
+
+  /* Show page one of the result before the user commits to downloading it.
+     Every user has exactly one question after compressing - "is it still
+     readable?" - and answering it with a byte count alone means opening the
+     file in another app to find out, which on a phone is where people give up. */
+  function showPreview() {
+    var wrap = $('#preview'), canvas = $('#previewCanvas'), note = $('#previewNote');
+    if (!wrap || !canvas || !outBlob) return;
+    wrap.classList.remove('on');
+    outBlob.arrayBuffer().then(function (ab) {
+      return pdfjsLib.getDocument({ data: new Uint8Array(ab) }).promise;
+    }).then(function (doc) {
+      return doc.getPage(1);
+    }).then(function (page) {
+      var vp = page.getViewport({ scale: 1 });
+      var maxW = Math.min(360, wrap.clientWidth || 360);
+      var k = maxW / vp.width;
+      vp = page.getViewport({ scale: k });
+      canvas.width = Math.floor(vp.width);
+      canvas.height = Math.floor(vp.height);
+      var ctx = canvas.getContext('2d');
+      ctx.fillStyle = '#fff';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      var task = page.render({ canvasContext: ctx, viewport: vp });
+      return task.promise;
+    }).then(function () {
+      note.textContent = lastKeptText
+        ? 'Page 1 of the result. Text is still selectable in the file itself.'
+        : 'Page 1 of the result. Check the smallest text and any signature before you submit it.';
+      wrap.classList.add('on');
+    }).catch(function (e) {
+      console.error(e);   // preview is a nicety; never block the download on it
+    });
+  }
 
   function fmt(b) {
     if (b < 1024) return b + ' B';
@@ -43,11 +78,13 @@
     progress = Math.max(0, Math.min(100, p));
     bar.classList.add('on');
     barFill.style.width = progress + '%';
+    bar.setAttribute('aria-valuenow', Math.round(progress));
   }
   function bump(n) { prog(progress + (100 - progress) * (n / 100)); }
 
   /* ---------- file intake ---------- */
-  drop.addEventListener('click', function () { file.click(); });
+    // the drop zone is a <label for="file">, so the browser opens the
+    // picker on click and on Enter/Space from the keyboard - no handler needed
   drop.addEventListener('dragover', function (e) {
     e.preventDefault(); drop.classList.add('over');
   });
@@ -273,6 +310,7 @@
 
     go.disabled = true;
     result.classList.remove('on', 'miss');
+    var pv = $('#preview'); if (pv) pv.classList.remove('on');
 
     /* A file already under the target needs no work. Rasterising it anyway
        can return something LARGER than the original - a 20 KB text PDF comes
@@ -282,34 +320,65 @@
       $('#rBig').textContent = 'Already ' + fmt(srcSize) + ' — no compression needed';
       $('#rMeta').textContent = 'This file is under your ' + targetKB +
         ' KB target, so it is unchanged. Compressing it further would only lose quality.';
+      lastKeptText = true;
       result.classList.add('on');
       say(''); bar.classList.remove('on'); go.disabled = false;
+      showPreview();
       return;
     }
 
     prog(5);
     say('Reading the PDF…');
 
-    var job = (mode === 'lossless') ? repack() : toTarget(Math.max(10, targetKB) * 1024);
+    var targetBytes = Math.max(10, targetKB) * 1024;
+    var job;
 
-    job.then(function (bytes) {
+    if (mode === 'lossless') {
+      job = repack().then(function (b) { return { bytes: b, kepText: true }; });
+    } else {
+      /* Try the lossless repack BEFORE rasterising. Stripping metadata and
+         repacking with object streams typically saves 5-25%, which clears a
+         large share of near-miss targets - and it costs nothing, because the
+         text layer survives. Going straight to rasterising threw that away on
+         every job, flattening documents that never needed it. */
+      say('Trying lossless first…');
+      job = repack().then(function (b) {
+        if (b && b.length <= targetBytes) return { bytes: b, keptText: true };
+        return toTarget(targetBytes).then(function (r) {
+          return { bytes: r, keptText: false };
+        });
+      }).catch(function () {
+        // A file pdf-lib cannot repack may still rasterise fine.
+        return toTarget(targetBytes).then(function (r) {
+          return { bytes: r, keptText: false };
+        });
+      });
+    }
+
+    job.then(function (res) {
       prog(100);
+      var bytes = res && res.bytes;
       if (!bytes) { say('Could not process this PDF.'); go.disabled = false; return; }
       outBlob = new Blob([bytes], { type: 'application/pdf' });
+      lastKeptText = !!res.keptText;
       var saved = srcSize - outBlob.size;
       var pct = srcSize ? Math.round((saved / srcSize) * 100) : 0;
-      var hit = mode === 'lossless' || outBlob.size <= Math.max(10, targetKB) * 1024;
+      var hit = mode === 'lossless' || outBlob.size <= targetBytes;
 
       $('#rBig').textContent = hit
         ? fmt(outBlob.size) + '  —  ' + (pct > 0 ? pct + '% smaller' : 'no reduction possible')
         : 'Smallest achievable: ' + fmt(outBlob.size);
       $('#rMeta').textContent = hit
-        ? 'Was ' + fmt(srcSize) + ', now ' + fmt(outBlob.size) + '.'
+        ? ('Was ' + fmt(srcSize) + ', now ' + fmt(outBlob.size) + '. ' +
+           (res.keptText
+             ? 'Text is still selectable and searchable — nothing was rasterised.'
+             : 'Pages were rasterised to reach the target, so the text layer is gone.'))
         : 'Could not reach ' + targetKB + ' KB without destroying legibility. ' +
           'This is the smallest sensible result.';
       result.classList.add('on');
       if (!hit) result.classList.add('miss');
       say(''); bar.classList.remove('on'); go.disabled = false;
+      showPreview();
     }).catch(function (err) {
       console.error(err);
       say('Something went wrong: ' + (err && err.message ? err.message : 'unknown error') +

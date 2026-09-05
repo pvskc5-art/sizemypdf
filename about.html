@@ -20,7 +20,7 @@
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="manifest" href="site.webmanifest">
 <meta name="theme-color" content="#2f6df6">
-<link rel="stylesheet" href="css/style.css?v=61800416">
+<link rel="stylesheet" href="css/style.css?v=0f96e848">
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5619759216593458" crossorigin="anonymous"></script>
 <script type="application/ld+json">
 {
@@ -70,11 +70,12 @@
 
 <h2>Why it runs in your browser</h2>
 <p>Every other compressor uploads your document to a server, processes it there, and asks you to trust a privacy policy about what happens next. That is a genuinely bad deal when the document is a passport scan, a bank statement or a signed contract.</p>
-<p>SizeMyPDF does the work on your own device using JavaScript and WebAssembly. There is no upload endpoint. There is no storage bucket. There is no server that could be breached, subpoenaed or sold, because there is no server in the path at all.</p>
-<p>You do not have to take that on faith. Load the page, disconnect from the internet, and compress a file. It will still work.</p>
+<p>SizeMyPDF does the work on your own device in plain JavaScript. There is no upload endpoint. There is no storage bucket. There is no server that could be breached, subpoenaed or sold, because there is no server in the path at all.</p>
+<p>You do not have to take that on faith. Load the page, disconnect from the internet, and compress a file. It will still work &mdash; from your second visit onwards, when the service worker has cached the two libraries the tools need. On a very first visit those still have to be fetched, so try it once online first.</p>
 
 <h2>How the site is funded</h2>
 <p>Hosting is paid for by advertising. The ads are clearly marked, kept away from the tool itself, and never disguised as download buttons &mdash; a pattern common on free file-tool sites that this one deliberately avoids.</p>
+<p><strong>The ads do track you, and the tool does not.</strong> Those are two different claims and it would be dishonest to let the first hide behind the second. Your documents are never transmitted &mdash; that is enforced by there being no upload endpoint at all. But the advertising is served by Google, which sets cookies and profiles visitors the way it does everywhere else. If that matters to you, an ad blocker will not stop any tool on this site from working, because nothing here depends on the ads loading.</p>
 <p>There is no premium tier, no account, no file size cap and no watermark, because none of those would make the tool better; they would just make it worse in a way that pressures you to pay.</p>
 
 <h2>Limitations, stated plainly</h2>
@@ -102,6 +103,7 @@
   </div>
 </footer>
 
-<script>document.getElementById('yr').textContent=new Date().getFullYear()</script>
+<script>document.getElementById('yr').textContent=new Date().getFullYear();
+if('serviceWorker' in navigator){addEventListener('load',function(){navigator.serviceWorker.register('/sw.js').catch(function(){});});}</script>
 </body>
 </html>

@@ -16,8 +16,8 @@
     return (b / 1048576).toFixed(2) + ' MB';
   }
   function say(t) { statusEl.textContent = t; }
-
-  drop.addEventListener('click', function () { file.click(); });
+    // the drop zone is a <label for="file">, so the browser opens the
+    // picker on click and on Enter/Space from the keyboard - no handler needed
   drop.addEventListener('dragover', function (e) { e.preventDefault(); drop.classList.add('over'); });
   drop.addEventListener('dragleave', function () { drop.classList.remove('over'); });
   drop.addEventListener('drop', function (e) {

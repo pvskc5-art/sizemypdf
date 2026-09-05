@@ -41,7 +41,15 @@ li{margin-bottom:7px}
 .drop:hover,.drop.over{border-color:var(--brand);background:#f2f6ff}
 .drop strong{display:block;font-size:17px;margin-bottom:4px}
 .drop small{color:var(--muted)}
-input[type=file]{display:none}
+/* The file input must stay reachable: display:none removes it from the tab
+   order entirely, which locked out keyboard and screen-reader users. Clip it
+   instead so it is invisible but still focusable, and let the enclosing
+   <label class="drop"> show the focus ring. */
+.vh{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;
+  clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap;border:0}
+label.drop{display:block}
+.drop:focus-within{border-color:var(--brand);background:#f2f6ff;
+  outline:2px solid var(--brand);outline-offset:2px}
 
 .controls{margin-top:18px;display:none}
 .controls.on{display:block}
@@ -135,3 +143,12 @@ footer.site a{color:var(--muted)}
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}
 }
+
+
+/* ---- result preview ---- */
+.preview{display:none;margin-top:16px;padding-top:16px;border-top:1px solid #bfe3cf}
+.preview.on{display:block}
+.preview h4{margin:0 0 9px;font-size:14px;font-weight:600;color:var(--ink)}
+.preview canvas{max-width:100%;height:auto;border:1px solid var(--line);
+  border-radius:6px;background:#fff;display:block}
+.preview small{display:block;margin-top:8px;color:var(--muted);font-size:13px}

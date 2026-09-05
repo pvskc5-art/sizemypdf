@@ -21,7 +21,7 @@
 <link rel="manifest" href="site.webmanifest">
 <meta name="theme-color" content="#2f6df6">
 <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
-<link rel="stylesheet" href="css/style.css?v=61800416">
+<link rel="stylesheet" href="css/style.css?v=0f96e848">
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5619759216593458" crossorigin="anonymous"></script>
 <script type="application/ld+json">
 {
@@ -118,11 +118,11 @@
 <div class="privacy-badge">&#128274; Your file never leaves this device</div>
 
 <div class="tool">
-  <div class="drop" id="drop">
-    <strong>Choose a PDF or drop it here</strong>
+  <label class="drop" id="drop" for="file">
+      <strong>Choose a PDF or drop it here</strong>
     <small>Nothing is uploaded &mdash; pages are rendered in your browser</small>
-  </div>
-  <input type="file" id="file" accept="application/pdf,.pdf">
+      <input type="file" id="file" accept="application/pdf,.pdf" class="vh">
+    </label>
 
   <div class="controls" id="controls">
     <p class="note" id="info" style="margin-top:0"></p>
@@ -145,8 +145,8 @@
       <div><button class="btn" id="go">Convert</button></div>
     </div>
 
-    <div class="bar" id="bar"><i id="barFill"></i></div>
-    <div class="status" id="status"></div>
+    <div class="bar" id="bar" role="progressbar" aria-valuemin="0" aria-valuemax="100"><i id="barFill"></i></div>
+    <div class="status" id="status" role="status" aria-live="polite"></div>
     <div class="outputs" id="outputs"></div>
   </div>
 </div>
@@ -198,7 +198,8 @@
   </div>
 </footer>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js" integrity="sha384-/1qUCSGwTur9vjf/z9lmu/eCUYbpOTgSjmpbMQZ1/CtX2v/WcAIKqRv+U1DUCG6e" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<script src="js/pdf2img.js?v=e8740e34"></script>
-<script>document.getElementById('yr').textContent=new Date().getFullYear()</script>
+<script src="js/pdf2img.js?v=ec2f6d74"></script>
+<script>document.getElementById('yr').textContent=new Date().getFullYear();
+if('serviceWorker' in navigator){addEventListener('load',function(){navigator.serviceWorker.register('/sw.js').catch(function(){});});}</script>
 </body>
 </html>

@@ -129,7 +129,8 @@ ${(p.scripts || []).map(s => {
   // local script: version it so an update is picked up immediately
   return `<script src="${s.indexOf('http') === 0 ? s : ver(s)}"></script>`;
 }).join('\n')}
-<script>document.getElementById('yr').textContent=new Date().getFullYear()</script>
+<script>document.getElementById('yr').textContent=new Date().getFullYear();
+if('serviceWorker' in navigator){addEventListener('load',function(){navigator.serviceWorker.register('/sw.js').catch(function(){});});}</script>
 </body>
 </html>
 `;
@@ -440,18 +441,18 @@ pages.push({
 <div class="privacy-badge">&#128274; Your files never leave this device</div>
 
 <div class="tool">
-  <div class="drop" id="drop">
-    <strong>Choose PDFs or drop them here</strong>
+  <label class="drop" id="drop" for="file">
+      <strong>Choose PDFs or drop them here</strong>
     <small>Nothing is uploaded &mdash; merging happens in your browser</small>
-  </div>
-  <input type="file" id="file" accept="application/pdf,.pdf" multiple>
+      <input type="file" id="file" accept="application/pdf,.pdf" multiple class="vh">
+    </label>
 
   <div class="controls" id="controls">
     <ul class="filelist" id="list"></ul>
     <button class="btn" id="go">Merge PDFs</button>
 
-    <div class="bar" id="bar"><i id="barFill"></i></div>
-    <div class="status" id="status"></div>
+    <div class="bar" id="bar" role="progressbar" aria-valuemin="0" aria-valuemax="100"><i id="barFill"></i></div>
+    <div class="status" id="status" role="status" aria-live="polite"></div>
 
     <div class="result" id="result">
       <div class="big" id="rBig"></div>
@@ -518,11 +519,11 @@ pages.push({
 <div class="privacy-badge">&#128274; Your file never leaves this device</div>
 
 <div class="tool">
-  <div class="drop" id="drop">
-    <strong>Choose a PDF or drop it here</strong>
+  <label class="drop" id="drop" for="file">
+      <strong>Choose a PDF or drop it here</strong>
     <small>Nothing is uploaded &mdash; splitting happens in your browser</small>
-  </div>
-  <input type="file" id="file" accept="application/pdf,.pdf">
+      <input type="file" id="file" accept="application/pdf,.pdf" class="vh">
+    </label>
 
   <div class="controls" id="controls">
     <p class="note" id="info" style="margin-top:0"></p>
@@ -545,8 +546,8 @@ pages.push({
       <div><button class="btn" id="go">Split</button></div>
     </div>
 
-    <div class="bar" id="bar"><i id="barFill"></i></div>
-    <div class="status" id="status"></div>
+    <div class="bar" id="bar" role="progressbar" aria-valuemin="0" aria-valuemax="100"><i id="barFill"></i></div>
+    <div class="status" id="status" role="status" aria-live="polite"></div>
     <div class="outputs" id="outputs"></div>
   </div>
 </div>
@@ -613,11 +614,11 @@ pages.push({
 <div class="privacy-badge">&#128274; Your images never leave this device</div>
 
 <div class="tool">
-  <div class="drop" id="drop">
-    <strong>Choose images or drop them here</strong>
+  <label class="drop" id="drop" for="file">
+      <strong>Choose images or drop them here</strong>
     <small>JPG, PNG, GIF, BMP or WebP &mdash; nothing is uploaded</small>
-  </div>
-  <input type="file" id="file" accept="image/*" multiple>
+      <input type="file" id="file" accept="image/*" multiple class="vh">
+    </label>
 
   <div class="controls" id="controls">
     <ul class="filelist" id="list"></ul>
@@ -632,8 +633,8 @@ pages.push({
       <div><button class="btn" id="go">Create PDF</button></div>
     </div>
 
-    <div class="bar" id="bar"><i id="barFill"></i></div>
-    <div class="status" id="status"></div>
+    <div class="bar" id="bar" role="progressbar" aria-valuemin="0" aria-valuemax="100"><i id="barFill"></i></div>
+    <div class="status" id="status" role="status" aria-live="polite"></div>
 
     <div class="result" id="result">
       <div class="big" id="rBig"></div>
@@ -702,11 +703,11 @@ pages.push({
 <div class="privacy-badge">&#128274; Your file never leaves this device</div>
 
 <div class="tool">
-  <div class="drop" id="drop">
-    <strong>Choose a PDF or drop it here</strong>
+  <label class="drop" id="drop" for="file">
+      <strong>Choose a PDF or drop it here</strong>
     <small>Nothing is uploaded &mdash; pages are rendered in your browser</small>
-  </div>
-  <input type="file" id="file" accept="application/pdf,.pdf">
+      <input type="file" id="file" accept="application/pdf,.pdf" class="vh">
+    </label>
 
   <div class="controls" id="controls">
     <p class="note" id="info" style="margin-top:0"></p>
@@ -729,8 +730,8 @@ pages.push({
       <div><button class="btn" id="go">Convert</button></div>
     </div>
 
-    <div class="bar" id="bar"><i id="barFill"></i></div>
-    <div class="status" id="status"></div>
+    <div class="bar" id="bar" role="progressbar" aria-valuemin="0" aria-valuemax="100"><i id="barFill"></i></div>
+    <div class="status" id="status" role="status" aria-live="polite"></div>
     <div class="outputs" id="outputs"></div>
   </div>
 </div>
@@ -795,11 +796,11 @@ pages.push({
 <div class="privacy-badge">&#128274; Your file never leaves this device</div>
 
 <div class="tool">
-  <div class="drop" id="drop">
-    <strong>Choose a PDF or drop it here</strong>
+  <label class="drop" id="drop" for="file">
+      <strong>Choose a PDF or drop it here</strong>
     <small>Nothing is uploaded &mdash; rotation happens in your browser</small>
-  </div>
-  <input type="file" id="file" accept="application/pdf,.pdf">
+      <input type="file" id="file" accept="application/pdf,.pdf" class="vh">
+    </label>
 
   <div class="controls" id="controls">
     <p class="note" id="info" style="margin-top:0"></p>
@@ -819,7 +820,7 @@ pages.push({
       <div><button class="btn" id="go">Rotate</button></div>
     </div>
 
-    <div class="status" id="status"></div>
+    <div class="status" id="status" role="status" aria-live="polite"></div>
 
     <div class="result" id="result">
       <div class="big" id="rBig"></div>
@@ -1124,11 +1125,11 @@ pages.push({
 <div class="privacy-badge">&#128274; Your file never leaves this device</div>
 
 <div class="tool">
-  <div class="drop" id="drop">
-    <strong>Choose a PDF or drop it here</strong>
+  <label class="drop" id="drop" for="file">
+      <strong>Choose a PDF or drop it here</strong>
     <small>Nothing is uploaded &mdash; pages are removed in your browser</small>
-  </div>
-  <input type="file" id="file" accept="application/pdf,.pdf">
+      <input type="file" id="file" accept="application/pdf,.pdf" class="vh">
+    </label>
 
   <div class="controls" id="controls">
     <p class="note" id="info" style="margin-top:0"></p>
@@ -1139,7 +1140,7 @@ pages.push({
       </div>
       <div><button class="btn" id="go">Remove pages</button></div>
     </div>
-    <div class="status" id="status"></div>
+    <div class="status" id="status" role="status" aria-live="polite"></div>
     <div class="result" id="result">
       <div class="big" id="rBig"></div>
       <div class="meta" id="rMeta"></div>
@@ -1204,11 +1205,11 @@ pages.push({
 <div class="privacy-badge">&#128274; Your file never leaves this device</div>
 
 <div class="tool">
-  <div class="drop" id="drop">
-    <strong>Choose a PDF or drop it here</strong>
+  <label class="drop" id="drop" for="file">
+      <strong>Choose a PDF or drop it here</strong>
     <small>Nothing is uploaded &mdash; numbering happens in your browser</small>
-  </div>
-  <input type="file" id="file" accept="application/pdf,.pdf">
+      <input type="file" id="file" accept="application/pdf,.pdf" class="vh">
+    </label>
 
   <div class="controls" id="controls">
     <p class="note" id="info" style="margin-top:0"></p>
@@ -1249,7 +1250,7 @@ pages.push({
         Skip the first page (title page)
       </label>
     </p>
-    <div class="status" id="status"></div>
+    <div class="status" id="status" role="status" aria-live="polite"></div>
     <div class="result" id="result">
       <div class="big" id="rBig"></div>
       <div class="meta" id="rMeta"></div>
@@ -1303,11 +1304,11 @@ pages.push({
 <div class="privacy-badge">&#128274; Your file never leaves this device</div>
 
 <div class="tool">
-  <div class="drop" id="drop">
-    <strong>Choose a PDF or drop it here</strong>
+  <label class="drop" id="drop" for="file">
+      <strong>Choose a PDF or drop it here</strong>
     <small>Nothing is uploaded &mdash; the watermark is drawn in your browser</small>
-  </div>
-  <input type="file" id="file" accept="application/pdf,.pdf">
+      <input type="file" id="file" accept="application/pdf,.pdf" class="vh">
+    </label>
 
   <div class="controls" id="controls">
     <p class="note" id="info" style="margin-top:0"></p>
@@ -1334,7 +1335,7 @@ pages.push({
       </div>
       <div><button class="btn" id="go">Add watermark</button></div>
     </div>
-    <div class="status" id="status"></div>
+    <div class="status" id="status" role="status" aria-live="polite"></div>
     <div class="result" id="result">
       <div class="big" id="rBig"></div>
       <div class="meta" id="rMeta"></div>
@@ -1386,11 +1387,12 @@ pages.push({
 
 <h2>Why it runs in your browser</h2>
 <p>Every other compressor uploads your document to a server, processes it there, and asks you to trust a privacy policy about what happens next. That is a genuinely bad deal when the document is a passport scan, a bank statement or a signed contract.</p>
-<p>${NAME} does the work on your own device using JavaScript and WebAssembly. There is no upload endpoint. There is no storage bucket. There is no server that could be breached, subpoenaed or sold, because there is no server in the path at all.</p>
-<p>You do not have to take that on faith. Load the page, disconnect from the internet, and compress a file. It will still work.</p>
+<p>${NAME} does the work on your own device in plain JavaScript. There is no upload endpoint. There is no storage bucket. There is no server that could be breached, subpoenaed or sold, because there is no server in the path at all.</p>
+<p>You do not have to take that on faith. Load the page, disconnect from the internet, and compress a file. It will still work &mdash; from your second visit onwards, when the service worker has cached the two libraries the tools need. On a very first visit those still have to be fetched, so try it once online first.</p>
 
 <h2>How the site is funded</h2>
 <p>Hosting is paid for by advertising. The ads are clearly marked, kept away from the tool itself, and never disguised as download buttons &mdash; a pattern common on free file-tool sites that this one deliberately avoids.</p>
+<p><strong>The ads do track you, and the tool does not.</strong> Those are two different claims and it would be dishonest to let the first hide behind the second. Your documents are never transmitted &mdash; that is enforced by there being no upload endpoint at all. But the advertising is served by Google, which sets cookies and profiles visitors the way it does everywhere else. If that matters to you, an ad blocker will not stop any tool on this site from working, because nothing here depends on the ads loading.</p>
 <p>There is no premium tier, no account, no file size cap and no watermark, because none of those would make the tool better; they would just make it worse in a way that pressures you to pay.</p>
 
 <h2>Limitations, stated plainly</h2>
@@ -1576,6 +1578,79 @@ for (const p of pages) {
   }
   fs.writeFileSync(p, html, 'utf8');
   console.log('  stamped index.html (' + changed + ' asset refs, adsense ' + ads + ')');
+}
+
+/* Service worker. Two jobs: make "disconnect and it still works" actually true
+   by precaching the CDN libraries, and make repeat visits instant. The cache
+   name embeds a hash of the assets, so a deploy invalidates it automatically
+   rather than needing a version bumped by hand. */
+{
+  const assets = ['css/style.css', 'js/app.js', 'js/pageops.js'];
+  const stamp = crypto.createHash('sha1')
+    .update(assets.map(a => {
+      try { return fs.readFileSync(path.join(root, a)); } catch (e) { return ''; }
+    }).join('|'))
+    .digest('hex').slice(0, 10);
+
+  const precache = [
+    './', './tools.html', './css/style.css', './js/app.js',
+    'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js',
+    'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js',
+    'https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js'
+  ];
+
+  const sw = `/* SizeMyPDF service worker - generated by build.js, do not edit. */
+const CACHE = 'sizemypdf-${stamp}';
+const PRECACHE = ${JSON.stringify(precache, null, 2)};
+
+self.addEventListener('install', e => {
+  // Individually, so one failed CDN fetch cannot abort the whole install.
+  e.waitUntil(caches.open(CACHE).then(c =>
+    Promise.all(PRECACHE.map(u => c.add(u).catch(() => null)))
+  ).then(() => self.skipWaiting()));
+});
+
+self.addEventListener('activate', e => {
+  e.waitUntil(caches.keys()
+    .then(ks => Promise.all(ks.filter(k => k !== CACHE).map(k => caches.delete(k))))
+    .then(() => self.clients.claim()));
+});
+
+self.addEventListener('fetch', e => {
+  const req = e.request;
+  if (req.method !== 'GET') return;
+  const url = new URL(req.url);
+
+  // Never touch advertising, analytics or consent traffic - caching it would
+  // both break it and misrepresent what the visitor actually loaded.
+  if (/googlesyndication|doubleclick|adtrafficquality|googletagservices|cloudflareinsights/
+      .test(url.hostname)) return;
+
+  const sameOrigin = url.origin === self.location.origin;
+  const isLib = url.hostname === 'cdnjs.cloudflare.com';
+  if (!sameOrigin && !isLib) return;
+
+  // Libraries are version-pinned in their path, so cache-first is safe and is
+  // what makes offline work. Pages go network-first so content stays fresh.
+  if (isLib) {
+    e.respondWith(caches.match(req).then(hit => hit || fetch(req).then(res => {
+      const copy = res.clone();
+      caches.open(CACHE).then(c => c.put(req, copy)).catch(() => {});
+      return res;
+    })));
+    return;
+  }
+
+  e.respondWith(fetch(req).then(res => {
+    const copy = res.clone();
+    caches.open(CACHE).then(c => c.put(req, copy)).catch(() => {});
+    return res;
+  }).catch(() => caches.match(req).then(hit => hit ||
+    (req.mode === 'navigate' ? caches.match('./') : undefined))));
+});
+`;
+  fs.writeFileSync(path.join(root, 'sw.js'), sw, 'utf8');
+  console.log('  wrote sw.js (cache sizemypdf-' + stamp + ')');
 }
 
 /* sitemap - index first, then generated pages, excluding noindex */

@@ -20,10 +20,12 @@
   function prog(p) {
     bar.classList.add('on');
     barFill.style.width = Math.max(0, Math.min(100, p)) + '%';
+    bar.setAttribute('aria-valuenow', Math.round(Math.max(0, Math.min(100, p))));
   }
 
   /* ---------- intake ---------- */
-  drop.addEventListener('click', function () { file.click(); });
+    // the drop zone is a <label for="file">, so the browser opens the
+    // picker on click and on Enter/Space from the keyboard - no handler needed
   drop.addEventListener('dragover', function (e) {
     e.preventDefault(); drop.classList.add('over');
   });

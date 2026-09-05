@@ -1,25 +1,7 @@
-/* SizeMyPDF - client-side PDF compressor.
-   Everything runs in the browser; no file is ever uploaded. */
+/* SizeMyPDF - single-file compressor UI.
+   The compression itself lives in compress-core.js, shared with the batch page. */
 (function () {
   'use strict';
-
-  pdfjsLib.GlobalWorkerOptions.workerSrc =
-    'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
-
-  /* pdf.js schedules its render chunks with requestAnimationFrame, which
-     browsers pause in a hidden tab. Without this, a compression stalls
-     forever the moment the user switches away - and switching away during a
-     slow multi-page job is exactly what people do. Fall back to a timer
-     while the page is hidden so rendering keeps making progress. */
-  (function () {
-    var native = window.requestAnimationFrame.bind(window);
-    window.requestAnimationFrame = function (cb) {
-      if (document.hidden) {
-        return window.setTimeout(function () { cb(performance.now()); }, 16);
-      }
-      return native(cb);
-    };
-  })();
 
   var $ = function (s) { return document.querySelector(s); };
   var drop = $('#drop'), file = $('#file'), controls = $('#controls'),
@@ -29,40 +11,6 @@
   var srcBytes = null, srcName = '', srcSize = 0, outBlob = null;
   var lastKeptText = true;
 
-  /* Show page one of the result before the user commits to downloading it.
-     Every user has exactly one question after compressing - "is it still
-     readable?" - and answering it with a byte count alone means opening the
-     file in another app to find out, which on a phone is where people give up. */
-  function showPreview() {
-    var wrap = $('#preview'), canvas = $('#previewCanvas'), note = $('#previewNote');
-    if (!wrap || !canvas || !outBlob) return;
-    wrap.classList.remove('on');
-    outBlob.arrayBuffer().then(function (ab) {
-      return pdfjsLib.getDocument({ data: new Uint8Array(ab) }).promise;
-    }).then(function (doc) {
-      return doc.getPage(1);
-    }).then(function (page) {
-      var vp = page.getViewport({ scale: 1 });
-      var maxW = Math.min(360, wrap.clientWidth || 360);
-      var k = maxW / vp.width;
-      vp = page.getViewport({ scale: k });
-      canvas.width = Math.floor(vp.width);
-      canvas.height = Math.floor(vp.height);
-      var ctx = canvas.getContext('2d');
-      ctx.fillStyle = '#fff';
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-      var task = page.render({ canvasContext: ctx, viewport: vp });
-      return task.promise;
-    }).then(function () {
-      note.textContent = lastKeptText
-        ? 'Page 1 of the result. Text is still selectable in the file itself.'
-        : 'Page 1 of the result. Check the smallest text and any signature before you submit it.';
-      wrap.classList.add('on');
-    }).catch(function (e) {
-      console.error(e);   // preview is a nicety; never block the download on it
-    });
-  }
-
   function fmt(b) {
     if (b < 1024) return b + ' B';
     if (b < 1048576) return (b / 1024).toFixed(0) + ' KB';
@@ -71,8 +19,8 @@
   function say(t) { statusEl.textContent = t; }
 
   /* The search explores an unknown number of scales, so true percentage
-     progress is not knowable up front. Advance monotonically and ease off as
-     it approaches 100 - a bar that slides backwards reads as a failure. */
+     progress is not knowable up front. Advance monotonically and ease off near
+     the end - a bar that slides backwards reads as a failure. */
   var progress = 0;
   function prog(p) {
     progress = Math.max(0, Math.min(100, p));
@@ -82,9 +30,38 @@
   }
   function bump(n) { prog(progress + (100 - progress) * (n / 100)); }
 
+  /* Show page one of the result before the user commits to downloading it.
+     Every user has one question after compressing - is it still readable -
+     and a byte count does not answer it. */
+  function showPreview() {
+    var wrap = $('#preview'), canvas = $('#previewCanvas'), note = $('#previewNote');
+    if (!wrap || !canvas || !outBlob) return;
+    wrap.classList.remove('on');
+    outBlob.arrayBuffer().then(function (ab) {
+      return pdfjsLib.getDocument({ data: new Uint8Array(ab) }).promise;
+    }).then(function (doc) { return doc.getPage(1); })
+      .then(function (page) {
+        var vp = page.getViewport({ scale: 1 });
+        vp = page.getViewport({ scale: 360 / vp.width });
+        canvas.width = Math.floor(vp.width);
+        canvas.height = Math.floor(vp.height);
+        var ctx = canvas.getContext('2d');
+        ctx.fillStyle = '#fff';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        return page.render({ canvasContext: ctx, viewport: vp }).promise;
+      }).then(function () {
+        note.textContent = lastKeptText
+          ? 'Page 1 of the result. Text is still selectable in the file itself.'
+          : 'Page 1 of the result. Check the smallest text and any signature before you submit it.';
+        wrap.classList.add('on');
+      }).catch(function (e) {
+        console.error(e);   // a preview failure must never block the download
+      });
+  }
+
   /* ---------- file intake ---------- */
-    // the drop zone is a <label for="file">, so the browser opens the
-    // picker on click and on Enter/Space from the keyboard - no handler needed
+  // the drop zone is a <label for="file">, so click and Enter/Space are handled
+  // natively by the browser - a click listener here would double-fire
   drop.addEventListener('dragover', function (e) {
     e.preventDefault(); drop.classList.add('over');
   });
@@ -103,7 +80,6 @@
     }
     srcName = f.name.replace(/\.pdf$/i, '');
     srcSize = f.size;
-    pdfDoc = null; baseCanvases = null; derived = {};
     var fr = new FileReader();
     fr.onload = function () {
       srcBytes = new Uint8Array(fr.result);
@@ -112,194 +88,12 @@
         fmt(srcSize) + ' — click to choose a different file';
       controls.classList.add('on');
       result.classList.remove('on');
+      var pv = $('#preview'); if (pv) pv.classList.remove('on');
       say('');
-      var kb = Math.round(srcSize / 1024);
       var t = $('#target');
-      if (!t.value) t.value = Math.max(50, Math.round(kb * 0.35));
+      if (!t.value) t.value = Math.max(50, Math.round(srcSize / 1024 * 0.35));
     };
     fr.readAsArrayBuffer(f);
-  }
-
-  /* ---------- rendering ---------- */
-  var pdfDoc = null, baseCanvases = null, derived = {};
-  var BASE_SCALE = 1.4;
-
-  function loadDoc() {
-    if (pdfDoc) return Promise.resolve(pdfDoc);
-    return pdfjsLib.getDocument({ data: srcBytes.slice(0) }).promise.then(function (d) {
-      pdfDoc = d; return d;
-    });
-  }
-
-  // Rasterising through pdf.js is by far the most expensive step, so it runs
-  // exactly once at the highest scale we will ever need. Every lower scale is
-  // then a cheap canvas downscale of that result rather than a fresh render.
-  function renderBase() {
-    if (baseCanvases) return Promise.resolve(baseCanvases);
-    var scale = BASE_SCALE;
-    return loadDoc().then(function (doc) {
-      var out = [], n = doc.numPages, chain = Promise.resolve();
-      for (var i = 1; i <= n; i++) {
-        (function (pageNo) {
-          chain = chain.then(function () {
-            return doc.getPage(pageNo).then(function (page) {
-              var vp = page.getViewport({ scale: scale });
-              // guard against absurd canvas sizes on very large pages
-              var cap = 2600, k = Math.min(1, cap / Math.max(vp.width, vp.height));
-              if (k < 1) vp = page.getViewport({ scale: scale * k });
-              var c = document.createElement('canvas');
-              c.width = Math.max(1, Math.floor(vp.width));
-              c.height = Math.max(1, Math.floor(vp.height));
-              var ctx = c.getContext('2d');
-              ctx.fillStyle = '#fff';
-              ctx.fillRect(0, 0, c.width, c.height);
-              var task = page.render({ canvasContext: ctx, viewport: vp });
-              return task.promise.then(function () {
-                out.push(c);
-                bump(60 / n);
-              });
-            });
-          });
-        })(i);
-      }
-      return chain.then(function () { baseCanvases = out; return out; });
-    });
-  }
-
-  // Downscale the rendered pages to `scale`. Cheap compared to re-rendering.
-  function canvasesAt(scale) {
-    if (scale === BASE_SCALE) return renderBase();
-    if (derived[scale]) return Promise.resolve(derived[scale]);
-    return renderBase().then(function (base) {
-      var k = scale / BASE_SCALE;
-      var out = base.map(function (src) {
-        var c = document.createElement('canvas');
-        c.width = Math.max(1, Math.round(src.width * k));
-        c.height = Math.max(1, Math.round(src.height * k));
-        var ctx = c.getContext('2d');
-        ctx.imageSmoothingEnabled = true;
-        ctx.imageSmoothingQuality = 'high';
-        ctx.fillStyle = '#fff';
-        ctx.fillRect(0, 0, c.width, c.height);
-        ctx.drawImage(src, 0, 0, c.width, c.height);
-        return c;
-      });
-      derived[scale] = out;
-      return out;
-    });
-  }
-
-  function toJpeg(canvas, q) {
-    return new Promise(function (res) {
-      if (canvas.toBlob) canvas.toBlob(function (b) { res(b); }, 'image/jpeg', q);
-      else {
-        var d = canvas.toDataURL('image/jpeg', q),
-            bin = atob(d.split(',')[1]),
-            arr = new Uint8Array(bin.length);
-        for (var i = 0; i < bin.length; i++) arr[i] = bin.charCodeAt(i);
-        res(new Blob([arr], { type: 'image/jpeg' }));
-      }
-    });
-  }
-
-  // Encode every page to JPEG and report the total. Used during the search:
-  // building a real PDF for each probe is far too slow, and the finished file
-  // is just the JPEG bytes plus a small, predictable container.
-  function encodeAll(canvases, q) {
-    var blobs = [], total = 0, chain = Promise.resolve();
-    canvases.forEach(function (c) {
-      chain = chain.then(function () {
-        return toJpeg(c, q).then(function (b) { blobs.push(b); total += b.size; });
-      });
-    });
-    return chain.then(function () { return { blobs: blobs, total: total }; });
-  }
-
-  // Container cost of the PDF wrapper around the images - object headers,
-  // xref table, page tree. Small and roughly linear in page count.
-  function overhead(n) { return 1200 + 320 * n; }
-
-  function assembleFrom(canvases, blobs) {
-    return PDFLib.PDFDocument.create().then(function (out) {
-      var chain = Promise.resolve();
-      blobs.forEach(function (blob, i) {
-        chain = chain.then(function () {
-          return blob.arrayBuffer()
-            .then(function (ab) { return out.embedJpg(ab); })
-            .then(function (img) {
-              var c = canvases[i];
-              var p = out.addPage([c.width, c.height]);
-              p.drawImage(img, { x: 0, y: 0, width: c.width, height: c.height });
-            });
-        });
-      });
-      return chain.then(function () { return out.save({ useObjectStreams: true }); });
-    });
-  }
-
-  /* ---------- strategies ---------- */
-
-  // Lossless-ish: re-save through pdf-lib, drop metadata, use object streams.
-  function repack() {
-    return PDFLib.PDFDocument.load(srcBytes.slice(0), { ignoreEncryption: true })
-      .then(function (doc) {
-        doc.setTitle(''); doc.setAuthor(''); doc.setSubject('');
-        doc.setKeywords([]); doc.setProducer(''); doc.setCreator('');
-        return doc.save({ useObjectStreams: true });
-      });
-  }
-
-  // Target size: walk scales high to low, binary-search JPEG quality at each.
-  // The search works on encoded JPEG totals; a real PDF is built only once,
-  // for the setting that wins.
-  function toTarget(targetBytes) {
-    var scales = [BASE_SCALE, 1.0, 0.75, 0.55, 0.4];
-    var idx = 0, fallback = null;   // smallest encoding seen, if nothing fits
-
-    function tryScale() {
-      if (idx >= scales.length) {
-        return fallback
-          ? assembleFrom(fallback.canvases, fallback.blobs)
-          : Promise.resolve(null);
-      }
-      var s = scales[idx++];
-      say('Testing quality at ' + Math.round(s * 100) + '% scale…');
-
-      return canvasesAt(s).then(function (canvases) {
-        var budget = targetBytes - overhead(canvases.length);
-        var lo = 0.15, hi = 0.94, best = null, steps = 0;
-
-        function step() {
-          if (steps++ >= 4) return Promise.resolve(best);
-          var q = (lo + hi) / 2;
-          return encodeAll(canvases, q).then(function (enc) {
-            bump(4);
-            if (!fallback || enc.total < fallback.total) {
-              fallback = { canvases: canvases, blobs: enc.blobs, total: enc.total };
-            }
-            if (enc.total <= budget) { best = enc; lo = q; } else { hi = q; }
-            return step();
-          });
-        }
-
-        return step().then(function (winner) {
-          if (!winner) {
-            delete derived[s];
-            return tryScale();
-          }
-          say('Building the PDF…');
-          return assembleFrom(canvases, winner.blobs).then(function (bytes) {
-            // Container estimate was optimistic - shave quality and retry once.
-            if (bytes.length > targetBytes && lo > 0.2) {
-              return encodeAll(canvases, Math.max(0.15, lo - 0.12))
-                .then(function (enc2) { return assembleFrom(canvases, enc2.blobs); });
-            }
-            return bytes;
-          });
-        });
-      });
-    }
-    return tryScale();
   }
 
   /* ---------- run ---------- */
@@ -307,53 +101,32 @@
     if (!srcBytes) return;
     var mode = $('#mode').value;
     var targetKB = parseInt($('#target').value, 10) || 200;
+    var targetBytes = Math.max(10, targetKB) * 1024;
 
     go.disabled = true;
     result.classList.remove('on', 'miss');
     var pv = $('#preview'); if (pv) pv.classList.remove('on');
 
-    /* A file already under the target needs no work. Rasterising it anyway
-       can return something LARGER than the original - a 20 KB text PDF comes
-       back as a 26 KB image - which is the opposite of what was asked for. */
-    if (mode !== 'lossless' && srcSize <= Math.max(10, targetKB) * 1024) {
+    /* A file already under the target needs no work. Rasterising it anyway can
+       return something LARGER than the original - a 20 KB text PDF comes back
+       as a 26 KB image - which is the opposite of what was asked for. */
+    if (mode !== 'lossless' && srcSize <= targetBytes) {
       outBlob = new Blob([srcBytes.slice(0)], { type: 'application/pdf' });
+      lastKeptText = true;
       $('#rBig').textContent = 'Already ' + fmt(srcSize) + ' — no compression needed';
       $('#rMeta').textContent = 'This file is under your ' + targetKB +
         ' KB target, so it is unchanged. Compressing it further would only lose quality.';
-      lastKeptText = true;
       result.classList.add('on');
       say(''); bar.classList.remove('on'); go.disabled = false;
       showPreview();
       return;
     }
 
-    prog(5);
-    say('Reading the PDF…');
+    progress = 0; prog(5);
 
-    var targetBytes = Math.max(10, targetKB) * 1024;
-    var job;
-
-    if (mode === 'lossless') {
-      job = repack().then(function (b) { return { bytes: b, kepText: true }; });
-    } else {
-      /* Try the lossless repack BEFORE rasterising. Stripping metadata and
-         repacking with object streams typically saves 5-25%, which clears a
-         large share of near-miss targets - and it costs nothing, because the
-         text layer survives. Going straight to rasterising threw that away on
-         every job, flattening documents that never needed it. */
-      say('Trying lossless first…');
-      job = repack().then(function (b) {
-        if (b && b.length <= targetBytes) return { bytes: b, keptText: true };
-        return toTarget(targetBytes).then(function (r) {
-          return { bytes: r, keptText: false };
-        });
-      }).catch(function () {
-        // A file pdf-lib cannot repack may still rasterise fine.
-        return toTarget(targetBytes).then(function (r) {
-          return { bytes: r, keptText: false };
-        });
-      });
-    }
+    var job = (mode === 'lossless')
+      ? PDFCompress.repack(srcBytes).then(function (b) { return { bytes: b, keptText: true }; })
+      : PDFCompress.toTarget(srcBytes, targetBytes, bump, say);
 
     job.then(function (res) {
       prog(100);
@@ -361,8 +134,7 @@
       if (!bytes) { say('Could not process this PDF.'); go.disabled = false; return; }
       outBlob = new Blob([bytes], { type: 'application/pdf' });
       lastKeptText = !!res.keptText;
-      var saved = srcSize - outBlob.size;
-      var pct = srcSize ? Math.round((saved / srcSize) * 100) : 0;
+      var pct = srcSize ? Math.round(((srcSize - outBlob.size) / srcSize) * 100) : 0;
       var hit = mode === 'lossless' || outBlob.size <= targetBytes;
 
       $('#rBig').textContent = hit

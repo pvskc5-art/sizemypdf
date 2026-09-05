@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Compress Multiple PDFs at Once — Free, No Upload | SizeMyPDF</title>
+<meta name="description" content="Compress many PDFs to the same size limit in one go, and download them individually or as a ZIP. Runs entirely in your browser — no upload, no signup.">
+<link rel="canonical" href="https://sizemypdf.com/batch-compress-pdf.html">
+<meta property="og:title" content="Compress Multiple PDFs at Once — Free, No Upload | SizeMyPDF">
+<meta property="og:description" content="Compress many PDFs to the same size limit in one go, and download them individually or as a ZIP. Runs entirely in your browser — no upload, no signup.">
+<meta property="og:url" content="https://sizemypdf.com/batch-compress-pdf.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="SizeMyPDF">
+<meta property="og:image" content="https://sizemypdf.com/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="alternate icon" href="favicon-32.png" sizes="32x32">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="manifest" href="site.webmanifest">
+<meta name="theme-color" content="#2f6df6">
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+<link rel="stylesheet" href="css/style.css?v=0f96e848">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5619759216593458" crossorigin="anonymous"></script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "How many files can I do at once?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "There is no fixed limit, because there is no server enforcing one. Twenty ordinary documents are comfortable on a laptop. The constraint is your device memory, and it is driven by page count rather than file size - fifty single-page files are far easier than five fifty-page scans."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Why are files processed one at a time?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Each file holds every one of its pages as an image in memory while it is being compressed. Running several at once is the quickest way to exhaust a phone, so they are queued deliberately rather than parallelised."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does every file get the same target?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes - one target applies to the whole batch, which is the case that matters when a portal enforces the same cap on every attachment. Files already under the target are handed back untouched rather than compressed for no reason."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What if one file fails?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The rest continue. A file that cannot be read - usually because it is password-protected - is marked in the list and skipped, and you still get everything else."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Are my files uploaded?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. Every file in the batch is compressed in your browser and none of them leave your device. For a folder of CVs, invoices or ID documents that is the whole point."
+      }
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://sizemypdf.com/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Compress multiple PDFs at once",
+      "item": "https://sizemypdf.com/batch-compress-pdf.html"
+    }
+  ]
+}
+</script>
+
+</head>
+<body>
+
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site">
+  <div class="wrap">
+    <a class="logo" href="index.html">Size<span>My</span>PDF</a>
+    <nav class="main">
+      <a href="tools.html">All&nbsp;tools</a>
+      <a href="merge-pdf.html">Merge</a>
+      <a href="split-pdf.html">Split</a>
+      <a href="batch-compress-pdf.html">Batch</a>
+      <a href="about.html">About</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap" id="main">
+
+<h1>Compress multiple PDFs at once</h1>
+<p class="lede">Drop a folder full of documents, set one size limit, get them all back. Nothing is uploaded &mdash; which is the entire reason this is usable for CVs, invoices and ID documents.</p>
+
+<div class="privacy-badge">&#128274; None of your files leave this device</div>
+
+<div class="tool">
+  <label class="drop" id="drop" for="file">
+    <strong>Choose PDFs or drop them here</strong>
+    <small>Nothing is uploaded &mdash; every file is compressed in your browser</small>
+    <input type="file" id="file" accept="application/pdf,.pdf" multiple class="vh">
+  </label>
+
+  <div class="controls" id="controls">
+    <ul class="filelist" id="list"></ul>
+    <div class="row">
+      <div class="field">
+        <label for="target">Target size for every file (KB)</label>
+        <input type="number" id="target" min="10" step="10" value="200">
+      </div>
+      <div><button class="btn" id="go">Compress</button></div>
+    </div>
+
+    <div class="bar" id="bar" role="progressbar" aria-valuemin="0" aria-valuemax="100"><i id="barFill"></i></div>
+    <div class="status" id="status" role="status" aria-live="polite"></div>
+
+    <div class="result" id="summary">
+      <div class="big" id="sBig"></div>
+      <div class="meta" id="sMeta"></div>
+      <button class="btn" id="zip" disabled>Download all as ZIP</button>
+    </div>
+  </div>
+</div>
+
+<h2>What this is for</h2>
+<p>One file at a time is fine when you are filing your own visa application. It is not a workflow when you are an HR coordinator with fifty CVs to get under an applicant tracking system's per-file cap, or a bookkeeper with a month of invoices to fit a portal limit.</p>
+<p>That case is also exactly where uploading is least acceptable. CVs carry addresses and phone numbers; invoices carry bank details; ID scans carry everything. Compressing them in the browser means a folder of other people's personal data never leaves your machine &mdash; which is a materially easier thing to justify to whoever is responsible for it.</p>
+
+<h2>How the queue behaves</h2>
+<table>
+  <thead><tr><th>Situation</th><th>What happens</th></tr></thead>
+  <tbody>
+    <tr><td>File already under the target</td><td>Handed back untouched &mdash; no quality lost for nothing</td></tr>
+    <tr><td>Lossless repack reaches the target</td><td>Marked <strong>text kept</strong>; nothing is rasterised</td></tr>
+    <tr><td>Lossless is not enough</td><td>Falls back to rasterising, marked <strong>rasterised</strong></td></tr>
+    <tr><td>Target is impossible</td><td>Marked <strong>over target</strong>, smallest sensible version kept</td></tr>
+    <tr><td>File is password-protected</td><td>Marked and skipped; the rest of the batch continues</td></tr>
+  </tbody>
+</table>
+<p>Files run one after another rather than together. Each one holds all of its pages as images while it works, so processing several at once is the fastest route to running a phone out of memory.</p>
+
+<div class="note"><strong>Large batches take real time.</strong> The work happens on your processor, not a server, so twenty scanned documents is minutes rather than seconds. The tab must stay open &mdash; but you can leave it in the background and come back to it.</div>
+
+<h2>Common questions</h2>
+<details><summary>How many files can I do at once?</summary><p>There is no fixed limit, because there is no server enforcing one. Twenty ordinary documents are comfortable on a laptop. The constraint is your device memory, and it is driven by page count rather than file size - fifty single-page files are far easier than five fifty-page scans.</p></details>
+<details><summary>Why are files processed one at a time?</summary><p>Each file holds every one of its pages as an image in memory while it is being compressed. Running several at once is the quickest way to exhaust a phone, so they are queued deliberately rather than parallelised.</p></details>
+<details><summary>Does every file get the same target?</summary><p>Yes - one target applies to the whole batch, which is the case that matters when a portal enforces the same cap on every attachment. Files already under the target are handed back untouched rather than compressed for no reason.</p></details>
+<details><summary>What if one file fails?</summary><p>The rest continue. A file that cannot be read - usually because it is password-protected - is marked in the list and skipped, and you still get everything else.</p></details>
+<details><summary>Are my files uploaded?</summary><p>No. Every file in the batch is compressed in your browser and none of them leave your device. For a folder of CVs, invoices or ID documents that is the whole point.</p></details>
+
+<h2>Other tools</h2>
+<div class="grid">
+  <a href="index.html"><strong>Compress one PDF</strong><small>Single file, with a preview of the result.</small></a>
+  <a href="merge-pdf.html"><strong>Merge PDFs</strong><small>Combine a batch into one document instead.</small></a>
+  <a href="tools.html"><strong>All tools</strong><small>Everything on this site.</small></a>
+</div>
+
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <nav>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+      <a href="privacy.html">Privacy Policy</a>
+      <a href="terms.html">Terms</a>
+    </nav>
+    <div class="copy">&copy; <span id="yr">2026</span> SizeMyPDF &middot; Files are processed in your browser and never uploaded.</div>
+  </div>
+</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js" integrity="sha384-/1qUCSGwTur9vjf/z9lmu/eCUYbpOTgSjmpbMQZ1/CtX2v/WcAIKqRv+U1DUCG6e" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js" integrity="sha384-weMABwrltA6jWR8DDe9Jp5blk+tZQh7ugpCsF3JwSA53WZM9/14PjS5LAJNHNjAI" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js" integrity="sha384-+mbV2IY1Zk/X1p/nWllGySJSUN8uMs+gUAN10Or95UBH0fpj6GfKgPmgC5EXieXG" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="js/compress-core.js?v=69b25e6a"></script>
+<script src="js/batch.js?v=4687d557"></script>
+<script>document.getElementById('yr').textContent=new Date().getFullYear();
+if('serviceWorker' in navigator){addEventListener('load',function(){navigator.serviceWorker.register('/sw.js').catch(function(){});});}</script>
+</body>
+</html>

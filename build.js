@@ -53,7 +53,9 @@ const SRI = {
   'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js':
     'sha384-/1qUCSGwTur9vjf/z9lmu/eCUYbpOTgSjmpbMQZ1/CtX2v/WcAIKqRv+U1DUCG6e',
   'https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js':
-    'sha384-weMABwrltA6jWR8DDe9Jp5blk+tZQh7ugpCsF3JwSA53WZM9/14PjS5LAJNHNjAI'
+    'sha384-weMABwrltA6jWR8DDe9Jp5blk+tZQh7ugpCsF3JwSA53WZM9/14PjS5LAJNHNjAI',
+  'https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js':
+    'sha384-+mbV2IY1Zk/X1p/nWllGySJSUN8uMs+gUAN10Or95UBH0fpj6GfKgPmgC5EXieXG'
 };
 
 /* ------------------------------------------------------------------ shell */
@@ -98,7 +100,7 @@ ${p.faq ? faqSchema(p.faq) : ''}${p.breadcrumb === false ? '' : crumbSchema(p)}
       <a href="tools.html">All&nbsp;tools</a>
       <a href="merge-pdf.html">Merge</a>
       <a href="split-pdf.html">Split</a>
-      <a href="jpg-to-pdf.html">Images</a>
+      <a href="batch-compress-pdf.html">Batch</a>
       <a href="about.html">About</a>
     </nav>
   </div>
@@ -861,12 +863,13 @@ pages.push({
   h1: 'All tools',
   body: `
 <h1>All tools</h1>
-<p class="lede">Nine tools, all free, all running entirely in your browser. No account, no upload, no watermark, no file size limit imposed by us.</p>
+<p class="lede">Ten tools, all free, all running entirely in your browser. No account, no upload, no watermark, no file size limit imposed by us.</p>
 
 <div class="privacy-badge">&#128274; Every tool here runs on your device</div>
 
 <div class="grid">
   <a href="index.html"><strong>Compress PDF</strong><small>Hit an exact size in KB &mdash; 100, 200, 500 or any number a form demands.</small></a>
+  <a href="batch-compress-pdf.html"><strong>Compress many at once</strong><small>One target, a whole folder of PDFs, downloaded individually or as a ZIP.</small></a>
   <a href="merge-pdf.html"><strong>Merge PDFs</strong><small>Combine any number of files into one, in the order you choose.</small></a>
   <a href="split-pdf.html"><strong>Split PDF</strong><small>Extract specific pages, or break one document into several files.</small></a>
   <a href="jpg-to-pdf.html"><strong>Images to PDF</strong><small>Turn JPGs, PNGs or photos of documents into a single PDF.</small></a>
@@ -915,6 +918,98 @@ ${AD}
   <a href="compress-pdf-to-500kb.html"><strong>Compress to 500 KB</strong><small>Job and visa applications.</small></a>
   <a href="compress-pdf-for-email.html"><strong>Compress for email</strong><small>Under the 25 MB attachment ceiling.</small></a>
   <a href="compress-scanned-pdf.html"><strong>Compress a scan</strong><small>Where the biggest savings hide.</small></a>
+</div>
+`
+});
+
+/* ---- batch compression ---- */
+
+const batchFaq = [
+  ['How many files can I do at once?',
+   'There is no fixed limit, because there is no server enforcing one. Twenty ordinary documents are comfortable on a laptop. The constraint is your device memory, and it is driven by page count rather than file size - fifty single-page files are far easier than five fifty-page scans.'],
+  ['Why are files processed one at a time?',
+   'Each file holds every one of its pages as an image in memory while it is being compressed. Running several at once is the quickest way to exhaust a phone, so they are queued deliberately rather than parallelised.'],
+  ['Does every file get the same target?',
+   'Yes - one target applies to the whole batch, which is the case that matters when a portal enforces the same cap on every attachment. Files already under the target are handed back untouched rather than compressed for no reason.'],
+  ['What if one file fails?',
+   'The rest continue. A file that cannot be read - usually because it is password-protected - is marked in the list and skipped, and you still get everything else.'],
+  ['Are my files uploaded?',
+   'No. Every file in the batch is compressed in your browser and none of them leave your device. For a folder of CVs, invoices or ID documents that is the whole point.']
+];
+
+pages.push({
+  slug: 'batch-compress-pdf.html',
+  title: `Compress Multiple PDFs at Once — Free, No Upload | ${NAME}`,
+  desc: 'Compress many PDFs to the same size limit in one go, and download them individually or as a ZIP. Runs entirely in your browser — no upload, no signup.',
+  h1: 'Compress multiple PDFs at once',
+  faq: batchFaq,
+  scripts: [
+    'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js',
+    'https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js',
+    'https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js',
+    'js/compress-core.js', 'js/batch.js'
+  ],
+  body: `
+<h1>Compress multiple PDFs at once</h1>
+<p class="lede">Drop a folder full of documents, set one size limit, get them all back. Nothing is uploaded &mdash; which is the entire reason this is usable for CVs, invoices and ID documents.</p>
+
+<div class="privacy-badge">&#128274; None of your files leave this device</div>
+
+<div class="tool">
+  <label class="drop" id="drop" for="file">
+    <strong>Choose PDFs or drop them here</strong>
+    <small>Nothing is uploaded &mdash; every file is compressed in your browser</small>
+    <input type="file" id="file" accept="application/pdf,.pdf" multiple class="vh">
+  </label>
+
+  <div class="controls" id="controls">
+    <ul class="filelist" id="list"></ul>
+    <div class="row">
+      <div class="field">
+        <label for="target">Target size for every file (KB)</label>
+        <input type="number" id="target" min="10" step="10" value="200">
+      </div>
+      <div><button class="btn" id="go">Compress</button></div>
+    </div>
+
+    <div class="bar" id="bar" role="progressbar" aria-valuemin="0" aria-valuemax="100"><i id="barFill"></i></div>
+    <div class="status" id="status" role="status" aria-live="polite"></div>
+
+    <div class="result" id="summary">
+      <div class="big" id="sBig"></div>
+      <div class="meta" id="sMeta"></div>
+      <button class="btn" id="zip" disabled>Download all as ZIP</button>
+    </div>
+  </div>
+</div>
+
+<h2>What this is for</h2>
+<p>One file at a time is fine when you are filing your own visa application. It is not a workflow when you are an HR coordinator with fifty CVs to get under an applicant tracking system's per-file cap, or a bookkeeper with a month of invoices to fit a portal limit.</p>
+<p>That case is also exactly where uploading is least acceptable. CVs carry addresses and phone numbers; invoices carry bank details; ID scans carry everything. Compressing them in the browser means a folder of other people's personal data never leaves your machine &mdash; which is a materially easier thing to justify to whoever is responsible for it.</p>
+
+<h2>How the queue behaves</h2>
+<table>
+  <thead><tr><th>Situation</th><th>What happens</th></tr></thead>
+  <tbody>
+    <tr><td>File already under the target</td><td>Handed back untouched &mdash; no quality lost for nothing</td></tr>
+    <tr><td>Lossless repack reaches the target</td><td>Marked <strong>text kept</strong>; nothing is rasterised</td></tr>
+    <tr><td>Lossless is not enough</td><td>Falls back to rasterising, marked <strong>rasterised</strong></td></tr>
+    <tr><td>Target is impossible</td><td>Marked <strong>over target</strong>, smallest sensible version kept</td></tr>
+    <tr><td>File is password-protected</td><td>Marked and skipped; the rest of the batch continues</td></tr>
+  </tbody>
+</table>
+<p>Files run one after another rather than together. Each one holds all of its pages as images while it works, so processing several at once is the fastest route to running a phone out of memory.</p>
+
+<div class="note"><strong>Large batches take real time.</strong> The work happens on your processor, not a server, so twenty scanned documents is minutes rather than seconds. The tab must stay open &mdash; but you can leave it in the background and come back to it.</div>
+
+<h2>Common questions</h2>
+${faqBlock(batchFaq)}
+
+<h2>Other tools</h2>
+<div class="grid">
+  <a href="index.html"><strong>Compress one PDF</strong><small>Single file, with a preview of the result.</small></a>
+  <a href="merge-pdf.html"><strong>Merge PDFs</strong><small>Combine a batch into one document instead.</small></a>
+  <a href="tools.html"><strong>All tools</strong><small>Everything on this site.</small></a>
 </div>
 `
 });
@@ -1565,7 +1660,7 @@ for (const p of pages) {
   const p = path.join(root, 'index.html');
   let html = fs.readFileSync(p, 'utf8');
   let changed = 0;
-  for (const asset of ['css/style.css', 'js/app.js']) {
+  for (const asset of ['css/style.css', 'js/compress-core.js', 'js/app.js']) {
     const re = new RegExp(asset.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '(\\?v=[a-f0-9]+)?', 'g');
     const next = html.replace(re, () => { changed++; return ver(asset); });
     html = next;
@@ -1585,7 +1680,7 @@ for (const p of pages) {
    name embeds a hash of the assets, so a deploy invalidates it automatically
    rather than needing a version bumped by hand. */
 {
-  const assets = ['css/style.css', 'js/app.js', 'js/pageops.js'];
+  const assets = ['css/style.css', 'js/compress-core.js', 'js/app.js', 'js/pageops.js'];
   const stamp = crypto.createHash('sha1')
     .update(assets.map(a => {
       try { return fs.readFileSync(path.join(root, a)); } catch (e) { return ''; }
@@ -1593,7 +1688,7 @@ for (const p of pages) {
     .digest('hex').slice(0, 10);
 
   const precache = [
-    './', './tools.html', './css/style.css', './js/app.js',
+    './', './tools.html', './css/style.css', './js/compress-core.js', './js/app.js',
     'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js',
     'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js',
     'https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js'

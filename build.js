@@ -32,7 +32,7 @@ const NAME = 'SizeMyPDF';
 /* Shown on the privacy policy and terms. Bump this whenever either changes
    materially - a policy dated years ago reads as abandoned, and AdSense
    review treats a stale or placeholder date as a red flag. */
-const POLICY_UPDATED = '4 September 2026';
+const POLICY_UPDATED = '5 September 2026';
 
 /* Public contact address. AdSense requires a working one, and it must be
    reachable - review does send mail to it. */
@@ -1000,7 +1000,7 @@ pages.push({
 <p>This site may use a privacy-respecting analytics service to count visits and understand which pages are useful. Where analytics are used, they are configured not to track individuals across other websites.</p>
 
 <h2>5. Visitors in the European Economic Area and United Kingdom</h2>
-<p>If you are located in the EEA, the UK or Switzerland, a consent prompt is shown before any non-essential cookies are set, and your choice is honoured. You may change or withdraw your consent at any time through the cookie settings link in the footer.</p>
+<p>If you are located in the European Economic Area, the United Kingdom or Switzerland, a consent message is shown before any non-essential cookies are set, and your choice is honoured. That message is provided by Google&rsquo;s certified consent management platform, and offers three options: consent, do not consent, or manage individual purposes. You can reopen it and change or withdraw your choice at any time through the consent tool itself; clearing this site&rsquo;s data in your browser also resets it.</p>
 <p>You have the right to request access to, correction of, or deletion of personal data held about you, and to lodge a complaint with your local data protection authority. Requests may be sent to the address on the <a href="contact.html">contact page</a>. Note that because your files never reach us, we hold no copies of your documents to disclose or delete.</p>
 
 <h2>6. Visitors in California</h2>

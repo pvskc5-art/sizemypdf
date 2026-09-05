@@ -64,7 +64,7 @@
 <main class="wrap" id="main">
 
 <h1>All tools</h1>
-<p class="lede">Six tools, all free, all running entirely in your browser. No account, no upload, no watermark, no file size limit imposed by us.</p>
+<p class="lede">Nine tools, all free, all running entirely in your browser. No account, no upload, no watermark, no file size limit imposed by us.</p>
 
 <div class="privacy-badge">&#128274; Every tool here runs on your device</div>
 
@@ -75,6 +75,9 @@
   <a href="jpg-to-pdf.html"><strong>Images to PDF</strong><small>Turn JPGs, PNGs or photos of documents into a single PDF.</small></a>
   <a href="pdf-to-jpg.html"><strong>PDF to images</strong><small>Render every page as a JPG or PNG at your chosen resolution.</small></a>
   <a href="rotate-pdf.html"><strong>Rotate PDF</strong><small>Fix sideways pages. Lossless &mdash; rotation is only metadata.</small></a>
+  <a href="delete-pages-from-pdf.html"><strong>Delete pages</strong><small>Remove the pages you do not want and keep the rest.</small></a>
+  <a href="add-page-numbers-to-pdf.html"><strong>Add page numbers</strong><small>Stamp numbers in the position and format you choose.</small></a>
+  <a href="watermark-pdf.html"><strong>Add a watermark</strong><small>Label pages DRAFT or CONFIDENTIAL across the page.</small></a>
 </div>
 
 <h2>Which tools change your file, and which do not</h2>
@@ -86,6 +89,9 @@
     <tr><td>Split</td><td>Yes</td><td>Page objects are copied into a new document</td></tr>
     <tr><td>Rotate</td><td>Yes</td><td>A number in the page metadata changes</td></tr>
     <tr><td>Compress &mdash; Lossless mode</td><td>Yes</td><td>Metadata stripped, file structure repacked</td></tr>
+    <tr><td>Delete pages</td><td>Yes</td><td>Remaining page objects are copied unchanged</td></tr>
+    <tr><td>Add page numbers</td><td>Mostly</td><td>Text is drawn on; the page beneath is untouched</td></tr>
+    <tr><td>Add watermark</td><td>Mostly</td><td>Text is drawn on; the page beneath is untouched</td></tr>
     <tr><td>Compress &mdash; Target size</td><td><strong>No</strong></td><td>Pages become images; the text layer is lost</td></tr>
     <tr><td>PDF to images</td><td><strong>No</strong></td><td>Pages become pixels; not reversible</td></tr>
     <tr><td>Images to PDF</td><td><strong>No</strong></td><td>Images are re-encoded as JPEG</td></tr>

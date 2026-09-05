@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Delete Pages from a PDF — Free, No Upload | SizeMyPDF</title>
+<meta name="description" content="Remove specific pages from a PDF and keep the rest. Lossless, runs entirely in your browser, nothing is uploaded. Free, no signup, no watermark.">
+<link rel="canonical" href="https://sizemypdf.com/delete-pages-from-pdf.html">
+<meta property="og:title" content="Delete Pages from a PDF — Free, No Upload | SizeMyPDF">
+<meta property="og:description" content="Remove specific pages from a PDF and keep the rest. Lossless, runs entirely in your browser, nothing is uploaded. Free, no signup, no watermark.">
+<meta property="og:url" content="https://sizemypdf.com/delete-pages-from-pdf.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="SizeMyPDF">
+<meta property="og:image" content="https://sizemypdf.com/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="alternate icon" href="favicon-32.png" sizes="32x32">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="manifest" href="site.webmanifest">
+<meta name="theme-color" content="#2f6df6">
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+<link rel="stylesheet" href="css/style.css?v=61800416">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5619759216593458" crossorigin="anonymous"></script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Does removing pages reduce quality?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. The pages you keep are copied across untouched, so text stays selectable and images keep their full resolution. Only the removed pages are gone."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Will the file get smaller?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Usually yes, roughly in proportion to what you removed - but not always. If the pages you deleted were light on content and the ones you kept carry the scans, the saving is small. Run the result through the compressor if you need a specific size."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I remove every page?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No, and the tool refuses to. A PDF with no pages is not a valid file and most readers will not open it. Keep at least one."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is this the same as splitting?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "They are two sides of the same operation. Splitting asks which pages you want to keep; this asks which you want gone. Use whichever is less typing for your document."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is my file uploaded?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. Everything happens in your browser."
+      }
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://sizemypdf.com/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Delete pages from a PDF",
+      "item": "https://sizemypdf.com/delete-pages-from-pdf.html"
+    }
+  ]
+}
+</script>
+
+</head>
+<body>
+
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site">
+  <div class="wrap">
+    <a class="logo" href="index.html">Size<span>My</span>PDF</a>
+    <nav class="main">
+      <a href="tools.html">All&nbsp;tools</a>
+      <a href="merge-pdf.html">Merge</a>
+      <a href="split-pdf.html">Split</a>
+      <a href="jpg-to-pdf.html">Images</a>
+      <a href="about.html">About</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap" id="main">
+
+<h1>Delete pages from a PDF</h1>
+<p class="lede">Name the pages you want gone. Everything else comes back untouched &mdash; and nothing is uploaded.</p>
+
+<div class="privacy-badge">&#128274; Your file never leaves this device</div>
+
+<div class="tool">
+  <div class="drop" id="drop">
+    <strong>Choose a PDF or drop it here</strong>
+    <small>Nothing is uploaded &mdash; pages are removed in your browser</small>
+  </div>
+  <input type="file" id="file" accept="application/pdf,.pdf">
+
+  <div class="controls" id="controls">
+    <p class="note" id="info" style="margin-top:0"></p>
+    <div class="row">
+      <div class="field">
+        <label for="pages">Pages to remove</label>
+        <input type="text" id="pages" placeholder="2, 5-7">
+      </div>
+      <div><button class="btn" id="go">Remove pages</button></div>
+    </div>
+    <div class="status" id="status"></div>
+    <div class="result" id="result">
+      <div class="big" id="rBig"></div>
+      <div class="meta" id="rMeta"></div>
+      <button class="btn" id="dl">Download PDF</button>
+    </div>
+  </div>
+</div>
+
+<h2>Why people remove pages</h2>
+<p>Nearly always because a document contains more than the recipient should see, or more than a form will accept. A bank statement where only one month is relevant. A scanned booklet with blank versos between every sheet. A contract where the appendix runs to forty pages nobody asked for.</p>
+<p>The blank-page case is the most common of all: duplex scanners faithfully capture the empty back of every sheet, doubling the page count for no information at all.</p>
+
+<div class="note"><strong>Removing a page is not redaction.</strong> Deleting page 4 removes page 4 entirely &mdash; but if sensitive text also appears on page 3, it is still there. Drawing a black box over text does not remove it either; the words remain underneath in the file. Genuine redaction means deleting the content, not covering it.</div>
+
+<h2>How to write the range</h2>
+<table>
+  <thead><tr><th>You want to remove</th><th>Type</th></tr></thead>
+  <tbody>
+    <tr><td>Just page 3</td><td><code>3</code></td></tr>
+    <tr><td>Pages 5 to 9</td><td><code>5-9</code></td></tr>
+    <tr><td>Page 2 and pages 8 to 10</td><td><code>2, 8-10</code></td></tr>
+    <tr><td>Every blank verso in a 10-page scan</td><td><code>2, 4, 6, 8, 10</code></td></tr>
+  </tbody>
+</table>
+
+<h2>Common questions</h2>
+<details><summary>Does removing pages reduce quality?</summary><p>No. The pages you keep are copied across untouched, so text stays selectable and images keep their full resolution. Only the removed pages are gone.</p></details>
+<details><summary>Will the file get smaller?</summary><p>Usually yes, roughly in proportion to what you removed - but not always. If the pages you deleted were light on content and the ones you kept carry the scans, the saving is small. Run the result through the compressor if you need a specific size.</p></details>
+<details><summary>Can I remove every page?</summary><p>No, and the tool refuses to. A PDF with no pages is not a valid file and most readers will not open it. Keep at least one.</p></details>
+<details><summary>Is this the same as splitting?</summary><p>They are two sides of the same operation. Splitting asks which pages you want to keep; this asks which you want gone. Use whichever is less typing for your document.</p></details>
+<details><summary>Is my file uploaded?</summary><p>No. Everything happens in your browser.</p></details>
+
+<h2>Other tools</h2>
+<div class="grid">
+  <a href="split-pdf.html"><strong>Split a PDF</strong><small>Say which pages to keep instead of which to remove.</small></a>
+  <a href="index.html"><strong>Compress a PDF</strong><small>Hit an exact size after trimming.</small></a>
+  <a href="tools.html"><strong>All tools</strong><small>Everything on this site.</small></a>
+</div>
+
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <nav>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+      <a href="privacy.html">Privacy Policy</a>
+      <a href="terms.html">Terms</a>
+    </nav>
+    <div class="copy">&copy; <span id="yr">2026</span> SizeMyPDF &middot; Files are processed in your browser and never uploaded.</div>
+  </div>
+</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js" integrity="sha384-weMABwrltA6jWR8DDe9Jp5blk+tZQh7ugpCsF3JwSA53WZM9/14PjS5LAJNHNjAI" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="js/pageops.js?v=5f245827"></script>
+<script src="js/delete.js?v=52e08dac"></script>
+<script>document.getElementById('yr').textContent=new Date().getFullYear()</script>
+</body>
+</html>

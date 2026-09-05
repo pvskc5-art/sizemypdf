@@ -201,6 +201,13 @@ const targets = [
 <p>The usual culprit is resolution. A phone camera photographs a sheet of A4 at something like 3000&times;4000 pixels &mdash; far more detail than anyone reading the document needs. Bringing that down to roughly 150 DPI keeps every word legible while removing most of the bytes.</p>`
   },
   {
+    kb: 300,
+    who: 'university portals, tender submissions and municipal e-services',
+    realistic: 'five to eight text pages, or three to four scanned pages',
+    extra: `<p>300 KB sits in a comfortable middle. It is loose enough that a scanned document has room to breathe, and tight enough that an unprocessed phone photograph will still miss it. In practice a colour scan at 150 DPI lands close to this figure for a handful of pages.</p>
+<p>If you are close but not under, the quickest win is almost always greyscale rather than harder compression &mdash; it removes two of the three colour channels at a stroke, and for black text on white paper you lose nothing that matters.</p>`
+  },
+  {
     kb: 500,
     who: 'job applications, visa portals and document management systems',
     realistic: 'ten to twenty pages, including moderate scanning',
@@ -853,7 +860,7 @@ pages.push({
   h1: 'All tools',
   body: `
 <h1>All tools</h1>
-<p class="lede">Six tools, all free, all running entirely in your browser. No account, no upload, no watermark, no file size limit imposed by us.</p>
+<p class="lede">Nine tools, all free, all running entirely in your browser. No account, no upload, no watermark, no file size limit imposed by us.</p>
 
 <div class="privacy-badge">&#128274; Every tool here runs on your device</div>
 
@@ -864,6 +871,9 @@ pages.push({
   <a href="jpg-to-pdf.html"><strong>Images to PDF</strong><small>Turn JPGs, PNGs or photos of documents into a single PDF.</small></a>
   <a href="pdf-to-jpg.html"><strong>PDF to images</strong><small>Render every page as a JPG or PNG at your chosen resolution.</small></a>
   <a href="rotate-pdf.html"><strong>Rotate PDF</strong><small>Fix sideways pages. Lossless &mdash; rotation is only metadata.</small></a>
+  <a href="delete-pages-from-pdf.html"><strong>Delete pages</strong><small>Remove the pages you do not want and keep the rest.</small></a>
+  <a href="add-page-numbers-to-pdf.html"><strong>Add page numbers</strong><small>Stamp numbers in the position and format you choose.</small></a>
+  <a href="watermark-pdf.html"><strong>Add a watermark</strong><small>Label pages DRAFT or CONFIDENTIAL across the page.</small></a>
 </div>
 
 <h2>Which tools change your file, and which do not</h2>
@@ -875,6 +885,9 @@ pages.push({
     <tr><td>Split</td><td>Yes</td><td>Page objects are copied into a new document</td></tr>
     <tr><td>Rotate</td><td>Yes</td><td>A number in the page metadata changes</td></tr>
     <tr><td>Compress &mdash; Lossless mode</td><td>Yes</td><td>Metadata stripped, file structure repacked</td></tr>
+    <tr><td>Delete pages</td><td>Yes</td><td>Remaining page objects are copied unchanged</td></tr>
+    <tr><td>Add page numbers</td><td>Mostly</td><td>Text is drawn on; the page beneath is untouched</td></tr>
+    <tr><td>Add watermark</td><td>Mostly</td><td>Text is drawn on; the page beneath is untouched</td></tr>
     <tr><td>Compress &mdash; Target size</td><td><strong>No</strong></td><td>Pages become images; the text layer is lost</td></tr>
     <tr><td>PDF to images</td><td><strong>No</strong></td><td>Pages become pixels; not reversible</td></tr>
     <tr><td>Images to PDF</td><td><strong>No</strong></td><td>Images are re-encoded as JPEG</td></tr>
@@ -901,6 +914,459 @@ ${AD}
   <a href="compress-pdf-to-500kb.html"><strong>Compress to 500 KB</strong><small>Job and visa applications.</small></a>
   <a href="compress-pdf-for-email.html"><strong>Compress for email</strong><small>Under the 25 MB attachment ceiling.</small></a>
   <a href="compress-scanned-pdf.html"><strong>Compress a scan</strong><small>Where the biggest savings hide.</small></a>
+</div>
+`
+});
+
+/* ---- intent landing pages ---- */
+
+const oneMbFaq = [
+  ['Is 1 MB the same as 1024 KB?',
+   'For file sizes, yes - 1 MB is 1024 KB. Some upload forms mean 1000 KB instead, and a few compute it differently again. If a form rejects a file just under 1 MB, aim for 950 KB and the ambiguity stops mattering.'],
+  ['Is 1 MB achievable for a scanned document?',
+   'Comfortably. A 1 MB budget is generous - twenty or thirty scanned pages at readable quality, or a hundred pages of ordinary text. If you cannot reach it, something unusual is in the file, such as embedded high-resolution images repeated on every page.'],
+  ['Should I use Lossless mode at this size?',
+   'Try it first. At 1 MB there is a real chance the lossless repack alone gets you under, which keeps your text selectable and searchable. Fall back to Target size only if it does not.'],
+  ['Is my file uploaded?',
+   'No. Compression runs in your browser and the document never leaves your device.']
+];
+
+pages.push({
+  slug: 'compress-pdf-to-1mb.html',
+  title: `Compress PDF to 1 MB Online — Free, No Upload | ${NAME}`,
+  desc: 'Compress a PDF to under 1 MB. A generous limit that usually keeps text selectable. Runs in your browser, nothing is uploaded. Free, no signup, no watermark.',
+  h1: 'Compress a PDF to 1 MB',
+  faq: oneMbFaq,
+  body: `
+<h1>Compress a PDF to 1 MB</h1>
+<p class="lede">A comfortable limit &mdash; and often reachable without touching image quality at all.</p>
+
+<div class="privacy-badge">&#128274; Your file never leaves this device</div>
+${TOOL_CTA}
+
+<h2>Try Lossless first at this size</h2>
+<p>1 MB is one of the few common limits where the lossless route stands a real chance. Stripping metadata and repacking the file structure typically saves between 5 and 25 per cent, which is often the whole gap &mdash; and it costs nothing: your text stays selectable, searchable and copyable.</p>
+<p>Only if that falls short is it worth rasterising. In the compressor, choose <strong>Lossless</strong>, look at the result, and switch to <strong>Target size</strong> with 1000 typed in the box if you still need more.</p>
+
+<h2>1 MB or 1000 KB?</h2>
+<p>Strictly, 1 MB is 1024 KB. In practice some upload forms treat it as 1000 KB, and a handful measure the encoded rather than the raw size. If a form rejects a file that appears to be under the limit, <strong>aim for 950 KB</strong> &mdash; the margin costs you almost nothing in quality and sidesteps the whole ambiguity.</p>
+
+<div class="note"><strong>Already under 1 MB?</strong> The compressor will tell you so and hand the file straight back rather than processing it. Compressing a file that already fits only loses quality for nothing.</div>
+
+<h2>Common questions</h2>
+${faqBlock(oneMbFaq)}
+
+<h2>Other size targets</h2>
+<div class="grid">
+${targets.map(o =>
+  `  <a href="compress-pdf-to-${o.kb}kb.html"><strong>Compress to ${o.kb} KB</strong><small>For ${o.who}.</small></a>`).join('\n')}
+</div>
+`
+});
+
+const visaFaq = [
+  ['What size do visa portals usually require?',
+   'Most sit between 100 KB and 500 KB per document, though a few allow 1 MB or more. The limit is nearly always stated next to the upload button rather than in the guidance notes, so check there first.'],
+  ['Will compression make my passport scan unacceptable?',
+   'It can, and this is the real risk. Verification staff and automated checks both need to read the machine-readable zone and any security features. Compress conservatively, then open the result and read every character yourself before submitting.'],
+  ['Colour or greyscale for identity documents?',
+   'Check the instructions. Many authorities specifically require colour for passports and photo IDs because colour is part of the verification. Where colour is required, do not convert to greyscale just to save space - reduce resolution instead.'],
+  ['Why was my document rejected even though the size was correct?',
+   'Size is only one of several checks. Portals also commonly enforce file type, page dimensions, a maximum number of pages, and filenames without spaces or non-English characters. Legibility is judged separately and by a human.'],
+  ['Is my passport scan uploaded to your server?',
+   'No. It never leaves your device. That is the entire reason this tool runs in the browser - a passport scan is exactly the kind of document you should not be uploading to a stranger to shrink.']
+];
+
+pages.push({
+  slug: 'compress-pdf-for-visa-application.html',
+  title: `Compress a PDF for a Visa Application — Free, No Upload | ${NAME}`,
+  desc: 'Get passport scans and supporting documents under a visa portal upload limit without making them unreadable. Runs in your browser, nothing is uploaded.',
+  h1: 'Compress a PDF for a visa application',
+  faq: visaFaq,
+  body: `
+<h1>Compress a PDF for a visa application</h1>
+<p class="lede">Get under the portal's limit without making your documents unreadable &mdash; and without handing your passport scan to a stranger's server.</p>
+
+<div class="privacy-badge">&#128274; Your documents never leave this device</div>
+${TOOL_CTA}
+
+<h2>Why this one deserves care</h2>
+<p>Most compression tasks are low stakes: if the output is a bit soft, you try again. A visa application is not that. A document that passes the upload check but cannot be read may be rejected weeks later, and by then you may have lost an appointment slot, a filing window, or the fee.</p>
+<p>So the goal here is not the smallest possible file. It is <strong>the largest file that still fits</strong>, which is exactly what the compressor returns &mdash; it searches for the highest quality that lands under your target rather than stopping at the first result that fits.</p>
+
+<h2>A safe order of operations</h2>
+<ol>
+  <li><strong>Find the actual limit.</strong> It is usually printed beside the upload control, not in the guidance PDF.</li>
+  <li><strong>Check whether colour is required.</strong> Many authorities require colour scans of photo identity documents. If so, do not convert to greyscale &mdash; reduce resolution instead.</li>
+  <li><strong>Remove pages you were not asked for</strong> with the <a href="delete-pages-from-pdf.html">page remover</a>. Fewer pages means far less compression pressure on the ones that matter.</li>
+  <li><strong>Compress to the stated limit</strong>, not below it. Extra headroom buys you nothing and costs legibility.</li>
+  <li><strong>Read the output at 100% zoom</strong> before submitting &mdash; every digit of the passport number, the dates, the signature, any stamp.</li>
+</ol>
+
+<div class="note"><strong>Keep the originals.</strong> Compression is not reversible. If a document is queried later you will need the full-quality version, and re-scanning from a passport you have already posted is not always possible.</div>
+
+<h2>What tends to fail</h2>
+<table>
+  <thead><tr><th>Element</th><th>Degrades at</th><th>Why it matters</th></tr></thead>
+  <tbody>
+    <tr><td>Machine-readable zone</td><td>First</td><td>Often read automatically; errors reject the file</td></tr>
+    <tr><td>Handwritten signature</td><td>Early</td><td>Compared against other documents</td></tr>
+    <tr><td>Official stamps and seals</td><td>Early</td><td>Fine detail is the point of them</td></tr>
+    <tr><td>Printed body text</td><td>Late</td><td>Survives well down to about 150 DPI</td></tr>
+  </tbody>
+</table>
+
+<h2>Common questions</h2>
+${faqBlock(visaFaq)}
+
+<h2>Common limits</h2>
+<div class="grid">
+  <a href="compress-pdf-to-100kb.html"><strong>100 KB</strong><small>The tightest limit portals impose.</small></a>
+  <a href="compress-pdf-to-200kb.html"><strong>200 KB</strong><small>The most common worldwide.</small></a>
+  <a href="compress-pdf-to-500kb.html"><strong>500 KB</strong><small>Typical for visa and job portals.</small></a>
+  <a href="compress-scanned-pdf.html"><strong>Compress a scan</strong><small>How far you can push a scan safely.</small></a>
+</div>
+`
+});
+
+const phoneFaq = [
+  ['Does this work on a phone?',
+   'Yes. The tools are ordinary web pages and run in mobile Safari, Chrome and Firefox. There is nothing to install and no app.'],
+  ['Why is it slower than on a laptop?',
+   'Because the work happens on your device rather than a server. A phone processor doing image compression is simply slower than a laptop one. A few pages take seconds; a fifty-page colour scan may take a minute or two.'],
+  ['My phone browser ran out of memory',
+   'Very large documents can exhaust a phone. Split the file into parts first, compress each, then merge them back if you need one file. Closing other browser tabs helps more than you would expect.'],
+  ['Where does the compressed file go?',
+   'To wherever your browser saves downloads - Files on iOS, the Downloads folder on Android. Tap the download notification to open it.'],
+  ['Can I use it offline?',
+   'Once the page has loaded, yes. That is a side effect of processing locally: nothing needs a connection after load. It is also the easiest way to prove that your file is not being uploaded.']
+];
+
+pages.push({
+  slug: 'compress-pdf-on-phone.html',
+  title: `Compress a PDF on Your Phone — No App, No Upload | ${NAME}`,
+  desc: 'Compress a PDF on Android or iPhone with no app to install and no upload. Runs in your mobile browser. Free, no signup, no watermark.',
+  h1: 'Compress a PDF on your phone',
+  faq: phoneFaq,
+  body: `
+<h1>Compress a PDF on your phone</h1>
+<p class="lede">No app to install, no account, no upload. It runs in the browser you already have open.</p>
+
+<div class="privacy-badge">&#128274; Your file never leaves your phone</div>
+${TOOL_CTA}
+
+<h2>Why no app</h2>
+<p>Compressing a PDF is a few seconds of work. Installing an app for it means granting storage permissions, accepting a privacy policy, and in most cases uploading your document to that company's servers anyway &mdash; app stores are full of PDF utilities that are thin wrappers around a web API.</p>
+<p>A web page that does the work locally avoids all of that. Nothing is installed, nothing is granted, and nothing is transmitted.</p>
+
+<h2>How to do it</h2>
+<ol>
+  <li>Open the <a href="index.html">compressor</a> in your phone browser.</li>
+  <li>Tap the box and choose your PDF. On iPhone this opens Files; on Android, your file picker or Drive.</li>
+  <li>Type the size limit you need in KB.</li>
+  <li>Tap Compress and wait &mdash; keep the tab in the foreground on older phones.</li>
+  <li>Tap Download. The file lands in Files or Downloads.</li>
+</ol>
+
+<div class="note"><strong>Scanning with the camera?</strong> Both phones have a document scanner built in &mdash; Notes on iPhone, Google Drive on Android. Both produce far better results than photographing a page, because they straighten the perspective and correct the lighting. Scan there, then <a href="jpg-to-pdf.html">combine the images into a PDF</a> if you end up with photos rather than a document.</div>
+
+<h2>What to expect on a phone</h2>
+<table>
+  <thead><tr><th>Document</th><th>Typical time</th></tr></thead>
+  <tbody>
+    <tr><td>1&ndash;3 page text PDF</td><td>A few seconds</td></tr>
+    <tr><td>10-page scan</td><td>10&ndash;30 seconds</td></tr>
+    <tr><td>50-page colour scan</td><td>1&ndash;2 minutes, and may strain an older phone</td></tr>
+  </tbody>
+</table>
+<p>If a large file struggles, <a href="split-pdf.html">split it</a> first, compress the parts, and <a href="merge-pdf.html">merge them back</a>.</p>
+
+<h2>Common questions</h2>
+${faqBlock(phoneFaq)}
+
+<h2>Other tools</h2>
+<div class="grid">
+  <a href="jpg-to-pdf.html"><strong>Images to PDF</strong><small>Turn phone photos of documents into one PDF.</small></a>
+  <a href="compress-pdf-to-200kb.html"><strong>Compress to 200 KB</strong><small>The most common upload limit.</small></a>
+  <a href="tools.html"><strong>All tools</strong><small>Everything on this site.</small></a>
+</div>
+`
+});
+
+/* ---- page-operation tools (delete / number / watermark) ---- */
+
+const PDFLIB_CDN = 'https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js';
+
+const deleteFaq = [
+  ['Does removing pages reduce quality?',
+   'No. The pages you keep are copied across untouched, so text stays selectable and images keep their full resolution. Only the removed pages are gone.'],
+  ['Will the file get smaller?',
+   'Usually yes, roughly in proportion to what you removed - but not always. If the pages you deleted were light on content and the ones you kept carry the scans, the saving is small. Run the result through the compressor if you need a specific size.'],
+  ['Can I remove every page?',
+   'No, and the tool refuses to. A PDF with no pages is not a valid file and most readers will not open it. Keep at least one.'],
+  ['Is this the same as splitting?',
+   'They are two sides of the same operation. Splitting asks which pages you want to keep; this asks which you want gone. Use whichever is less typing for your document.'],
+  ['Is my file uploaded?',
+   'No. Everything happens in your browser.']
+];
+
+pages.push({
+  slug: 'delete-pages-from-pdf.html',
+  title: `Delete Pages from a PDF — Free, No Upload | ${NAME}`,
+  desc: 'Remove specific pages from a PDF and keep the rest. Lossless, runs entirely in your browser, nothing is uploaded. Free, no signup, no watermark.',
+  h1: 'Delete pages from a PDF',
+  faq: deleteFaq,
+  scripts: [PDFLIB_CDN, 'js/pageops.js', 'js/delete.js'],
+  body: `
+<h1>Delete pages from a PDF</h1>
+<p class="lede">Name the pages you want gone. Everything else comes back untouched &mdash; and nothing is uploaded.</p>
+
+<div class="privacy-badge">&#128274; Your file never leaves this device</div>
+
+<div class="tool">
+  <div class="drop" id="drop">
+    <strong>Choose a PDF or drop it here</strong>
+    <small>Nothing is uploaded &mdash; pages are removed in your browser</small>
+  </div>
+  <input type="file" id="file" accept="application/pdf,.pdf">
+
+  <div class="controls" id="controls">
+    <p class="note" id="info" style="margin-top:0"></p>
+    <div class="row">
+      <div class="field">
+        <label for="pages">Pages to remove</label>
+        <input type="text" id="pages" placeholder="2, 5-7">
+      </div>
+      <div><button class="btn" id="go">Remove pages</button></div>
+    </div>
+    <div class="status" id="status"></div>
+    <div class="result" id="result">
+      <div class="big" id="rBig"></div>
+      <div class="meta" id="rMeta"></div>
+      <button class="btn" id="dl">Download PDF</button>
+    </div>
+  </div>
+</div>
+
+<h2>Why people remove pages</h2>
+<p>Nearly always because a document contains more than the recipient should see, or more than a form will accept. A bank statement where only one month is relevant. A scanned booklet with blank versos between every sheet. A contract where the appendix runs to forty pages nobody asked for.</p>
+<p>The blank-page case is the most common of all: duplex scanners faithfully capture the empty back of every sheet, doubling the page count for no information at all.</p>
+
+<div class="note"><strong>Removing a page is not redaction.</strong> Deleting page 4 removes page 4 entirely &mdash; but if sensitive text also appears on page 3, it is still there. Drawing a black box over text does not remove it either; the words remain underneath in the file. Genuine redaction means deleting the content, not covering it.</div>
+
+<h2>How to write the range</h2>
+<table>
+  <thead><tr><th>You want to remove</th><th>Type</th></tr></thead>
+  <tbody>
+    <tr><td>Just page 3</td><td><code>3</code></td></tr>
+    <tr><td>Pages 5 to 9</td><td><code>5-9</code></td></tr>
+    <tr><td>Page 2 and pages 8 to 10</td><td><code>2, 8-10</code></td></tr>
+    <tr><td>Every blank verso in a 10-page scan</td><td><code>2, 4, 6, 8, 10</code></td></tr>
+  </tbody>
+</table>
+
+<h2>Common questions</h2>
+${faqBlock(deleteFaq)}
+
+<h2>Other tools</h2>
+<div class="grid">
+  <a href="split-pdf.html"><strong>Split a PDF</strong><small>Say which pages to keep instead of which to remove.</small></a>
+  <a href="index.html"><strong>Compress a PDF</strong><small>Hit an exact size after trimming.</small></a>
+  <a href="tools.html"><strong>All tools</strong><small>Everything on this site.</small></a>
+</div>
+`
+});
+
+const numberFaq = [
+  ['Where do the numbers go?',
+   'Wherever you choose - bottom left, bottom centre, bottom right or top right - about 10mm in from the edge, which clears the printable margin on virtually all printers.'],
+  ['Can I skip the cover page?',
+   'Yes. Tick "skip the first page" and numbering begins on page two, which is the usual convention for a document with a title page.'],
+  ['Can numbering start at something other than 1?',
+   'Yes. Set the starting number - useful when the document is one section of a larger bundle and needs to continue from where the previous part ended.'],
+  ['Will the numbers cover my content?',
+   'They are drawn in the bottom margin, so on a normal document they sit in white space. On a page whose content runs edge to edge, they will overlap. Check the result.'],
+  ['Can I remove them afterwards?',
+   'Not with this tool - the numbers become part of the page once drawn. Keep your original.']
+];
+
+pages.push({
+  slug: 'add-page-numbers-to-pdf.html',
+  title: `Add Page Numbers to a PDF — Free, No Upload | ${NAME}`,
+  desc: 'Stamp page numbers onto a PDF. Choose position, starting number and whether to skip the cover. Runs in your browser, nothing is uploaded. Free, no signup.',
+  h1: 'Add page numbers to a PDF',
+  faq: numberFaq,
+  scripts: [PDFLIB_CDN, 'js/pageops.js', 'js/pagenum.js'],
+  body: `
+<h1>Add page numbers to a PDF</h1>
+<p class="lede">Stamp numbers where you want them, starting where you want. Nothing is uploaded.</p>
+
+<div class="privacy-badge">&#128274; Your file never leaves this device</div>
+
+<div class="tool">
+  <div class="drop" id="drop">
+    <strong>Choose a PDF or drop it here</strong>
+    <small>Nothing is uploaded &mdash; numbering happens in your browser</small>
+  </div>
+  <input type="file" id="file" accept="application/pdf,.pdf">
+
+  <div class="controls" id="controls">
+    <p class="note" id="info" style="margin-top:0"></p>
+    <div class="row">
+      <div class="field">
+        <label for="position">Position</label>
+        <select id="position">
+          <option value="bc">Bottom centre</option>
+          <option value="br">Bottom right</option>
+          <option value="bl">Bottom left</option>
+          <option value="tr">Top right</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="format">Format</label>
+        <select id="format">
+          <option value="plain">1, 2, 3</option>
+          <option value="of">1 of 12</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="startat">Start at</label>
+        <input type="number" id="startat" value="1" min="0">
+      </div>
+      <div class="field">
+        <label for="size">Size</label>
+        <select id="size">
+          <option value="9">Small</option>
+          <option value="11" selected>Normal</option>
+          <option value="14">Large</option>
+        </select>
+      </div>
+      <div><button class="btn" id="go">Add numbers</button></div>
+    </div>
+    <p style="font-size:14px;color:var(--muted);margin:-4px 0 14px">
+      <label style="display:inline;font-weight:400">
+        <input type="checkbox" id="skipfirst" style="width:auto;margin-right:6px">
+        Skip the first page (title page)
+      </label>
+    </p>
+    <div class="status" id="status"></div>
+    <div class="result" id="result">
+      <div class="big" id="rBig"></div>
+      <div class="meta" id="rMeta"></div>
+      <button class="btn" id="dl">Download PDF</button>
+    </div>
+  </div>
+</div>
+
+<h2>Conventions worth following</h2>
+<p>For anything that will be printed and bound, <strong>bottom centre</strong> is the safest choice: it reads correctly whichever side of the spread the page falls on. Bottom right suits single-sided documents and is what most word processors default to.</p>
+<p>Skip the first page when the document has a title page &mdash; convention is that a cover is counted but not numbered. If your bundle continues from an earlier section, set the starting number rather than renumbering from one; a reader following a table of contents will thank you.</p>
+
+<div class="note"><strong>Court and tribunal bundles</strong> often specify exactly where numbers must appear and that they must run continuously across the whole bundle. Check the direction before stamping &mdash; renumbering after the fact means redoing it from the originals.</div>
+
+<h2>Common questions</h2>
+${faqBlock(numberFaq)}
+
+<h2>Other tools</h2>
+<div class="grid">
+  <a href="merge-pdf.html"><strong>Merge PDFs</strong><small>Combine the bundle first, then number it continuously.</small></a>
+  <a href="watermark-pdf.html"><strong>Add a watermark</strong><small>Label a document DRAFT or CONFIDENTIAL.</small></a>
+  <a href="tools.html"><strong>All tools</strong><small>Everything on this site.</small></a>
+</div>
+`
+});
+
+const markFaq = [
+  ['Does a watermark protect my document?',
+   'No, and it is important not to believe otherwise. The text sits on top of the page and anyone with the right tools can strip it out. A watermark is a label that discourages casual misuse, not a security control.'],
+  ['What opacity should I use?',
+   'Around 15 to 25 per cent is the usual range: clearly visible, but not so heavy that the text underneath becomes hard to read. Go higher only if the label matters more than the content.'],
+  ['Diagonal or horizontal?',
+   'Diagonal is the convention for DRAFT and CONFIDENTIAL because it crosses the whole page and is awkward to crop out. Horizontal is less intrusive and suits a subtle label such as a company name.'],
+  ['Can I use an image instead of text?',
+   'Not in this tool. Text-only keeps it simple and keeps the output small - an embedded logo on every page adds real weight to the file.'],
+  ['Is my document uploaded?',
+   'No. The watermark is drawn in your browser.']
+];
+
+pages.push({
+  slug: 'watermark-pdf.html',
+  title: `Add a Watermark to a PDF — Free, No Upload | ${NAME}`,
+  desc: 'Stamp text such as DRAFT or CONFIDENTIAL across every page of a PDF. Choose opacity and angle. Runs in your browser, nothing is uploaded. Free, no signup.',
+  h1: 'Add a watermark to a PDF',
+  faq: markFaq,
+  scripts: [PDFLIB_CDN, 'js/pageops.js', 'js/watermark.js'],
+  body: `
+<h1>Add a watermark to a PDF</h1>
+<p class="lede">Stamp DRAFT, CONFIDENTIAL or anything else across every page. Nothing is uploaded.</p>
+
+<div class="privacy-badge">&#128274; Your file never leaves this device</div>
+
+<div class="tool">
+  <div class="drop" id="drop">
+    <strong>Choose a PDF or drop it here</strong>
+    <small>Nothing is uploaded &mdash; the watermark is drawn in your browser</small>
+  </div>
+  <input type="file" id="file" accept="application/pdf,.pdf">
+
+  <div class="controls" id="controls">
+    <p class="note" id="info" style="margin-top:0"></p>
+    <div class="row">
+      <div class="field">
+        <label for="text">Watermark text</label>
+        <input type="text" id="text" value="DRAFT" maxlength="60">
+      </div>
+      <div class="field">
+        <label for="opacity">Opacity</label>
+        <select id="opacity">
+          <option value="10">10% &mdash; very faint</option>
+          <option value="20" selected>20% &mdash; typical</option>
+          <option value="35">35% &mdash; bold</option>
+          <option value="50">50% &mdash; heavy</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="angle">Angle</label>
+        <select id="angle">
+          <option value="diagonal">Diagonal</option>
+          <option value="horizontal">Horizontal</option>
+        </select>
+      </div>
+      <div><button class="btn" id="go">Add watermark</button></div>
+    </div>
+    <div class="status" id="status"></div>
+    <div class="result" id="result">
+      <div class="big" id="rBig"></div>
+      <div class="meta" id="rMeta"></div>
+      <button class="btn" id="dl">Download PDF</button>
+    </div>
+  </div>
+</div>
+
+<h2>Be clear about what a watermark does</h2>
+<p>It signals intent. A page stamped DRAFT will not be mistaken for a final version; one stamped CONFIDENTIAL reminds the reader of their obligations. That is genuinely useful.</p>
+<p>What it does not do is protect anything. The text is a drawing on top of the page, and removing it is straightforward for anyone who wants to. If a document must not be redistributed, the control has to be who you send it to &mdash; not a label on the page.</p>
+
+<h2>Choosing the text</h2>
+<table>
+  <thead><tr><th>Purpose</th><th>Text</th><th>Suggested opacity</th></tr></thead>
+  <tbody>
+    <tr><td>Unfinished version</td><td><code>DRAFT</code></td><td>20%</td></tr>
+    <tr><td>Restricted circulation</td><td><code>CONFIDENTIAL</code></td><td>20&ndash;35%</td></tr>
+    <tr><td>Reference copy only</td><td><code>NOT FOR SIGNATURE</code></td><td>20%</td></tr>
+    <tr><td>Attribution</td><td>Your company name</td><td>10&ndash;15%, horizontal</td></tr>
+  </tbody>
+</table>
+<p>Shorter is better. A long phrase has to be set small to fit across the page, which makes it both harder to read and easier to ignore.</p>
+
+<h2>Common questions</h2>
+${faqBlock(markFaq)}
+
+<h2>Other tools</h2>
+<div class="grid">
+  <a href="add-page-numbers-to-pdf.html"><strong>Add page numbers</strong><small>Number a bundle after watermarking it.</small></a>
+  <a href="delete-pages-from-pdf.html"><strong>Delete pages</strong><small>Remove what the recipient should not see.</small></a>
+  <a href="tools.html"><strong>All tools</strong><small>Everything on this site.</small></a>
 </div>
 `
 });

@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Add Page Numbers to a PDF — Free, No Upload | SizeMyPDF</title>
+<meta name="description" content="Stamp page numbers onto a PDF. Choose position, starting number and whether to skip the cover. Runs in your browser, nothing is uploaded. Free, no signup.">
+<link rel="canonical" href="https://sizemypdf.com/add-page-numbers-to-pdf.html">
+<meta property="og:title" content="Add Page Numbers to a PDF — Free, No Upload | SizeMyPDF">
+<meta property="og:description" content="Stamp page numbers onto a PDF. Choose position, starting number and whether to skip the cover. Runs in your browser, nothing is uploaded. Free, no signup.">
+<meta property="og:url" content="https://sizemypdf.com/add-page-numbers-to-pdf.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="SizeMyPDF">
+<meta property="og:image" content="https://sizemypdf.com/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="alternate icon" href="favicon-32.png" sizes="32x32">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="manifest" href="site.webmanifest">
+<meta name="theme-color" content="#2f6df6">
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+<link rel="stylesheet" href="css/style.css?v=61800416">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5619759216593458" crossorigin="anonymous"></script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Where do the numbers go?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Wherever you choose - bottom left, bottom centre, bottom right or top right - about 10mm in from the edge, which clears the printable margin on virtually all printers."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I skip the cover page?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. Tick \"skip the first page\" and numbering begins on page two, which is the usual convention for a document with a title page."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can numbering start at something other than 1?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. Set the starting number - useful when the document is one section of a larger bundle and needs to continue from where the previous part ended."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Will the numbers cover my content?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "They are drawn in the bottom margin, so on a normal document they sit in white space. On a page whose content runs edge to edge, they will overlap. Check the result."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I remove them afterwards?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Not with this tool - the numbers become part of the page once drawn. Keep your original."
+      }
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://sizemypdf.com/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Add page numbers to a PDF",
+      "item": "https://sizemypdf.com/add-page-numbers-to-pdf.html"
+    }
+  ]
+}
+</script>
+
+</head>
+<body>
+
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site">
+  <div class="wrap">
+    <a class="logo" href="index.html">Size<span>My</span>PDF</a>
+    <nav class="main">
+      <a href="tools.html">All&nbsp;tools</a>
+      <a href="merge-pdf.html">Merge</a>
+      <a href="split-pdf.html">Split</a>
+      <a href="jpg-to-pdf.html">Images</a>
+      <a href="about.html">About</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap" id="main">
+
+<h1>Add page numbers to a PDF</h1>
+<p class="lede">Stamp numbers where you want them, starting where you want. Nothing is uploaded.</p>
+
+<div class="privacy-badge">&#128274; Your file never leaves this device</div>
+
+<div class="tool">
+  <div class="drop" id="drop">
+    <strong>Choose a PDF or drop it here</strong>
+    <small>Nothing is uploaded &mdash; numbering happens in your browser</small>
+  </div>
+  <input type="file" id="file" accept="application/pdf,.pdf">
+
+  <div class="controls" id="controls">
+    <p class="note" id="info" style="margin-top:0"></p>
+    <div class="row">
+      <div class="field">
+        <label for="position">Position</label>
+        <select id="position">
+          <option value="bc">Bottom centre</option>
+          <option value="br">Bottom right</option>
+          <option value="bl">Bottom left</option>
+          <option value="tr">Top right</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="format">Format</label>
+        <select id="format">
+          <option value="plain">1, 2, 3</option>
+          <option value="of">1 of 12</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="startat">Start at</label>
+        <input type="number" id="startat" value="1" min="0">
+      </div>
+      <div class="field">
+        <label for="size">Size</label>
+        <select id="size">
+          <option value="9">Small</option>
+          <option value="11" selected>Normal</option>
+          <option value="14">Large</option>
+        </select>
+      </div>
+      <div><button class="btn" id="go">Add numbers</button></div>
+    </div>
+    <p style="font-size:14px;color:var(--muted);margin:-4px 0 14px">
+      <label style="display:inline;font-weight:400">
+        <input type="checkbox" id="skipfirst" style="width:auto;margin-right:6px">
+        Skip the first page (title page)
+      </label>
+    </p>
+    <div class="status" id="status"></div>
+    <div class="result" id="result">
+      <div class="big" id="rBig"></div>
+      <div class="meta" id="rMeta"></div>
+      <button class="btn" id="dl">Download PDF</button>
+    </div>
+  </div>
+</div>
+
+<h2>Conventions worth following</h2>
+<p>For anything that will be printed and bound, <strong>bottom centre</strong> is the safest choice: it reads correctly whichever side of the spread the page falls on. Bottom right suits single-sided documents and is what most word processors default to.</p>
+<p>Skip the first page when the document has a title page &mdash; convention is that a cover is counted but not numbered. If your bundle continues from an earlier section, set the starting number rather than renumbering from one; a reader following a table of contents will thank you.</p>
+
+<div class="note"><strong>Court and tribunal bundles</strong> often specify exactly where numbers must appear and that they must run continuously across the whole bundle. Check the direction before stamping &mdash; renumbering after the fact means redoing it from the originals.</div>
+
+<h2>Common questions</h2>
+<details><summary>Where do the numbers go?</summary><p>Wherever you choose - bottom left, bottom centre, bottom right or top right - about 10mm in from the edge, which clears the printable margin on virtually all printers.</p></details>
+<details><summary>Can I skip the cover page?</summary><p>Yes. Tick "skip the first page" and numbering begins on page two, which is the usual convention for a document with a title page.</p></details>
+<details><summary>Can numbering start at something other than 1?</summary><p>Yes. Set the starting number - useful when the document is one section of a larger bundle and needs to continue from where the previous part ended.</p></details>
+<details><summary>Will the numbers cover my content?</summary><p>They are drawn in the bottom margin, so on a normal document they sit in white space. On a page whose content runs edge to edge, they will overlap. Check the result.</p></details>
+<details><summary>Can I remove them afterwards?</summary><p>Not with this tool - the numbers become part of the page once drawn. Keep your original.</p></details>
+
+<h2>Other tools</h2>
+<div class="grid">
+  <a href="merge-pdf.html"><strong>Merge PDFs</strong><small>Combine the bundle first, then number it continuously.</small></a>
+  <a href="watermark-pdf.html"><strong>Add a watermark</strong><small>Label a document DRAFT or CONFIDENTIAL.</small></a>
+  <a href="tools.html"><strong>All tools</strong><small>Everything on this site.</small></a>
+</div>
+
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <nav>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+      <a href="privacy.html">Privacy Policy</a>
+      <a href="terms.html">Terms</a>
+    </nav>
+    <div class="copy">&copy; <span id="yr">2026</span> SizeMyPDF &middot; Files are processed in your browser and never uploaded.</div>
+  </div>
+</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js" integrity="sha384-weMABwrltA6jWR8DDe9Jp5blk+tZQh7ugpCsF3JwSA53WZM9/14PjS5LAJNHNjAI" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="js/pageops.js?v=5f245827"></script>
+<script src="js/pagenum.js?v=f7ae4375"></script>
+<script>document.getElementById('yr').textContent=new Date().getFullYear()</script>
+</body>
+</html>

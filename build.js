@@ -92,6 +92,7 @@ ${p.faq ? faqSchema(p.faq) : ''}${p.breadcrumb === false ? '' : crumbSchema(p)}
       <a href="merge-pdf.html">Merge</a>
       <a href="split-pdf.html">Split</a>
       <a href="batch-compress-pdf.html">Batch</a>
+      <a href="compress-image-to-size.html">Image</a>
       <a href="about.html">About</a>
     </nav>
   </div>
@@ -845,6 +846,152 @@ ${faqBlock(rotateFaq)}
 `
 });
 
+/* ---- compress an image to an exact size ---- */
+
+const imgSizeFaq = [
+  ['Does it really hit the exact size I ask for?',
+   'It gets as close underneath your target as it can without going over, which is what an upload limit actually requires. A 100 KB target typically lands in the high 90s. It will not pad a file out to hit the number precisely - a smaller file is never a problem for a form that says "maximum 100 KB".'],
+  ['Will it shrink the photo’s dimensions?',
+   'Only if it has to. Quality is reduced first, because most forms want the picture to still be legible at full size. Dimensions are only reduced when no JPEG quality setting reaches your target, and the result tells you if that happened.'],
+  ['Why is my PNG barely getting smaller?',
+   'PNG is lossless - it has no quality dial to turn down, so the only way to make it smaller is to reduce its dimensions. For photographs, switch the output to JPEG, which is what portals expect anyway. PNG is the right choice only for screenshots, logos and line art.'],
+  ['My photo came out sideways on other tools. Will it here?',
+   'It should not. Phone cameras record rotation as EXIF metadata rather than rotating the pixels, and tools that ignore it produce sideways images. This one applies the orientation before compressing.'],
+  ['Is my photo uploaded anywhere?',
+   'No. The compression runs in your browser using the same canvas your device already uses to display the image. Nothing is sent to a server, which matters here because the images people resize are usually passport photos, signatures and ID documents.'],
+  ['The result came back larger than the original',
+   'That means the file was already well optimised, so re-encoding it could only add bytes. When that happens your original is returned unchanged rather than a worse, bigger version of it.']
+];
+
+pages.push({
+  slug: 'compress-image-to-size.html',
+  title: `Compress an Image to an Exact Size in KB — Free, No Upload | ${NAME}`,
+  desc: 'Compress a JPG or PNG to an exact size in KB - 20, 50, 100, 200 or any limit a form demands. Keeps full dimensions where it can. Runs in your browser, no upload, free.',
+  h1: 'Compress an image to an exact size',
+  faq: imgSizeFaq,
+  scripts: ['js/imgsize.js'],
+  body: `
+<h1>Compress an image to an exact size</h1>
+<p class="lede">Give it a photo and a number in KB. It finds the highest quality that fits underneath your limit &mdash; and keeps the full dimensions unless it genuinely cannot. Nothing is uploaded.</p>
+
+<div class="privacy-badge">&#128274; Your image never leaves this device</div>
+
+<div class="tool">
+  <label class="drop" id="drop" for="file">
+    <strong>Choose an image or drop it here</strong>
+    <small>JPG, PNG, WebP, GIF or BMP &mdash; nothing is uploaded</small>
+    <input type="file" id="file" accept="image/*" class="vh">
+  </label>
+
+  <div class="controls" id="controls">
+    <div class="row">
+      <div class="field">
+        <label for="target">Target size (KB)</label>
+        <input type="number" id="target" min="5" step="1" placeholder="100">
+      </div>
+      <div class="field">
+        <label for="format">Output format</label>
+        <select id="format">
+          <option value="jpeg">JPEG &mdash; best for photos</option>
+          <option value="png">PNG &mdash; lossless, for screenshots</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="resize">If quality is not enough</label>
+        <select id="resize">
+          <option value="yes">Reduce the dimensions too</option>
+          <option value="no">Keep full dimensions</option>
+        </select>
+      </div>
+      <div><button class="btn" id="go">Compress</button></div>
+    </div>
+
+    <p class="hint" id="pngNote" style="display:none">PNG is lossless, so there is no quality setting to reduce. The only way to make a PNG smaller is to shrink its dimensions &mdash; for a photograph, choose JPEG instead.</p>
+
+    <div class="bar" id="bar" role="progressbar" aria-valuemin="0" aria-valuemax="100"><i id="barFill"></i></div>
+    <div class="status" id="status" role="status" aria-live="polite"></div>
+
+    <div class="compare" id="compare">
+      <figure>
+        <canvas id="beforeCanvas" width="300" height="200"></canvas>
+        <figcaption>Original &mdash; <span id="beforeMeta"></span></figcaption>
+      </figure>
+      <figure>
+        <canvas id="afterCanvas" width="300" height="200"></canvas>
+        <figcaption>Compressed &mdash; <span id="afterMeta"></span></figcaption>
+      </figure>
+    </div>
+
+    <div class="result" id="result">
+      <div class="big" id="rBig"></div>
+      <div class="meta" id="rMeta"></div>
+      <button class="btn" id="dl">Download image</button>
+    </div>
+  </div>
+</div>
+
+${AD}
+
+<h2>Why forms ask for a size in kilobytes</h2>
+<p>Almost every request to compress an image to an exact size comes from a form that will not accept it otherwise. Government portals, university applications, job sites and visa systems set hard byte limits &mdash; 20 KB for a signature, 50 KB for a passport photograph, 100 or 200 KB for a scanned certificate &mdash; and reject anything above them without explaining what to do about it.</p>
+<p>Those limits exist because the systems behind them were built when storage was expensive and are rarely revisited. A modern phone photograph is between three and eight megabytes. A form asking for 50 KB is asking for roughly one percent of that, which is why simply "saving a smaller copy" never works.</p>
+
+<h2>How this reaches a number you choose</h2>
+<p>A JPEG's size is governed by a quality setting between 0 and 1, but the relationship is not linear and depends entirely on the picture: quality 0.6 might produce 40 KB for a plain document scan and 400 KB for a detailed landscape. There is no formula, so the only reliable method is to encode, measure, and adjust.</p>
+<ol>
+  <li>The image is encoded at a middling quality and measured.</li>
+  <li>If it fits, quality goes up; if it overshoots, quality comes down. This repeats seven times, halving the remaining range each time.</li>
+  <li>That converges on the highest quality that still fits underneath your target, to within about half a percent.</li>
+  <li>Only if no quality setting reaches the target do the dimensions come down a step, and the search runs again.</li>
+</ol>
+<p>The order matters. Reducing dimensions first is the easy way to hit any target, but it hands back a small blurry picture when a slightly softer full-size one would have been accepted. Quality is spent first for the same reason a photographer stops down before reaching for a smaller sensor.</p>
+
+<div class="note"><strong>The result is always under your target, never exactly on it.</strong> A limit of "maximum 100 KB" is satisfied by 96 KB, and padding a file out to hit 100 KB precisely would only waste the difference. If a form demands a size <em>range</em> &mdash; some ask for 20&ndash;50 KB &mdash; set the target to the top of the range.</div>
+
+<h2>Which format to choose</h2>
+<table>
+  <thead><tr><th>Format</th><th>Compression</th><th>Use it for</th></tr></thead>
+  <tbody>
+    <tr><td>JPEG</td><td>Lossy, adjustable</td><td>Photographs, scans, anything from a camera. The only format that can hit an arbitrary size target.</td></tr>
+    <tr><td>PNG</td><td>Lossless, fixed</td><td>Screenshots, logos, diagrams, line art. Sharp edges and flat colour survive; photographs stay large.</td></tr>
+  </tbody>
+</table>
+<p>If a form does not say which it wants, send JPEG. It is the format these systems were built around, and it is the only one where a size limit is reliably reachable.</p>
+
+<h2>Typical limits, and what survives them</h2>
+<table>
+  <thead><tr><th>Limit</th><th>Commonly asked for</th><th>What you can expect</th></tr></thead>
+  <tbody>
+    <tr><td>10&ndash;20 KB</td><td>Signatures</td><td>Fine. A signature is black ink on white and compresses extremely well.</td></tr>
+    <tr><td>50 KB</td><td>Passport photographs</td><td>Comfortable at passport dimensions. Full-frame phone photos will be resized.</td></tr>
+    <tr><td>100&ndash;200 KB</td><td>Certificates, ID scans</td><td>Usually keeps full dimensions with a modest quality reduction.</td></tr>
+    <tr><td>Under 10 KB</td><td>Thumbnails, some older portals</td><td>Expect visible artefacts, and expect the dimensions to come down.</td></tr>
+  </tbody>
+</table>
+
+<h2>Getting a better result</h2>
+<ul>
+  <li><strong>Crop before you compress.</strong> Every pixel of desk, floor or fingertip in the frame costs bytes that could have gone to the document. Cropping tightly is the single largest improvement available.</li>
+  <li><strong>Photograph in even light, not flash.</strong> Flash creates a bright hotspot and hard shadows, both of which are fine detail that JPEG spends bytes describing.</li>
+  <li><strong>Keep the camera parallel to the page.</strong> A skewed photo wastes frame area and is harder to read once quality drops.</li>
+  <li><strong>Start from the original, not a forward.</strong> An image that has been through WhatsApp or email has already been compressed once; compressing it again stacks artefacts.</li>
+  <li><strong>Keep your original file.</strong> Compression is not reversible. If the form rejects the result for another reason, you want the full-quality version to go back to.</li>
+</ul>
+
+<div class="note"><strong>Working with a document rather than a photo?</strong> If what you actually have is a multi-page PDF, compressing it as a PDF gives a far better result than turning it into images first &mdash; <a href="index.html">compress a PDF to an exact size</a> instead.</div>
+
+<h2>Common questions</h2>
+${faqBlock(imgSizeFaq)}
+
+<h2>Other tools</h2>
+<div class="grid">
+  <a href="index.html"><strong>Compress a PDF</strong><small>The same exact-size approach, applied to documents.</small></a>
+  <a href="jpg-to-pdf.html"><strong>Images to PDF</strong><small>Turn your compressed photos into one PDF file.</small></a>
+  <a href="tools.html"><strong>All tools</strong><small>Everything on this site, in one list.</small></a>
+</div>
+`
+});
+
 /* ---- tools hub ---- */
 
 pages.push({
@@ -854,7 +1001,7 @@ pages.push({
   h1: 'All tools',
   body: `
 <h1>All tools</h1>
-<p class="lede">Ten tools, all free, all running entirely in your browser. No account, no upload, no watermark, no file size limit imposed by us.</p>
+<p class="lede">Eleven tools, all free, all running entirely in your browser. No account, no upload, no watermark, no file size limit imposed by us.</p>
 
 <div class="privacy-badge">&#128274; Every tool here runs on your device</div>
 
@@ -863,6 +1010,7 @@ pages.push({
   <a href="batch-compress-pdf.html"><strong>Compress many at once</strong><small>One target, a whole folder of PDFs, downloaded individually or as a ZIP.</small></a>
   <a href="merge-pdf.html"><strong>Merge PDFs</strong><small>Combine any number of files into one, in the order you choose.</small></a>
   <a href="split-pdf.html"><strong>Split PDF</strong><small>Extract specific pages, or break one document into several files.</small></a>
+  <a href="compress-image-to-size.html"><strong>Compress an image</strong><small>Hit an exact size in KB for a photo, signature or scan.</small></a>
   <a href="jpg-to-pdf.html"><strong>Images to PDF</strong><small>Turn JPGs, PNGs or photos of documents into a single PDF.</small></a>
   <a href="pdf-to-jpg.html"><strong>PDF to images</strong><small>Render every page as a JPG or PNG at your chosen resolution.</small></a>
   <a href="rotate-pdf.html"><strong>Rotate PDF</strong><small>Fix sideways pages. Lossless &mdash; rotation is only metadata.</small></a>
@@ -886,6 +1034,7 @@ pages.push({
     <tr><td>Compress &mdash; Target size</td><td><strong>No</strong></td><td>Pages become images; the text layer is lost</td></tr>
     <tr><td>PDF to images</td><td><strong>No</strong></td><td>Pages become pixels; not reversible</td></tr>
     <tr><td>Images to PDF</td><td><strong>No</strong></td><td>Images are re-encoded as JPEG</td></tr>
+    <tr><td>Compress an image</td><td><strong>No</strong></td><td>Re-encoded as JPEG at a lower quality</td></tr>
   </tbody>
 </table>
 <p><strong>Always keep your original.</strong> The lossy operations cannot be undone by running them backwards &mdash; converting an image back to a PDF does not restore the text that rendering destroyed.</p>

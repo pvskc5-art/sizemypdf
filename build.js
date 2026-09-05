@@ -77,6 +77,7 @@ ${p.noindex
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="manifest" href="site.webmanifest">
 <meta name="theme-color" content="#2f6df6">
+<link rel="stylesheet" href="${ver('css/style.css')}">
 ${ADSENSE}
 ${p.faq ? faqSchema(p.faq) : ''}${p.breadcrumb === false ? '' : crumbSchema(p)}
 </head>
@@ -427,7 +428,7 @@ pages.push({
   desc: 'Combine several PDFs into one file, in the order you choose. Runs entirely in your browser, so nothing is uploaded. Free, no signup, no watermark, no page limit.',
   h1: 'Merge PDF files',
   faq: mergeFaq,
-  scripts: ['vendor/pdf-lib.min.js', 'js/merge.js'],
+  scripts: ['vendor/pdf-lib.min.js', 'js/thumbs.js', 'js/merge.js'],
   body: `
 <h1>Merge PDF files</h1>
 <p class="lede">Combine any number of PDFs into a single document, in whatever order you want. Nothing is uploaded and nothing is added to the output.</p>
@@ -505,7 +506,7 @@ pages.push({
   desc: 'Extract specific pages from a PDF, or split one document into several files. Runs entirely in your browser, so nothing is uploaded. Free, no signup, no watermark.',
   h1: 'Split a PDF',
   faq: splitFaq,
-  scripts: ['vendor/pdf-lib.min.js', 'js/split.js'],
+  scripts: ['vendor/pdf-lib.min.js', 'js/thumbs.js', 'js/split.js'],
   body: `
 <h1>Split a PDF</h1>
 <p class="lede">Pull out the pages you need, or break one document into several files. Quality is untouched, and nothing is uploaded.</p>
@@ -521,6 +522,8 @@ pages.push({
 
   <div class="controls" id="controls">
     <p class="note" id="info" style="margin-top:0"></p>
+    <p class="hint" id="thumbHint" style="display:none"></p>
+    <div class="thumbs" id="thumbs"></div>
     <div class="row">
       <div class="field">
         <label for="mode">Method</label>
@@ -1353,14 +1356,14 @@ pages.push({
   desc: 'Remove specific pages from a PDF and keep the rest. Lossless, runs entirely in your browser, nothing is uploaded. Free, no signup, no watermark.',
   h1: 'Delete pages from a PDF',
   faq: deleteFaq,
-  scripts: [PDFLIB_CDN, 'js/pageops.js', 'js/delete.js'],
+  scripts: [PDFLIB_CDN, 'js/thumbs.js', 'js/pageops.js', 'js/delete.js'],
   body: `
 <h1>Delete pages from a PDF</h1>
 <p class="lede">Name the pages you want gone. Everything else comes back untouched &mdash; and nothing is uploaded.</p>
 
 <div class="privacy-badge">&#128274; Your file never leaves this device</div>
 
-<div class="tool">
+<div class="tool del-tool">
   <label class="drop" id="drop" for="file">
       <strong>Choose a PDF or drop it here</strong>
     <small>Nothing is uploaded &mdash; pages are removed in your browser</small>
@@ -1369,6 +1372,8 @@ pages.push({
 
   <div class="controls" id="controls">
     <p class="note" id="info" style="margin-top:0"></p>
+    <p class="hint" id="thumbHint" style="display:none"></p>
+    <div class="thumbs" id="thumbs"></div>
     <div class="row">
       <div class="field">
         <label for="pages">Pages to remove</label>

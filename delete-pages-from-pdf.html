@@ -20,6 +20,7 @@
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="manifest" href="site.webmanifest">
 <meta name="theme-color" content="#2f6df6">
+<link rel="stylesheet" href="css/style.css?v=df79d6da">
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5619759216593458" crossorigin="anonymous"></script>
 <script type="application/ld+json">
 {
@@ -116,7 +117,7 @@
 
 <div class="privacy-badge">&#128274; Your file never leaves this device</div>
 
-<div class="tool">
+<div class="tool del-tool">
   <label class="drop" id="drop" for="file">
       <strong>Choose a PDF or drop it here</strong>
     <small>Nothing is uploaded &mdash; pages are removed in your browser</small>
@@ -125,6 +126,8 @@
 
   <div class="controls" id="controls">
     <p class="note" id="info" style="margin-top:0"></p>
+    <p class="hint" id="thumbHint" style="display:none"></p>
+    <div class="thumbs" id="thumbs"></div>
     <div class="row">
       <div class="field">
         <label for="pages">Pages to remove</label>
@@ -186,8 +189,9 @@
   </div>
 </footer>
 <script src="vendor/pdf-lib.min.js"></script>
+<script src="js/thumbs.js?v=35352335"></script>
 <script src="js/pageops.js?v=0565be2c"></script>
-<script src="js/delete.js?v=52e08dac"></script>
+<script src="js/delete.js?v=9cbccb43"></script>
 <script>document.getElementById('yr').textContent=new Date().getFullYear();
 if('serviceWorker' in navigator){addEventListener('load',function(){navigator.serviceWorker.register('/sw.js').catch(function(){});});}</script>
 </body>

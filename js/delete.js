@@ -2,11 +2,42 @@
    across as-is, so nothing is re-encoded. */
 (function () {
   'use strict';
-  var ui;
+  var ui, thumbApi = null, pageCount = 0;
+
+  /* Thumbnails matter more here than anywhere else on the site: deleting the
+     wrong page is silent and only noticed after the file has been sent. */
+  function buildThumbs(state) {
+    pageCount = state.pageCount;
+    var box = document.getElementById('thumbs');
+    if (!box || typeof PDFThumbs === 'undefined') return;
+    thumbApi = null;
+    var hint = document.getElementById('thumbHint');
+    if (hint) { hint.style.display = ''; hint.textContent = 'Loading page previews…'; }
+
+    PDFThumbs.grid(box, state.bytes, {
+      onChange: function (pages) {
+        document.getElementById('pages').value = PDFThumbs.toRanges(pages);
+      }
+    }).then(function (api) {
+      thumbApi = api;
+      if (hint) hint.textContent = 'Click the pages you want to remove — they turn red.';
+    }).catch(function (err) {
+      console.error(err);
+      if (hint) hint.textContent =
+        'Page previews could not be loaded, but removing pages still works.';
+    });
+  }
+
+  document.getElementById('pages').addEventListener('input', function () {
+    if (!thumbApi) return;
+    var p = PageOps.parsePages(this.value, pageCount, false);
+    thumbApi.setSelection(p.indices.map(function (i) { return i + 1; }));
+  });
 
   ui = PageOps.init({
     suffix: 'pages-removed',
     working: 'Removing pages…',
+    onLoad: buildThumbs,
 
     run: function (doc, state) {
       var parsed = PageOps.parsePages(

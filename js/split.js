@@ -10,6 +10,7 @@
       outputs = $('#outputs'), go = $('#go'), info = $('#info');
 
   var srcBuf = null, srcName = '', pageCount = 0;
+  var thumbApi = null;
 
   function fmt(b) {
     if (b < 1024) return b + ' B';
@@ -59,6 +60,7 @@
         (pageCount > 4 ? ', ' + pageCount : '');
       controls.classList.add('on');
       say('');
+      buildThumbs(srcBuf);
     }).catch(function (err) {
       console.error(err);
       say('Could not open this PDF: ' +
@@ -66,6 +68,40 @@
           '. If it is password-protected, remove the password first.');
     });
   }
+
+  /* ---------- thumbnails ----------
+     Clicking pages and typing page numbers are the same action expressed two
+     ways, so they write to each other rather than being separate features. */
+  function buildThumbs(ab) {
+    var box = $('#thumbs');
+    if (!box || typeof PDFThumbs === 'undefined') return;
+    thumbApi = null;
+    var hint = $('#thumbHint');
+    if (hint) { hint.style.display = ''; hint.textContent = 'Loading page previews…'; }
+
+    PDFThumbs.grid(box, ab, {
+      onChange: function (pages) {
+        // a click only makes sense as a range, so switch the mode to match
+        $('#mode').value = 'range';
+        $('#rangeField').style.display = '';
+        $('#chunkField').style.display = 'none';
+        $('#range').value = PDFThumbs.toRanges(pages);
+      }
+    }).then(function (api) {
+      thumbApi = api;
+      if (hint) hint.textContent = 'Click pages to choose them, or type the numbers below.';
+    }).catch(function (err) {
+      console.error(err);
+      // previews are a convenience - splitting must still work without them
+      if (hint) hint.textContent = 'Page previews could not be loaded, but splitting still works.';
+    });
+  }
+
+  $('#range').addEventListener('input', function () {
+    if (!thumbApi) return;
+    var p = parseRange(this.value, pageCount);
+    thumbApi.setSelection(p.indices.map(function (i) { return i + 1; }));
+  });
 
   /* ---------- range parsing ---------- */
   // "1-3, 5, 8-10" -> zero-based indices, de-duplicated, in the order given.

@@ -1,6 +1,8 @@
 /* SizeMyPDF - merge PDFs, entirely in the browser.
-   Only pdf-lib is needed here: merging copies page objects between documents
-   and never rasterises, so pdf.js is not loaded on this page. */
+   Merging itself needs only pdf-lib: it copies page objects between documents
+   and never rasterises. pdf.js is pulled in lazily by thumbs.js, and only once
+   files have actually been chosen, to draw a first-page cover for each one -
+   filenames like scan_0001.pdf tell you nothing about what you are ordering. */
 (function () {
   'use strict';
 
@@ -52,21 +54,38 @@
             return PDFLib.PDFDocument.load(ab, { ignoreEncryption: true });
           })
           .then(function (doc) {
-            items.push({ file: f, name: f.name, size: f.size, pages: doc.getPageCount() });
+            var it = { file: f, name: f.name, size: f.size,
+                       pages: doc.getPageCount(), cover: null };
+            items.push(it);
+            // Keep only the small canvas, never the source buffer - holding
+            // every file's bytes is how merging a folder exhausts a phone.
+            return coverFor(f).then(function (c) { it.cover = c; render(); });
           })
           .catch(function () {
             // A file we cannot open is reported rather than silently dropped.
-            items.push({ file: f, name: f.name, size: f.size, pages: null });
+            items.push({ file: f, name: f.name, size: f.size, pages: null, cover: null });
           });
       });
     });
     chain.then(function () { say(''); render(); });
   }
 
+  function coverFor(f) {
+    if (typeof PDFThumbs === 'undefined') return Promise.resolve(null);
+    return f.arrayBuffer()
+      .then(function (ab) { return PDFThumbs.cover(ab, 40); })
+      .catch(function () { return null; });   // a missing cover is not an error
+  }
+
   function render() {
     list.innerHTML = '';
     items.forEach(function (it, i) {
       var li = document.createElement('li');
+
+      var cov = document.createElement('span');
+      cov.className = 'cover';
+      if (it.cover) cov.appendChild(it.cover);
+      li.appendChild(cov);
 
       var nm = document.createElement('span');
       nm.className = 'nm'; nm.textContent = it.name;

@@ -92,11 +92,6 @@ jobs:
           done
           echo "::warning::$url did not return 200 after 5 minutes; submitting anyway"
 
-      - uses: actions/setup-node@v4
-        if: steps.changed.outputs.mode != 'none'
-        with:
-          node-version: '20'
-
       - name: Submit to IndexNow
         if: steps.changed.outputs.mode != 'none'
         run: |

@@ -3,18 +3,9 @@
   'use strict';
 
   pdfjsLib.GlobalWorkerOptions.workerSrc =
-    'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+    'vendor/pdf.worker.min.js';
 
-  /* pdf.js drives its render loop with requestAnimationFrame, which browsers
-     pause in a hidden tab - so conversion would stall the moment someone
-     switched away. Fall back to a timer while the page is hidden. */
-  (function () {
-    var native = window.requestAnimationFrame.bind(window);
-    window.requestAnimationFrame = function (cb) {
-      if (document.hidden) return window.setTimeout(function () { cb(performance.now()); }, 16);
-      return native(cb);
-    };
-  })();
+  /* The requestAnimationFrame shim lives in pdfjs-raf.js, loaded before pdf.js. */
 
   var $ = function (s) { return document.querySelector(s); };
   var drop = $('#drop'), file = $('#file'), controls = $('#controls'),

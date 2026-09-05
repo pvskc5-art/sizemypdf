@@ -44,19 +44,12 @@ const CONTACT_EMAIL = 'hello@sizemypdf.com';
 const ADSENSE_CLIENT = 'ca-pub-5619759216593458';
 const ADSENSE = `<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_CLIENT}" crossorigin="anonymous"></script>`;
 
-/* Subresource Integrity for the CDN libraries. Dependabot cannot help here -
-   these come from a CDN, not from npm - so pinning the exact bytes is the only
-   thing standing between a compromised CDN and arbitrary code running against
-   documents in a visitor's browser. Recompute if a version is ever bumped:
-     curl -s <url> | openssl dgst -sha384 -binary | openssl base64 -A          */
-const SRI = {
-  'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js':
-    'sha384-/1qUCSGwTur9vjf/z9lmu/eCUYbpOTgSjmpbMQZ1/CtX2v/WcAIKqRv+U1DUCG6e',
-  'https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js':
-    'sha384-weMABwrltA6jWR8DDe9Jp5blk+tZQh7ugpCsF3JwSA53WZM9/14PjS5LAJNHNjAI',
-  'https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js':
-    'sha384-+mbV2IY1Zk/X1p/nWllGySJSUN8uMs+gUAN10Or95UBH0fpj6GfKgPmgC5EXieXG'
-};
+/* Libraries are self-hosted in vendor/ rather than pulled from a CDN.
+   cdnjs is blocked on some corporate and national networks, where the site
+   loaded fine and then failed the moment you pressed the button. Same-origin
+   files need no SRI, and it removes an external dependency from a product
+   whose whole pitch is that nothing leaves your device. */
+const SRI = {};
 
 /* ------------------------------------------------------------------ shell */
 
@@ -84,8 +77,6 @@ ${p.noindex
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="manifest" href="site.webmanifest">
 <meta name="theme-color" content="#2f6df6">
-${(p.scripts || []).some(s => s.indexOf('cdnjs') === 0 || s.indexOf('https://cdnjs') === 0)
-  ? '<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>\n' : ''}<link rel="stylesheet" href="${ver('css/style.css')}">
 ${ADSENSE}
 ${p.faq ? faqSchema(p.faq) : ''}${p.breadcrumb === false ? '' : crumbSchema(p)}
 </head>
@@ -129,7 +120,7 @@ ${(p.scripts || []).map(s => {
     return `<script src="${s}" integrity="${sri}" crossorigin="anonymous" referrerpolicy="no-referrer"></script>`;
   }
   // local script: version it so an update is picked up immediately
-  return `<script src="${s.indexOf('http') === 0 ? s : ver(s)}"></script>`;
+  return `<script src="${(s.indexOf('http') === 0 || s.indexOf('vendor/') === 0) ? s : ver(s)}"></script>`;
 }).join('\n')}
 <script>document.getElementById('yr').textContent=new Date().getFullYear();
 if('serviceWorker' in navigator){addEventListener('load',function(){navigator.serviceWorker.register('/sw.js').catch(function(){});});}</script>
@@ -435,7 +426,7 @@ pages.push({
   desc: 'Combine several PDFs into one file, in the order you choose. Runs entirely in your browser, so nothing is uploaded. Free, no signup, no watermark, no page limit.',
   h1: 'Merge PDF files',
   faq: mergeFaq,
-  scripts: ['https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js', 'js/merge.js'],
+  scripts: ['vendor/pdf-lib.min.js', 'js/merge.js'],
   body: `
 <h1>Merge PDF files</h1>
 <p class="lede">Combine any number of PDFs into a single document, in whatever order you want. Nothing is uploaded and nothing is added to the output.</p>
@@ -513,7 +504,7 @@ pages.push({
   desc: 'Extract specific pages from a PDF, or split one document into several files. Runs entirely in your browser, so nothing is uploaded. Free, no signup, no watermark.',
   h1: 'Split a PDF',
   faq: splitFaq,
-  scripts: ['https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js', 'js/split.js'],
+  scripts: ['vendor/pdf-lib.min.js', 'js/split.js'],
   body: `
 <h1>Split a PDF</h1>
 <p class="lede">Pull out the pages you need, or break one document into several files. Quality is untouched, and nothing is uploaded.</p>
@@ -608,7 +599,7 @@ pages.push({
   desc: 'Turn JPG, PNG or other images into a single PDF, in the order you choose. Runs entirely in your browser, so your photos are never uploaded. Free, no signup.',
   h1: 'Images to PDF',
   faq: img2pdfFaq,
-  scripts: ['https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js', 'js/img2pdf.js'],
+  scripts: ['vendor/pdf-lib.min.js', 'js/img2pdf.js'],
   body: `
 <h1>Images to PDF</h1>
 <p class="lede">Turn photos or scans into one PDF, in the order you choose. Nothing is uploaded &mdash; which matters, because the images people convert are usually documents.</p>
@@ -697,7 +688,7 @@ pages.push({
   desc: 'Turn every page of a PDF into a JPG or PNG image. Choose the resolution. Runs entirely in your browser, so nothing is uploaded. Free, no signup, no watermark.',
   h1: 'PDF to images',
   faq: pdf2imgFaq,
-  scripts: ['https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js', 'js/pdf2img.js'],
+  scripts: ['js/pdfjs-raf.js', 'vendor/pdf.min.js', 'js/pdf2img.js'],
   body: `
 <h1>PDF to images</h1>
 <p class="lede">Turn each page into a JPG or PNG at the resolution you pick. Rendered in your browser &mdash; the document is never uploaded.</p>
@@ -790,7 +781,7 @@ pages.push({
   desc: 'Rotate every page of a PDF, or only the ones you name. Lossless - rotation is metadata, nothing is re-encoded. Runs in your browser, nothing is uploaded.',
   h1: 'Rotate a PDF',
   faq: rotateFaq,
-  scripts: ['https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js', 'js/rotate.js'],
+  scripts: ['vendor/pdf-lib.min.js', 'js/rotate.js'],
   body: `
 <h1>Rotate a PDF</h1>
 <p class="lede">Turn every page, or just the sideways ones. Completely lossless &mdash; and nothing is uploaded.</p>
@@ -944,9 +935,10 @@ pages.push({
   h1: 'Compress multiple PDFs at once',
   faq: batchFaq,
   scripts: [
-    'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js',
-    'https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js',
-    'https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js',
+    'js/pdfjs-raf.js',
+    'vendor/pdf.min.js',
+    'vendor/pdf-lib.min.js',
+    'vendor/jszip.min.js',
     'js/compress-core.js', 'js/batch.js'
   ],
   body: `
@@ -1191,7 +1183,7 @@ ${faqBlock(phoneFaq)}
 
 /* ---- page-operation tools (delete / number / watermark) ---- */
 
-const PDFLIB_CDN = 'https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js';
+const PDFLIB_CDN = 'vendor/pdf-lib.min.js';
 
 const deleteFaq = [
   ['Does removing pages reduce quality?',
@@ -1660,7 +1652,7 @@ for (const p of pages) {
   const p = path.join(root, 'index.html');
   let html = fs.readFileSync(p, 'utf8');
   let changed = 0;
-  for (const asset of ['css/style.css', 'js/compress-core.js', 'js/app.js']) {
+  for (const asset of ['css/style.css', 'js/pdfjs-raf.js', 'js/compress-core.js', 'js/app.js']) {
     const re = new RegExp(asset.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '(\\?v=[a-f0-9]+)?', 'g');
     const next = html.replace(re, () => { changed++; return ver(asset); });
     html = next;
@@ -1688,10 +1680,12 @@ for (const p of pages) {
     .digest('hex').slice(0, 10);
 
   const precache = [
-    './', './tools.html', './css/style.css', './js/compress-core.js', './js/app.js',
-    'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js',
-    'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js',
-    'https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js'
+    './', './tools.html', './css/style.css',
+    './js/pdfjs-raf.js', './js/compress-core.js', './js/app.js',
+    'vendor/pdf.min.js',
+    'vendor/pdf.worker.min.js',
+    'vendor/pdf-lib.min.js',
+    'vendor/jszip.min.js'
   ];
 
   const sw = `/* SizeMyPDF service worker - generated by build.js, do not edit. */
@@ -1699,7 +1693,7 @@ const CACHE = 'sizemypdf-${stamp}';
 const PRECACHE = ${JSON.stringify(precache, null, 2)};
 
 self.addEventListener('install', e => {
-  // Individually, so one failed CDN fetch cannot abort the whole install.
+  // Individually, so one failed fetch cannot abort the whole install.
   e.waitUntil(caches.open(CACHE).then(c =>
     Promise.all(PRECACHE.map(u => c.add(u).catch(() => null)))
   ).then(() => self.skipWaiting()));
@@ -1721,12 +1715,12 @@ self.addEventListener('fetch', e => {
   if (/googlesyndication|doubleclick|adtrafficquality|googletagservices|cloudflareinsights/
       .test(url.hostname)) return;
 
-  const sameOrigin = url.origin === self.location.origin;
-  const isLib = url.hostname === 'cdnjs.cloudflare.com';
-  if (!sameOrigin && !isLib) return;
+  if (url.origin !== self.location.origin) return;
+  const isLib = url.pathname.indexOf('/vendor/') !== -1;
 
-  // Libraries are version-pinned in their path, so cache-first is safe and is
-  // what makes offline work. Pages go network-first so content stays fresh.
+  // vendor/ holds version-pinned library builds that only change when the file
+  // itself is replaced, so cache-first is safe and is what makes offline work.
+  // Pages go network-first so content stays fresh.
   if (isLib) {
     e.respondWith(caches.match(req).then(hit => hit || fetch(req).then(res => {
       const copy = res.clone();

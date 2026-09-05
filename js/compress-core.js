@@ -11,23 +11,10 @@ window.PDFCompress = (function () {
   'use strict';
 
   pdfjsLib.GlobalWorkerOptions.workerSrc =
-    'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+    'vendor/pdf.worker.min.js';
 
-  /* pdf.js drives its render loop with requestAnimationFrame, which browsers
-     pause in a hidden tab - so a job would stall forever the moment someone
-     switched away. Fall back to a timer while hidden. Background timers are
-     clamped, so this is a crawl rather than a stall; the real fix is moving
-     this into a worker, which is a larger change. */
-  if (!window.__pdfRafPatched) {
-    var nativeRaf = window.requestAnimationFrame.bind(window);
-    window.requestAnimationFrame = function (cb) {
-      if (document.hidden) {
-        return window.setTimeout(function () { cb(performance.now()); }, 16);
-      }
-      return nativeRaf(cb);
-    };
-    window.__pdfRafPatched = true;
-  }
+  /* The requestAnimationFrame shim that keeps rendering alive when the browser
+     stops painting lives in pdfjs-raf.js, loaded before pdf.js. */
 
   var BASE_SCALE = 1.4;
 
@@ -208,6 +195,22 @@ window.PDFCompress = (function () {
   }
 
   /* ---------- public ---------- */
+
+  /* Rasterising is not guaranteed to shrink anything. A five-page text
+     document is a few kilobytes of glyph instructions; the same five pages as
+     JPEGs are hundreds. When the target is out of reach we would otherwise
+     hand back a file several times LARGER than the one we were given, while
+     calling it "the smallest achievable" - so always fall back to whatever the
+     lossless route managed. */
+  function pickSmaller(original, repacked, rastered) {
+    var lossless = (repacked && repacked.length < original.length)
+      ? repacked : original;
+    if (!rastered || rastered.length >= lossless.length) {
+      return { bytes: lossless, keptText: true };
+    }
+    return { bytes: rastered, keptText: false };
+  }
+
   function toTarget(bytes, targetBytes, onProgress, onStage) {
     onProgress = onProgress || noop;
     onStage = onStage || noop;
@@ -216,10 +219,11 @@ window.PDFCompress = (function () {
     return repack(bytes).then(function (b) {
       if (b && b.length <= targetBytes) return { bytes: b, keptText: true };
       return rasterToTarget(bytes, targetBytes, onProgress, onStage)
-        .then(function (r) { return { bytes: r, keptText: false }; });
-    }).catch(function () {
+        .then(function (r) { return pickSmaller(bytes, b, r); });
+    }, function () {
+      // repack failed outright; rasterising is the only route left
       return rasterToTarget(bytes, targetBytes, onProgress, onStage)
-        .then(function (r) { return { bytes: r, keptText: false }; });
+        .then(function (r) { return pickSmaller(bytes, null, r); });
     });
   }
 

@@ -1,11 +1,3 @@
 # ads.txt - authorised digital sellers
 # https://iabtechlab.com/ads-txt/
-#
-# Intentionally empty of records until an AdSense publisher ID exists.
-# A placeholder ID here would declare a seller that is not authorised to sell
-# this inventory, which is worse than declaring nothing at all.
-#
-# After AdSense approval, replace this file with the single line below,
-# substituting the real publisher ID from AdSense > Account > Settings:
-#
-#   google.com, pub-XXXXXXXXXXXXXXXX, DIRECT, f08c47fec0942fa0
+google.com, pub-5619759216593458, DIRECT, f08c47fec0942fa0

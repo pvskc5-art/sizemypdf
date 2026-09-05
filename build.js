@@ -38,6 +38,12 @@ const POLICY_UPDATED = '4 September 2026';
    reachable - review does send mail to it. */
 const CONTACT_EMAIL = 'hello@sizemypdf.com';
 
+/* Google AdSense. Auto ads inject their own placements, so no manual ad slots
+   are needed in the markup - the loader in <head> is the whole integration.
+   This same tag is what AdSense checks for during site review. */
+const ADSENSE_CLIENT = 'ca-pub-5619759216593458';
+const ADSENSE = `<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_CLIENT}" crossorigin="anonymous"></script>`;
+
 /* Subresource Integrity for the CDN libraries. Dependabot cannot help here -
    these come from a CDN, not from npm - so pinning the exact bytes is the only
    thing standing between a compromised CDN and arbitrary code running against
@@ -78,6 +84,7 @@ ${p.noindex
 <meta name="theme-color" content="#2f6df6">
 ${(p.scripts || []).some(s => s.indexOf('cdnjs') === 0 || s.indexOf('https://cdnjs') === 0)
   ? '<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>\n' : ''}<link rel="stylesheet" href="${ver('css/style.css')}">
+${ADSENSE}
 ${p.faq ? faqSchema(p.faq) : ''}${p.breadcrumb === false ? '' : crumbSchema(p)}
 </head>
 <body>
@@ -1095,8 +1102,14 @@ for (const p of pages) {
     const next = html.replace(re, () => { changed++; return ver(asset); });
     html = next;
   }
+  // AdSense loader: insert once, after the stylesheet, if not already there
+  let ads = 'present';
+  if (html.indexOf('adsbygoogle.js?client=') === -1) {
+    html = html.replace(/(<link rel="stylesheet"[^>]*>)/, '$1\n' + ADSENSE);
+    ads = 'inserted';
+  }
   fs.writeFileSync(p, html, 'utf8');
-  console.log('  stamped index.html (' + changed + ' asset refs)');
+  console.log('  stamped index.html (' + changed + ' asset refs, adsense ' + ads + ')');
 }
 
 /* sitemap - index first, then generated pages, excluding noindex */

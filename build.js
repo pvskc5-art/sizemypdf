@@ -1123,7 +1123,7 @@ const phoneFaq = [
   ['Why is it slower than on a laptop?',
    'Because the work happens on your device rather than a server. A phone processor doing image compression is simply slower than a laptop one. A few pages take seconds; a fifty-page colour scan may take a minute or two.'],
   ['My phone browser ran out of memory',
-   'Very large documents can exhaust a phone. Split the file into parts first, compress each, then merge them back if you need one file. Closing other browser tabs helps more than you would expect.'],
+   'It is page count that costs memory rather than file size, because every page is held as an image while it is compressed. Split a long document into parts first, compress each, then merge them back if you need one file. Closing other browser tabs helps more than you would expect.'],
   ['Where does the compressed file go?',
    'To wherever your browser saves downloads - Files on iOS, the Downloads folder on Android. Tap the download notification to open it.'],
   ['Can I use it offline?',
@@ -1487,7 +1487,7 @@ pages.push({
   <li><strong>Target Size mode flattens text.</strong> Guaranteeing a hard byte limit requires converting pages to images. Text stops being selectable. Lossless mode avoids this but cannot promise a specific size.</li>
   <li><strong>No OCR.</strong> The tool does not add a searchable text layer to scans.</li>
   <li><strong>Encrypted PDFs are not handled.</strong> Remove the password yourself first; bypassing document encryption is deliberately out of scope.</li>
-  <li><strong>Very large files depend on your device.</strong> There is no server limit, but a 100 MB scan may exhaust memory on a phone.</li>
+  <li><strong>Long documents depend on your device.</strong> There is no server limit. What costs memory is page count, not megabytes &mdash; every page is held as an image while it is worked on &mdash; so a 300-page scan can exhaust a phone while a 100 MB single-page poster is trivial.</li>
 </ul>
 
 <h2>Contact</h2>

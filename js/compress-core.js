@@ -163,9 +163,14 @@ window.PDFCompress = (function () {
       onStage('Testing quality at ' + Math.round(s * 100) + '% scale…');
       return r.canvasesAt(s).then(function (canvases) {
         var budget = targetBytes - overhead(canvases.length);
+        /* Bisection on JPEG quality. Six steps narrow the window to about 1%
+           of the quality range; four left it near 5%, which routinely spent a
+           target of 200 KB on a 170 KB file that looked worse than it had to.
+           Encoding is cheap next to rasterising - the pages are already
+           rendered - so the extra probes cost far less than the quality. */
         var lo = 0.15, hi = 0.94, best = null, steps = 0;
         function step() {
-          if (steps++ >= 4) return Promise.resolve(best);
+          if (steps++ >= 6) return Promise.resolve(best);
           var q = (lo + hi) / 2;
           return encodeAll(canvases, q).then(function (enc) {
             onProgress(4);

@@ -260,7 +260,7 @@ window.PDFCompress = (function () {
         if (d.type === 'progress') { job.onProgress(d.n); return; }
         if (d.type === 'stage') { job.onStage(d.msg); return; }
         delete jobs[d.id];
-        if (d.type === 'done') job.resolve({ bytes: d.bytes, keptText: d.keptText });
+        if (d.type === 'done') job.resolve({ bytes: d.bytes, keptText: d.keptText, mode: d.mode });
         else job.reject(new Error(d.message || 'worker failed'));
       };
       worker.onerror = function (ev) {

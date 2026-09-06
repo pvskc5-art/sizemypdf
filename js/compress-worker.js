@@ -59,8 +59,30 @@ function repack(bytes) {
 }
 
 /* ---------- rasterising ---------- */
-function makeRenderer(bytes, onProgress) {
-  var pdfDoc = null, baseCanvases = null, derived = {};
+/* A page source that keeps at most one full-size canvas alive at a time.
+
+   The old shape held every page of the document as a canvas for the whole
+   job, plus a second copy for each scale it tried. An A4 page at 1.4x is
+   roughly 3.9 MB of pixels, so a 30-page scan was carrying well over 100 MB
+   before the second scale was even considered - which is what ran phones out
+   of memory, and it got worse once batch could queue twenty documents.
+
+   Now pages are rendered once and, for documents big enough to matter, kept
+   as compressed JPEG blobs instead of raw pixels: about 200 KB a page rather
+   than 3.9 MB. Encoding walks the document a page at a time, decoding one
+   blob, scaling it, encoding it and freeing it before moving on.
+
+   Short documents keep the raw canvases, because storing an intermediate JPEG
+   costs a second lossy encode. That is a real quality cost and there is no
+   reason to pay it when the whole document fits in memory comfortably. The
+   switch is made on estimated bytes, not page count, since page sizes vary. */
+var MEMORY_BUDGET = 48 * 1024 * 1024;   // raw pixels we are willing to hold
+var lastMode = null;                    // reported back so the path is checkable
+var STORE_QUALITY = 0.94;               // intermediate quality in streaming mode
+
+function makeSource(bytes, onProgress) {
+  var pdfDoc = null, mode = null;
+  var canvases = null, stored = null, dims = null;
 
   function loadDoc() {
     if (pdfDoc) return Promise.resolve(pdfDoc);
@@ -70,99 +92,122 @@ function makeRenderer(bytes, onProgress) {
     }).promise.then(function (d) { pdfDoc = d; return d; });
   }
 
-  // Rasterising dominates the runtime, so it happens once at the highest scale
-  // needed; lower scales are cheap canvas downscales.
-  function renderBase() {
-    if (baseCanvases) return Promise.resolve(baseCanvases);
+  function viewportFor(page) {
+    var vp = page.getViewport({ scale: BASE_SCALE });
+    var k = Math.min(1, MAX_EDGE / Math.max(vp.width, vp.height));
+    return k < 1 ? page.getViewport({ scale: BASE_SCALE * k }) : vp;
+  }
+
+  function prepare() {
+    if (mode) return Promise.resolve();
     return loadDoc().then(function (doc) {
-      var out = [], n = doc.numPages, chain = Promise.resolve();
-      for (var i = 1; i <= n; i++) {
-        (function (pageNo) {
-          chain = chain.then(function () {
-            return doc.getPage(pageNo).then(function (page) {
-              var vp = page.getViewport({ scale: BASE_SCALE });
-              var k = Math.min(1, MAX_EDGE / Math.max(vp.width, vp.height));
-              if (k < 1) vp = page.getViewport({ scale: BASE_SCALE * k });
-              var c = new OffscreenCanvas(
-                Math.max(1, Math.floor(vp.width)),
-                Math.max(1, Math.floor(vp.height)));
-              var ctx = c.getContext('2d');
-              ctx.fillStyle = '#fff';
-              ctx.fillRect(0, 0, c.width, c.height);
-              return page.render({ canvasContext: ctx, viewport: vp }).promise
-                .then(function () {
-                  out.push(c);
-                  // the page's own internal buffers are no longer needed
-                  if (page.cleanup) { try { page.cleanup(); } catch (e) {} }
-                  onProgress(60 / n);
-                });
-            });
-          });
-        })(i);
-      }
-      return chain.then(function () { baseCanvases = out; return out; });
-    });
-  }
-
-  function canvasesAt(scale) {
-    if (scale === BASE_SCALE) return renderBase();
-    if (derived[scale]) return Promise.resolve(derived[scale]);
-    return renderBase().then(function (base) {
-      var k = scale / BASE_SCALE;
-      derived[scale] = base.map(function (src) {
-        var c = new OffscreenCanvas(
-          Math.max(1, Math.round(src.width * k)),
-          Math.max(1, Math.round(src.height * k)));
-        var ctx = c.getContext('2d');
-        ctx.imageSmoothingEnabled = true;
-        ctx.imageSmoothingQuality = 'high';
-        ctx.fillStyle = '#fff';
-        ctx.fillRect(0, 0, c.width, c.height);
-        ctx.drawImage(src, 0, 0, c.width, c.height);
-        return c;
+      return doc.getPage(1).then(function (p1) {
+        var vp = viewportFor(p1);
+        var estimate = Math.floor(vp.width) * Math.floor(vp.height) * 4 * doc.numPages;
+        mode = estimate > MEMORY_BUDGET ? 'stream' : 'cache';
+        lastMode = mode;
+        return renderAll(doc);
       });
-      return derived[scale];
     });
   }
 
-  function zero(c) { try { c.width = 0; c.height = 0; } catch (e) {} }
-
-  /* A 30-page scan holds hundreds of megabytes of canvas. Dropping each scale
-     as soon as its probes are done, rather than at the end of the job, is what
-     keeps the peak down - and in batch that memory has to come back before the
-     next file starts. */
-  function dropScale(s) {
-    if (derived[s]) { derived[s].forEach(zero); delete derived[s]; }
+  function renderAll(doc) {
+    canvases = []; stored = []; dims = [];
+    var n = doc.numPages, chain = Promise.resolve();
+    for (var i = 1; i <= n; i++) {
+      (function (pageNo) {
+        chain = chain.then(function () {
+          return doc.getPage(pageNo).then(function (page) {
+            var vp = viewportFor(page);
+            var c = new OffscreenCanvas(
+              Math.max(1, Math.floor(vp.width)),
+              Math.max(1, Math.floor(vp.height)));
+            var ctx = c.getContext('2d');
+            ctx.fillStyle = '#fff';
+            ctx.fillRect(0, 0, c.width, c.height);
+            return page.render({ canvasContext: ctx, viewport: vp }).promise
+              .then(function () {
+                dims.push({ width: c.width, height: c.height });
+                if (page.cleanup) { try { page.cleanup(); } catch (e) {} }
+                if (mode === 'cache') { canvases.push(c); onProgress(60 / n); return; }
+                return c.convertToBlob({ type: 'image/jpeg', quality: STORE_QUALITY })
+                  .then(function (b) {
+                    stored.push(b);
+                    c.width = 0; c.height = 0;    // free the pixels immediately
+                    onProgress(60 / n);
+                  });
+              });
+          });
+        });
+      })(i);
+    }
+    return chain;
   }
 
-  function dropBase() {
-    if (baseCanvases) { baseCanvases.forEach(zero); baseCanvases = null; }
+  function pageCount() { return dims ? dims.length : 0; }
+
+  function sourceFor(i) {
+    if (mode === 'cache') return Promise.resolve({ img: canvases[i], close: false });
+    return createImageBitmap(stored[i]).then(function (bm) {
+      return { img: bm, close: true };
+    });
+  }
+
+  /* Encode the whole document at one scale and quality, holding a single
+     scaled canvas at a time. Returns the encoded blobs and their dimensions,
+     so the pixels can be gone before a PDF is assembled from them. */
+  function encodeAt(scale, q) {
+    var k = scale / BASE_SCALE;
+    var blobs = [], outDims = [], total = 0;
+    var chain = Promise.resolve();
+
+    dims.forEach(function (d, i) {
+      chain = chain.then(function () {
+        var w = Math.max(1, Math.round(d.width * k));
+        var h = Math.max(1, Math.round(d.height * k));
+
+        // at base scale in cache mode the page is already the right size
+        if (mode === 'cache' && k === 1) {
+          outDims.push({ width: w, height: h });
+          return canvases[i].convertToBlob({ type: 'image/jpeg', quality: q })
+            .then(function (b) { blobs.push(b); total += b.size; });
+        }
+
+        return sourceFor(i).then(function (src) {
+          var c = new OffscreenCanvas(w, h);
+          var ctx = c.getContext('2d');
+          ctx.imageSmoothingEnabled = true;
+          ctx.imageSmoothingQuality = 'high';
+          ctx.fillStyle = '#fff';
+          ctx.fillRect(0, 0, w, h);
+          ctx.drawImage(src.img, 0, 0, w, h);
+          if (src.close && src.img.close) src.img.close();
+          outDims.push({ width: w, height: h });
+          return c.convertToBlob({ type: 'image/jpeg', quality: q })
+            .then(function (b) {
+              blobs.push(b); total += b.size;
+              c.width = 0; c.height = 0;          // and free it again
+            });
+        });
+      });
+    });
+
+    return chain.then(function () {
+      return { blobs: blobs, dims: outDims, total: total };
+    });
+  }
+
+  function release() {
+    if (canvases) {
+      canvases.forEach(function (c) { try { c.width = 0; c.height = 0; } catch (e) {} });
+    }
+    canvases = null; stored = null;
     if (pdfDoc && pdfDoc.destroy) { try { pdfDoc.destroy(); } catch (e) {} }
     pdfDoc = null;
   }
 
-  function release() {
-    Object.keys(derived).forEach(dropScale);
-    dropBase();
-  }
-
-  return { canvasesAt: canvasesAt, dropScale: dropScale,
-           dropBase: dropBase, release: release };
-}
-
-function toJpeg(canvas, q) {
-  return canvas.convertToBlob({ type: 'image/jpeg', quality: q });
-}
-
-// Search on encoded JPEG totals; a real PDF is assembled only for the winner.
-function encodeAll(canvases, q) {
-  var blobs = [], total = 0, chain = Promise.resolve();
-  canvases.forEach(function (c) {
-    chain = chain.then(function () {
-      return toJpeg(c, q).then(function (b) { blobs.push(b); total += b.size; });
-    });
-  });
-  return chain.then(function () { return { blobs: blobs, total: total }; });
+  return { prepare: prepare, encodeAt: encodeAt, release: release,
+           pageCount: pageCount, modeUsed: function () { return mode; } };
 }
 
 function overhead(n) { return 1200 + 320 * n; }
@@ -187,77 +232,61 @@ function assembleFrom(dims, blobs) {
   });
 }
 
-function dimsOf(canvases) {
-  return canvases.map(function (c) { return { width: c.width, height: c.height }; });
-}
-
 function rasterToTarget(bytes, targetBytes, onProgress, onStage) {
-  var r = makeRenderer(bytes, onProgress);
+  var src = makeSource(bytes, onProgress);
   var idx = 0, fallback = null;
 
   function tryScale() {
     if (idx >= SCALES.length) {
       if (!fallback) return Promise.resolve(null);
       var f = fallback;
-      r.release();
+      src.release();
       return assembleFrom(f.dims, f.blobs);
     }
     var s = SCALES[idx++];
     onStage('Testing quality at ' + Math.round(s * 100) + '% scale…');
-    return r.canvasesAt(s).then(function (canvases) {
-      var budget = targetBytes - overhead(canvases.length);
-      var lo = 0.15, hi = 0.94, best = null, steps = 0;
 
-      function step() {
-        if (steps++ >= PROBES) return Promise.resolve(best);
-        var q = (lo + hi) / 2;
-        return encodeAll(canvases, q).then(function (enc) {
-          onProgress(4);
-          if (!fallback || enc.total < fallback.total) {
-            fallback = { dims: dimsOf(canvases), blobs: enc.blobs, total: enc.total };
-          }
-          if (enc.total <= budget) { best = enc; lo = q; } else { hi = q; }
-          return step();
-        });
+    var lo = 0.15, hi = 0.94, best = null, steps = 0;
+    var budget = targetBytes - overhead(src.pageCount());
+
+    function step() {
+      if (steps++ >= PROBES) return Promise.resolve(best);
+      var q = (lo + hi) / 2;
+      return src.encodeAt(s, q).then(function (enc) {
+        onProgress(4);
+        if (!fallback || enc.total < fallback.total) fallback = enc;
+        if (enc.total <= budget) { best = enc; lo = q; } else { hi = q; }
+        return step();
+      });
+    }
+
+    return step().then(function (winner) {
+      if (!winner) return tryScale();
+      onStage('Building the PDF…');
+      var needsRetry = lo > 0.2;
+      var retryQ = Math.max(0.15, lo - 0.12);
+
+      // nothing holds pixels any more, so the source can go before assembly
+      if (!needsRetry) {
+        src.release();
+        return assembleFrom(winner.dims, winner.blobs);
       }
-
-      return step().then(function (winner) {
-        if (!winner) {
-          if (s !== BASE_SCALE) r.dropScale(s);
-          return tryScale();
-        }
-        onStage('Building the PDF…');
-        var dims = dimsOf(canvases);
-        var needsRetry = lo > 0.2;
-        var retryQ = Math.max(0.15, lo - 0.12);
-
-        /* Peak memory is here - canvases, encoded blobs and the assembled PDF
-           are all alive at once. When no retry pass is possible the canvases
-           are already dead weight, so drop them before assembling rather than
-           after. assembleFrom only needs the page sizes. */
-        if (!needsRetry) {
-          r.release();
-          return assembleFrom(dims, winner.blobs);
-        }
-        return assembleFrom(dims, winner.blobs).then(function (out) {
-          if (out.length <= targetBytes) { r.release(); return out; }
-          // one more, slightly harder pass before giving up on the target
-          return encodeAll(canvases, retryQ).then(function (e2) {
-            r.release();
-            return assembleFrom(dims, e2.blobs);
-          });
+      return assembleFrom(winner.dims, winner.blobs).then(function (out) {
+        if (out.length <= targetBytes) { src.release(); return out; }
+        // one more, slightly harder pass before giving up on the target
+        return src.encodeAt(s, retryQ).then(function (e2) {
+          src.release();
+          return assembleFrom(e2.dims, e2.blobs);
         });
       });
     });
   }
 
-  return tryScale().then(
-    function (out) { r.release(); return out; },
-    function (e) { r.release(); throw e; });
+  return src.prepare().then(tryScale).then(
+    function (out) { src.release(); return out; },
+    function (e) { src.release(); throw e; });
 }
 
-/* Rasterising is not guaranteed to shrink anything: a text document is a few
-   kilobytes of glyph instructions and the same pages as JPEGs are hundreds. */
 function pickSmaller(original, repacked, rastered) {
   var lossless = (repacked && repacked.length < original.length) ? repacked : original;
   if (!rastered || rastered.length >= lossless.length) {
@@ -292,7 +321,8 @@ self.onmessage = function (e) {
     if (!res || !res.bytes) { post(id, 'error', { message: 'no output' }); return; }
     var out = res.bytes instanceof Uint8Array ? res.bytes : new Uint8Array(res.bytes);
     // hand the buffer over rather than copying it back
-    self.postMessage({ id: id, type: 'done', bytes: out, keptText: !!res.keptText },
+    self.postMessage({ id: id, type: 'done', bytes: out,
+                       keptText: !!res.keptText, mode: lastMode },
                      [out.buffer]);
   }).catch(function (err) {
     post(id, 'error', { message: String(err && err.message || err) });

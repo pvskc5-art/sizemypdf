@@ -12,16 +12,16 @@
    arrives first.
 
    The timer is driven from a Web Worker rather than setTimeout on purpose.
-   Background tabs clamp main-thread timers to roughly one second, which is
-   what made a backgrounded job crawl: the batch page tells people to leave
-   the tab in the background, which was the slowest possible path. Worker
-   timers are not clamped, so a backgrounded job now runs at close to
-   foreground speed. The ticker only runs while frames are actually pending,
-   so an idle page costs nothing.
+   Background tabs clamp main-thread timers to roughly one second, which made
+   any backgrounded render crawl. Worker timers are not clamped. The ticker
+   only runs while frames are actually pending, so an idle page costs nothing.
 
-   This is not the same thing as moving compression into a worker. The work
-   still happens on the main thread and still blocks the UI while it runs.
-   It removes the background penalty, not the blocking.
+   Compression itself no longer needs this - it runs in compress-worker.js,
+   where there is no animation frame to wait for. This still matters for
+   everything that renders on the main thread: PDF-to-images, the page
+   thumbnails on Split, Delete and Merge, the result preview, and the
+   main-thread fallback in compress-core.js when a browser has no
+   OffscreenCanvas.convertToBlob.
 
    Loaded before pdf.js on every page that renders a PDF. */
 (function () {

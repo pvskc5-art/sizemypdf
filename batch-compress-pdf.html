@@ -164,7 +164,7 @@
 </table></div>
 <p>Files run one after another rather than together. Each one holds all of its pages as images while it works, so processing several at once is the fastest route to running a phone out of memory.</p>
 
-<div class="note"><strong>Large batches take real time.</strong> The work happens on your processor, not a server, so twenty scanned documents is minutes rather than seconds. The tab must stay open &mdash; but you can leave it in the background and come back to it.</div>
+<div class="note"><strong>Large batches take real time.</strong> The work happens on your processor, not a server, so a folder of scanned documents takes a while &mdash; how long depends on your device more than on us. Compression runs on a background thread, so the page stays responsive and you can switch tabs without slowing it down. The tab does need to stay open.</div>
 
 <h2>Common questions</h2>
 <details><summary>How many files can I do at once?</summary><p>There is no fixed limit, because there is no server enforcing one. Twenty ordinary documents are comfortable on a laptop. The constraint is your device memory, and it is driven by page count rather than file size - fifty single-page files are far easier than five fifty-page scans.</p></details>
@@ -193,12 +193,12 @@
     <div class="copy">&copy; <span id="yr">2026</span> SizeMyPDF &middot; Files are processed in your browser and never uploaded.</div>
   </div>
 </footer>
-<script src="js/pdfjs-raf.js?v=5fb85bc9"></script>
+<script src="js/pdfjs-raf.js?v=2e128684"></script>
 <script src="vendor/pdf.min.js"></script>
 <script src="vendor/pdf-lib.min.js"></script>
 <script src="vendor/jszip.min.js"></script>
 <script src="js/metrics.js?v=a83c46f8"></script>
-<script src="js/compress-core.js?v=1d8e1f1f"></script>
+<script src="js/compress-core.js?v=0f685bf6"></script>
 <script src="js/batch.js?v=1f8525eb"></script>
 <script>document.getElementById('yr').textContent=new Date().getFullYear();
 if('serviceWorker' in navigator){addEventListener('load',function(){navigator.serviceWorker.register('/sw.js').catch(function(){});});}</script>

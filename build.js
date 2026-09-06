@@ -1146,7 +1146,7 @@ pages.push({
 </table>
 <p>Files run one after another rather than together. Each one holds all of its pages as images while it works, so processing several at once is the fastest route to running a phone out of memory.</p>
 
-<div class="note"><strong>Large batches take real time.</strong> The work happens on your processor, not a server, so twenty scanned documents is minutes rather than seconds. The tab must stay open &mdash; but you can leave it in the background and come back to it.</div>
+<div class="note"><strong>Large batches take real time.</strong> The work happens on your processor, not a server, so a folder of scanned documents takes a while &mdash; how long depends on your device more than on us. Compression runs on a background thread, so the page stays responsive and you can switch tabs without slowing it down. The tab does need to stay open.</div>
 
 <h2>Common questions</h2>
 ${faqBlock(batchFaq)}

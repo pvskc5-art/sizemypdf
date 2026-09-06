@@ -216,10 +216,7 @@ window.PDFCompress = (function () {
     return { bytes: rastered, keptText: false };
   }
 
-  function toTarget(bytes, targetBytes, onProgress, onStage) {
-    onProgress = onProgress || noop;
-    onStage = onStage || noop;
-
+  function toTargetMain(bytes, targetBytes, onProgress, onStage) {
     onStage('Trying lossless first…');
     return repack(bytes).then(function (b) {
       if (b && b.length <= targetBytes) return { bytes: b, keptText: true };
@@ -232,5 +229,86 @@ window.PDFCompress = (function () {
     });
   }
 
-  return { toTarget: toTarget, repack: repack, BASE_SCALE: BASE_SCALE };
+  /* ---------- worker ----------
+
+     The same algorithm lives in compress-worker.js and runs off the main
+     thread, which keeps the page responsive and sidesteps animation-frame
+     throttling entirely. Everything above stays as the fallback: not every
+     browser has OffscreenCanvas.convertToBlob, and a worker that fails to
+     start must not take the product down with it. */
+
+  var canUseWorker = (function () {
+    try {
+      return typeof Worker !== 'undefined' &&
+             typeof OffscreenCanvas !== 'undefined' &&
+             typeof OffscreenCanvas.prototype.convertToBlob === 'function';
+    } catch (e) { return false; }
+  })();
+
+  var worker = null, workerDead = false, seq = 0;
+  var jobs = Object.create(null);
+
+  function getWorker() {
+    if (workerDead) return null;
+    if (worker) return worker;
+    try {
+      worker = new Worker('js/compress-worker.js');
+      worker.onmessage = function (e) {
+        var d = e.data || {};
+        var job = jobs[d.id];
+        if (!job) return;
+        if (d.type === 'progress') { job.onProgress(d.n); return; }
+        if (d.type === 'stage') { job.onStage(d.msg); return; }
+        delete jobs[d.id];
+        if (d.type === 'done') job.resolve({ bytes: d.bytes, keptText: d.keptText });
+        else job.reject(new Error(d.message || 'worker failed'));
+      };
+      worker.onerror = function (ev) {
+        // the worker itself is broken: fail every job on it and stop using it
+        workerDead = true;
+        var err = new Error(ev && ev.message ? ev.message : 'worker error');
+        Object.keys(jobs).forEach(function (k) { jobs[k].reject(err); delete jobs[k]; });
+        try { worker.terminate(); } catch (e2) {}
+        worker = null;
+      };
+      return worker;
+    } catch (e) {
+      workerDead = true;
+      return null;
+    }
+  }
+
+  function toTargetWorker(bytes, targetBytes, onProgress, onStage) {
+    var w = getWorker();
+    if (!w) return Promise.reject(new Error('no worker'));
+    var id = ++seq;
+    return new Promise(function (resolve, reject) {
+      jobs[id] = { resolve: resolve, reject: reject,
+                   onProgress: onProgress, onStage: onStage };
+      // deliberately not transferred: the fallback needs these bytes intact
+      w.postMessage({ id: id, cmd: 'toTarget', bytes: bytes, targetBytes: targetBytes });
+    });
+  }
+
+  function toTarget(bytes, targetBytes, onProgress, onStage) {
+    onProgress = onProgress || noop;
+    onStage = onStage || noop;
+
+    if (!canUseWorker || workerDead) {
+      return toTargetMain(bytes, targetBytes, onProgress, onStage);
+    }
+    return toTargetWorker(bytes, targetBytes, onProgress, onStage)
+      .catch(function (err) {
+        /* Any worker failure falls back rather than surfacing to the user. It
+           costs the time already spent, which beats an error on a file the
+           main-thread path can still compress. */
+        console.warn('compression worker failed, using the main thread:',
+                     err && err.message);
+        workerDead = true;
+        return toTargetMain(bytes, targetBytes, onProgress, onStage);
+      });
+  }
+
+  return { toTarget: toTarget, repack: repack, BASE_SCALE: BASE_SCALE,
+           usingWorker: function () { return canUseWorker && !workerDead; } };
 })();

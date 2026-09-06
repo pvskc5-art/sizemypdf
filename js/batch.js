@@ -144,6 +144,7 @@
     render();
 
     var done = 0;
+    var batchStarted = Date.now();
     function step(i) {
       if (i >= items.length) return Promise.resolve();
       var it = items[i];
@@ -198,6 +199,19 @@
         kept + ' kept their text layer' +
         (over ? ', ' + over + ' could not reach the target' : '') +
         (failed ? ', ' + failed + ' could not be read' : '') + '.';
+      try {
+        if (typeof Metrics !== 'undefined') {
+          Metrics.record('batch', {
+            files: Metrics.count(items.length),
+            target: Metrics.kb(targetKB),
+            over: over ? 'yes' : 'no',
+            failed: failed ? 'yes' : 'no',
+            took: Metrics.ms(Date.now() - batchStarted),
+            engine: (PDFCompress.usingWorker && PDFCompress.usingWorker())
+              ? 'worker' : 'main'
+          });
+        }
+      } catch (e) {}
       summary.classList.add('on');
       zipBtn.disabled = ok.length === 0;
       say(ok.length ? 'Done. Download them individually or as a ZIP.' : 'Nothing could be compressed.');

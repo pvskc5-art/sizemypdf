@@ -118,11 +118,14 @@
         ' KB target, so it is unchanged. Compressing it further would only lose quality.';
       result.classList.add('on');
       say(''); bar.classList.remove('on'); go.disabled = false;
+      track({ mode: mode, target: Metrics.kb(targetKB), outcome: 'already-under',
+              kept: 'text', took: '<1s' });
       showPreview();
       return;
     }
 
     progress = 0; prog(5);
+    var startedAt = Date.now();
 
     var job = (mode === 'lossless')
       ? PDFCompress.repack(srcBytes).then(function (b) { return { bytes: b, keptText: true }; })
@@ -150,6 +153,13 @@
       result.classList.add('on');
       if (!hit) result.classList.add('miss');
       say(''); bar.classList.remove('on'); go.disabled = false;
+      track({
+        mode: mode,
+        target: Metrics.kb(targetKB),
+        outcome: hit ? 'hit' : 'miss',
+        kept: res.keptText ? 'text' : 'raster',
+        took: Metrics.ms(Date.now() - startedAt)
+      });
       showPreview();
     }).catch(function (err) {
       console.error(err);
@@ -167,6 +177,17 @@
     document.body.appendChild(a); a.click();
     setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 1500);
   });
+
+  /* Never let counting break compressing: if metrics.js did not load, or
+     storage is blocked, the job is unaffected. */
+  function track(fields) {
+    try {
+      if (typeof Metrics === 'undefined') return;
+      fields.engine = (PDFCompress.usingWorker && PDFCompress.usingWorker())
+        ? 'worker' : 'main';
+      Metrics.record('compress', fields);
+    } catch (e) {}
+  }
 
   $('#mode').addEventListener('change', function () {
     $('#targetField').style.display = this.value === 'lossless' ? 'none' : '';

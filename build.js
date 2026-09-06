@@ -1093,7 +1093,7 @@ pages.push({
     'vendor/pdf.min.js',
     'vendor/pdf-lib.min.js',
     'vendor/jszip.min.js',
-    'js/compress-core.js', 'js/batch.js'
+    'js/metrics.js', 'js/compress-core.js', 'js/batch.js'
   ],
   body: `
 <h1>Compress multiple PDFs at once</h1>
@@ -1708,7 +1708,9 @@ pages.push({
 <p>Third-party vendors and ad networks may also serve ads on this site and may themselves set cookies. We do not control these cookies and cannot access the data they collect.</p>
 
 <h2>4. Analytics</h2>
-<p>This site may use a privacy-respecting analytics service to count visits and understand which pages are useful. Where analytics are used, they are configured not to track individuals across other websites.</p>
+<p>This site uses Cloudflare Web Analytics to count visits and see which pages are useful. It is cookieless, does not fingerprint you, and does not follow you to other websites. It records the page address, the referring site, and general details such as browser, device type and country.</p>
+<p>Separately, the compression tools keep a few anonymous counters about how they are used &mdash; which target sizes are asked for, whether the target was reached, and roughly how long a job took. These are rounded into ranges before they are stored, so a counter reads like &ldquo;a 101&ndash;200&nbsp;KB target, reached, 2&ndash;5 seconds&rdquo;. Nothing derived from your file is included: not its name, not its contents, not its exact size.</p>
+<p><strong>These counters do not leave your device.</strong> They are kept in your browser's local storage and are not transmitted anywhere. If that ever changes, this page will say so before it does. You can switch them off entirely by enabling &ldquo;Do Not Track&rdquo; in your browser, and clearing your browsing data for this site erases them.</p>
 
 <h2>5. Visitors in the European Economic Area and United Kingdom</h2>
 <p>If you are located in the European Economic Area, the United Kingdom or Switzerland, a consent message is shown before any non-essential cookies are set, and your choice is honoured. That message is provided by Google&rsquo;s certified consent management platform, and offers three options: consent, do not consent, or manage individual purposes. You can reopen it and change or withdraw your choice at any time through the consent tool itself; clearing this site&rsquo;s data in your browser also resets it.</p>
@@ -1843,7 +1845,7 @@ for (const p of pages) {
   const p = path.join(root, 'index.html');
   let html = fs.readFileSync(p, 'utf8');
   let changed = 0;
-  for (const asset of ['css/style.css', 'js/pdfjs-raf.js', 'js/compress-core.js', 'js/app.js']) {
+  for (const asset of ['css/style.css', 'js/pdfjs-raf.js', 'js/metrics.js', 'js/compress-core.js', 'js/app.js']) {
     const re = new RegExp(asset.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '(\\?v=[a-f0-9]+)?', 'g');
     const next = html.replace(re, () => { changed++; return ver(asset); });
     html = next;
@@ -1881,7 +1883,7 @@ for (const p of pages) {
      which is the case the About page actually claims. */
   const precache = [
     './', './tools.html', './offline.html', './css/style.css',
-    './js/pdfjs-raf.js', './js/compress-core.js', './js/app.js',
+    './js/pdfjs-raf.js', './js/metrics.js', './js/compress-core.js', './js/app.js',
     './js/compress-worker.js'
   ];
 

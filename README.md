@@ -93,6 +93,33 @@ files will be overwritten.
 - [ ] Add a GDPR consent banner before serving ads to EU/UK visitors
 - [ ] Verify in Google Search Console and submit `sitemap.xml`
 
+## Security headers
+
+The headers are **not in this repo** - they are a Cloudflare Response Header
+Transform Rule named "Security headers" on the zone. Nothing here will restore
+them if that rule is deleted, so the live value is recorded below.
+
+    default-src 'self'; script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval' https://static.cloudflareinsights.com https://pagead2.googlesyndication.com https://*.googlesyndication.com https://*.googletagservices.com https://*.google.com https://*.gstatic.com https://*.doubleclick.net https://*.adtrafficquality.google; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https:; font-src 'self' data:; connect-src 'self' blob: data: https:; frame-src https://*.googlesyndication.com https://*.doubleclick.net https://*.google.com https://*.adtrafficquality.google; worker-src 'self' blob:; frame-ancestors 'none'; base-uri 'self'; form-action 'none'; object-src 'none'
+
+Plus `X-Content-Type-Options: nosniff`, `X-Frame-Options: DENY` and
+`Referrer-Policy: strict-origin-when-cross-origin`.
+
+Two tokens in there are load-bearing and easy to remove by accident:
+
+- `'wasm-unsafe-eval'` in `script-src` - **OCR does not run without it.**
+  Tesseract is WebAssembly, and compiling WASM counts as eval to CSP. It is
+  the narrow token: it permits WASM compilation only, not `eval()`. Never
+  "simplify" it to the broad `'unsafe-eval'`, which would also re-open
+  `eval()` to every script on the page.
+- `blob:` in `worker-src` - the rAF ticker in `js/pdfjs-raf.js` and the
+  compression engine are Blob-URL workers, so page rendering stops without it.
+
+Verify after any change to the rule:
+
+```bash
+curl -sI https://sizemypdf.com/ | grep -i content-security-policy
+```
+
 ## Deployment
 
 Static files. Point Cloudflare Pages or Netlify at this repo with no build
@@ -102,7 +129,8 @@ command and the root as output directory. GitHub Pages works too.
 
 - Target size mode rasterises pages, so text stops being selectable. This is
   inherent to guaranteeing a byte ceiling, not a bug.
-- No OCR.
+- OCR is English-only and runs on the device, so a long scan is slow on a
+  phone. The 9 MB engine is fetched the first time that page is used.
 - Encrypted PDFs are not handled by design.
 - Very large files are bounded by device memory, not by any server limit.
 

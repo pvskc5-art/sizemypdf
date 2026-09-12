@@ -1083,6 +1083,7 @@ ${faqBlock(organiseFaq)}
 <h2>Other tools</h2>
 <div class="grid">
   <a href="index.html"><strong>Compress to an exact size</strong><small>The last step &mdash; hit the KB limit a form demands.</small></a>
+  <a href="scan-to-pdf.html"><strong>Scan to PDF</strong><small>Photograph pages with your phone camera, no app and no pairing.</small></a>
   <a href="fill-pdf-form.html"><strong>Fill a PDF form</strong><small>Type into a fillable form and save the answers into the file.</small></a>
   <a href="ocr-pdf.html"><strong>OCR a scan</strong><small>Make a scanned PDF searchable, with the engine running on your device.</small></a>
   <a href="sign-pdf.html"><strong>Sign PDF</strong><small>Draw or type a signature and click the page to place it.</small></a>
@@ -1199,6 +1200,7 @@ ${faqBlock(cropFaq)}
 <h2>Other tools</h2>
 <div class="grid">
   <a href="index.html"><strong>Compress to an exact size</strong><small>The step after cropping, when a form names a KB limit.</small></a>
+  <a href="scan-to-pdf.html"><strong>Scan to PDF</strong><small>Photograph pages with your phone camera, no app and no pairing.</small></a>
   <a href="fill-pdf-form.html"><strong>Fill a PDF form</strong><small>Type into a fillable form and save the answers into the file.</small></a>
   <a href="ocr-pdf.html"><strong>OCR a scan</strong><small>Make a scanned PDF searchable, with the engine running on your device.</small></a>
   <a href="sign-pdf.html"><strong>Sign PDF</strong><small>Draw or type a signature and click the page to place it.</small></a>
@@ -1527,6 +1529,122 @@ ${faqBlock(formsFaq)}
 `
 });
 
+/* ---- scan to PDF ---- */
+
+const camScanFaq = [
+  ['Do I need to pair my phone with my computer?',
+   'No, and that is the point. Other scan-to-PDF tools pair a phone to a desktop session and pass the photographs through their servers to get them across. Open this page on the phone itself and the photographs never go anywhere — the phone is where the document already is.'],
+  ['Is the camera stream recorded?',
+   'No. The live view is shown so you can line the page up, and only the frames you actually capture are kept — in memory, until you close the tab. Nothing is written to disk or sent anywhere, and the camera is released when you press Stop or leave the page.'],
+  ['The camera will not open.',
+   'A page can only use the camera over HTTPS and with your permission. If you refused it, or the browser blocks it, use "Choose photos" instead — on a phone that opens the camera anyway and works just as well.'],
+  ['Why is the PDF so large?',
+   'Because photographs are large: a few phone shots easily come to several megabytes. Lower the quality setting, or send the result through the compressor, which is what the rest of this site is for.'],
+  ['Match the photo or use A4?',
+   'Match the photo if it is going to be read on a screen — nothing is cropped and no space is wasted. Choose A4 if it will be printed or a form expects standard pages; the photo is centred and its proportions are kept.'],
+  ['Can I get searchable text out of it?',
+   'Yes, afterwards. Build the PDF here, then run it through OCR, which adds a text layer without changing how the pages look.']
+];
+
+pages.push({
+  slug: 'scan-to-pdf.html',
+  title: `Scan to PDF with Your Phone — No App, No Upload | ${NAME}`,
+  desc: 'Photograph documents with your phone camera and get a single PDF. No app, no pairing, nothing uploaded — it all happens in the browser. Free.',
+  h1: 'Scan to PDF',
+  faq: camScanFaq,
+  scripts: ['vendor/pdf-lib.min.js', 'js/scan.js'],
+  body: `
+<h1>Scan to PDF</h1>
+<p class="lede">Photograph the pages, check them, put them in order, get one PDF. No app to install, no pairing with a computer, and nothing leaves your phone.</p>
+
+<div class="privacy-badge">&#128274; The photographs never leave this device</div>
+
+<div class="tool">
+  <div class="row">
+    <div><button class="btn" type="button" id="start">Use the camera</button></div>
+    <div>
+      <label class="btn ghost" for="file">Choose photos</label>
+      <input type="file" id="file" accept="image/*" capture="environment" multiple class="vh">
+    </div>
+  </div>
+
+  <div class="camwrap" id="camwrap">
+    <video id="cam" playsinline muted aria-label="Camera view"></video>
+    <div class="camtools">
+      <button class="btn" type="button" id="shoot" disabled>Capture page</button>
+      <button class="btn ghost" type="button" id="stop" disabled>Stop camera</button>
+    </div>
+  </div>
+
+  <div class="status" id="status" role="status" aria-live="polite"></div>
+
+  <div class="controls" id="controls">
+    <p class="note" id="info" style="margin-top:0"></p>
+    <div class="pagegrid" id="shots"></div>
+    <div class="row">
+      <div class="field">
+        <label for="pagesize">Page size</label>
+        <select id="pagesize">
+          <option value="match">Match each photo &mdash; no margins</option>
+          <option value="a4">A4 &mdash; centred, for printing</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="quality">Quality</label>
+        <select id="quality">
+          <option value="0.92">High &mdash; largest file</option>
+          <option value="0.8" selected>Normal</option>
+          <option value="0.6">Small &mdash; lowest quality</option>
+        </select>
+      </div>
+      <div><button class="btn" id="go" disabled>Make a PDF</button></div>
+    </div>
+
+    <div class="result" id="result">
+      <div class="big" id="rBig"></div>
+      <div class="meta" id="rMeta"></div>
+      <button class="btn" id="dl">Download PDF</button>
+    </div>
+  </div>
+</div>
+
+${AD}
+
+<h2>Why this does not need an app</h2>
+<p>The usual arrangement for scanning on a phone is either an app that wants an account, or a desktop tool that shows you a QR code, pairs your phone to a session, and relays the photographs through a server so they can appear on your computer.</p>
+<p>That relay is the only reason the pairing exists. If you open this page on the phone, the phone already has the camera, the photographs and the processor needed to assemble a PDF &mdash; so nothing has to travel. The result is a file you can share however you normally would.</p>
+
+<h2>Getting a readable scan</h2>
+<ul>
+  <li><strong>Fill the frame with the page.</strong> Everything else in shot is wasted detail and wasted bytes.</li>
+  <li><strong>Keep the phone parallel to the page.</strong> A skewed photograph is harder to read and much harder to OCR.</li>
+  <li><strong>Use even light, not flash.</strong> Flash gives a bright hotspot and hard shadows; daylight or a room light is better.</li>
+  <li><strong>Put the page on a dark surface.</strong> It makes the edges obvious, which helps if you crop afterwards.</li>
+  <li><strong>Check each shot before you move on.</strong> Discarding a blurred page here costs a second; discovering it after submission costs rather more.</li>
+</ul>
+
+<div class="note"><strong>Photographs make large PDFs.</strong> Three or four phone shots can come to several megabytes, which is over almost every upload limit. Build the PDF here, then <a href="index.html">compress it to an exact size</a> &mdash; that is the tool this site exists for.</div>
+
+<h2>A sensible sequence</h2>
+<ol>
+  <li><strong>Scan</strong> the pages here.</li>
+  <li><strong><a href="crop-pdf.html">Crop</a></strong> away the desk and the shadows.</li>
+  <li><strong><a href="ocr-pdf.html">OCR</a></strong> if you need to search the text later.</li>
+  <li><strong><a href="index.html">Compress</a></strong> last, to whatever limit you have been given.</li>
+</ol>
+
+<h2>Common questions</h2>
+${faqBlock(camScanFaq)}
+
+<h2>Other tools</h2>
+<div class="grid">
+  <a href="index.html"><strong>Compress to an exact size</strong><small>Photographs are large; this is how they get under a limit.</small></a>
+  <a href="crop-pdf.html"><strong>Crop PDF</strong><small>Trim the desk and shadows off the edges.</small></a>
+  <a href="ocr-pdf.html"><strong>OCR a scan</strong><small>Make the photographed text searchable.</small></a>
+</div>
+`
+});
+
 /* ---- tools hub ---- */
 
 pages.push({
@@ -1536,7 +1654,7 @@ pages.push({
   h1: 'All tools',
   body: `
 <h1>All tools</h1>
-<p class="lede">Sixteen tools, all free, all running entirely in your browser. No account, no upload, no watermark, no file size limit imposed by us.</p>
+<p class="lede">Seventeen tools, all free, all running entirely in your browser. No account, no upload, no watermark, no file size limit imposed by us.</p>
 
 <div class="privacy-badge">&#128274; Every tool here runs on your device</div>
 
@@ -1544,6 +1662,7 @@ pages.push({
   <a href="index.html"><strong>Compress PDF</strong><small>Hit an exact size in KB &mdash; 100, 200, 500 or any number a form demands.</small></a>
   <a href="batch-compress-pdf.html"><strong>Compress many at once</strong><small>One target, a whole folder of PDFs, downloaded individually or as a ZIP.</small></a>
   <a href="merge-pdf.html"><strong>Merge PDFs</strong><small>Combine any number of files into one, in the order you choose.</small></a>
+  <a href="scan-to-pdf.html"><strong>Scan to PDF</strong><small>Photograph pages with your phone camera, no app and no pairing.</small></a>
   <a href="fill-pdf-form.html"><strong>Fill a PDF form</strong><small>Type into a fillable form and save the answers into the file.</small></a>
   <a href="ocr-pdf.html"><strong>OCR a scan</strong><small>Make a scanned PDF searchable, with the engine running on your device.</small></a>
   <a href="sign-pdf.html"><strong>Sign PDF</strong><small>Draw or type a signature and click the page to place it.</small></a>
@@ -1579,6 +1698,7 @@ pages.push({
     <tr><td>Compress &mdash; Target size</td><td><strong>No</strong></td><td>Pages become images; the text layer is lost</td></tr>
     <tr><td>PDF to images</td><td><strong>No</strong></td><td>Pages become pixels; not reversible</td></tr>
     <tr><td>Images to PDF</td><td><strong>No</strong></td><td>Images are re-encoded as JPEG</td></tr>
+    <tr><td>Scan to PDF</td><td><strong>No</strong></td><td>Camera photographs are encoded as JPEG</td></tr>
     <tr><td>Compress an image</td><td><strong>No</strong></td><td>Re-encoded as JPEG at a lower quality</td></tr>
   </tbody>
 </table>

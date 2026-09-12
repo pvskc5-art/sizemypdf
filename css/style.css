@@ -274,3 +274,10 @@ footer.site a{color:var(--muted)}
 .checkrow{display:flex;align-items:center;gap:9px;flex-wrap:wrap}
 .checkrow input{width:22px;height:22px}
 .checkrow label{font-size:14px;color:var(--ink);font-weight:400}
+
+/* ---- scan to PDF ---- */
+.camwrap{display:none;margin:14px 0}
+.camwrap.on{display:block}
+.camwrap video{width:100%;max-height:60vh;background:#111;border-radius:8px;display:block}
+.camtools{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+label.btn{display:inline-flex;align-items:center;justify-content:center;cursor:pointer}

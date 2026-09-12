@@ -1083,6 +1083,7 @@ ${faqBlock(organiseFaq)}
 <h2>Other tools</h2>
 <div class="grid">
   <a href="index.html"><strong>Compress to an exact size</strong><small>The last step &mdash; hit the KB limit a form demands.</small></a>
+  <a href="fill-pdf-form.html"><strong>Fill a PDF form</strong><small>Type into a fillable form and save the answers into the file.</small></a>
   <a href="ocr-pdf.html"><strong>OCR a scan</strong><small>Make a scanned PDF searchable, with the engine running on your device.</small></a>
   <a href="sign-pdf.html"><strong>Sign PDF</strong><small>Draw or type a signature and click the page to place it.</small></a>
   <a href="crop-pdf.html"><strong>Crop PDF</strong><small>Trim margins with a live preview, or detect where the content stops.</small></a>
@@ -1198,6 +1199,7 @@ ${faqBlock(cropFaq)}
 <h2>Other tools</h2>
 <div class="grid">
   <a href="index.html"><strong>Compress to an exact size</strong><small>The step after cropping, when a form names a KB limit.</small></a>
+  <a href="fill-pdf-form.html"><strong>Fill a PDF form</strong><small>Type into a fillable form and save the answers into the file.</small></a>
   <a href="ocr-pdf.html"><strong>OCR a scan</strong><small>Make a scanned PDF searchable, with the engine running on your device.</small></a>
   <a href="sign-pdf.html"><strong>Sign PDF</strong><small>Draw or type a signature and click the page to place it.</small></a>
   <a href="crop-pdf.html"><strong>Crop PDF</strong><small>Trim margins with a live preview, or detect where the content stops.</small></a>
@@ -1428,6 +1430,103 @@ ${faqBlock(ocrFaq)}
 `
 });
 
+/* ---- fill forms ---- */
+
+const formsFaq = [
+  ['My browser can already open the form. Why use this?',
+   'Opening it is not the problem; saving it is. Several built-in viewers let you type into a form and then save a file with the boxes empty again, and plenty of phone viewers will not show the fields at all. This writes the answers into the file itself, so what you send is what you typed.'],
+  ['What does flattening do?',
+   'It turns your answers into part of the page, so no later viewer can change them or fail to display them. That is usually what you want when submitting something. It cannot be undone, so it is off unless you ask for it — keep the form editable if somebody else still has to fill part of it in.'],
+  ['It says my PDF has no fillable fields.',
+   'Then it is not a form in the technical sense — most likely a scan, or a document that only looks like a form. Nothing can fill those in automatically because there are no fields to fill. Use the signing tool to write on it instead.'],
+  ['Why are the labels odd?',
+   'They come from the field names inside the file, and those are written for software rather than people — names like f1_04[0] are common on official forms. The tidied name is shown first and the real one underneath, so you can match it against the page if there is any doubt.'],
+  ['Are radio buttons and dropdowns supported?',
+   'Yes: text boxes, checkboxes, radio groups, dropdowns and multi-select lists. Buttons and signature fields are skipped, because there is nothing sensible to type into them.'],
+  ['Is the form uploaded?',
+   'No. It is read, filled and rebuilt in your browser. That matters here because these forms usually carry a name, an address and a date of birth on the first page.']
+];
+
+pages.push({
+  slug: 'fill-pdf-form.html',
+  title: `Fill a PDF Form Online — Free, No Upload | ${NAME}`,
+  desc: 'Fill in a fillable PDF form and save the answers into the file, with optional flattening. Runs in your browser — nothing is uploaded. Free, no signup.',
+  h1: 'Fill in a PDF form',
+  faq: formsFaq,
+  scripts: ['vendor/pdf-lib.min.js', 'js/forms.js'],
+  body: `
+<h1>Fill in a PDF form</h1>
+<p class="lede">Type your answers, then get a PDF that actually contains them. Optionally flatten so nothing can alter them afterwards. Nothing is uploaded.</p>
+
+<div class="privacy-badge">&#128274; Your form never leaves this device</div>
+
+<div class="tool">
+  <label class="drop" id="drop" for="file">
+    <strong>Choose a fillable PDF or drop it here</strong>
+    <small>Nothing is uploaded &mdash; processing happens in your browser</small>
+    <input type="file" id="file" accept="application/pdf,.pdf" class="vh">
+  </label>
+
+  <div class="controls" id="controls">
+    <p class="note" id="info" style="margin-top:0"></p>
+    <div class="fieldlist" id="fields"></div>
+    <div class="row">
+      <div class="field checkrow">
+        <input type="checkbox" id="flatten">
+        <label for="flatten">Flatten &mdash; make the answers permanent (cannot be undone)</label>
+      </div>
+      <div><button class="btn" id="go">Save filled PDF</button></div>
+    </div>
+
+    <div class="status" id="status" role="status" aria-live="polite"></div>
+
+    <div class="result" id="result">
+      <div class="big" id="rBig"></div>
+      <div class="meta" id="rMeta"></div>
+      <button class="btn" id="dl">Download PDF</button>
+    </div>
+  </div>
+</div>
+
+${AD}
+
+<h2>The problem this actually solves</h2>
+<p>A fillable PDF is a document with real form fields in it, and the awkwardness is almost never in typing &mdash; it is in saving. Some built-in browser viewers will happily let you fill a form, then save a copy with every box empty, because they were only ever showing you the fields rather than editing the file. Phone viewers often do worse and do not show the fields at all.</p>
+<p>Here the answers are written into the document and the field appearances are regenerated, so the file carries its contents with it whatever opens it next.</p>
+
+<h2>Flatten, or keep it editable?</h2>
+<table>
+  <thead><tr><th></th><th>Keep editable</th><th>Flatten</th></tr></thead>
+  <tbody>
+    <tr><td>Answers can be changed later</td><td>Yes</td><td>No</td></tr>
+    <tr><td>Shows correctly in every viewer</td><td>Usually</td><td>Always</td></tr>
+    <tr><td>Good for</td><td>A form somebody else still has to complete</td><td>Anything you are submitting</td></tr>
+    <tr><td>Reversible</td><td>&mdash;</td><td><strong>No</strong></td></tr>
+  </tbody>
+</table>
+<p>If you are sending the form somewhere final, flatten it. If it is going round an office first, leave it editable and flatten the last version.</p>
+
+<div class="note"><strong>Form too large to upload once filled?</strong> Fill it first, then <a href="index.html">compress to an exact size</a>. If you flatten as well, compress afterwards &mdash; a flattened form is ordinary page content and compresses predictably.</div>
+
+<h2>What is not a form</h2>
+<p>A scanned page that looks like a form is not one. If somebody printed a form, filled nothing in, scanned it and sent you the PDF, there are no fields inside it &mdash; only a picture of boxes. No tool can fill that in for you, here or anywhere. Two things do work:</p>
+<ul>
+  <li><a href="sign-pdf.html">Sign PDF</a> lets you place text or a signature anywhere on the page, which covers most of what people need.</li>
+  <li><a href="ocr-pdf.html">OCR</a> will at least make the printed words searchable, which helps if you are looking for a particular clause.</li>
+</ul>
+
+<h2>Common questions</h2>
+${faqBlock(formsFaq)}
+
+<h2>Other tools</h2>
+<div class="grid">
+  <a href="sign-pdf.html"><strong>Sign PDF</strong><small>Add a signature once the form is filled in.</small></a>
+  <a href="index.html"><strong>Compress to an exact size</strong><small>For when the completed form has an upload limit.</small></a>
+  <a href="merge-pdf.html"><strong>Merge PDFs</strong><small>Attach supporting documents to the form.</small></a>
+</div>
+`
+});
+
 /* ---- tools hub ---- */
 
 pages.push({
@@ -1437,7 +1536,7 @@ pages.push({
   h1: 'All tools',
   body: `
 <h1>All tools</h1>
-<p class="lede">Fifteen tools, all free, all running entirely in your browser. No account, no upload, no watermark, no file size limit imposed by us.</p>
+<p class="lede">Sixteen tools, all free, all running entirely in your browser. No account, no upload, no watermark, no file size limit imposed by us.</p>
 
 <div class="privacy-badge">&#128274; Every tool here runs on your device</div>
 
@@ -1445,6 +1544,7 @@ pages.push({
   <a href="index.html"><strong>Compress PDF</strong><small>Hit an exact size in KB &mdash; 100, 200, 500 or any number a form demands.</small></a>
   <a href="batch-compress-pdf.html"><strong>Compress many at once</strong><small>One target, a whole folder of PDFs, downloaded individually or as a ZIP.</small></a>
   <a href="merge-pdf.html"><strong>Merge PDFs</strong><small>Combine any number of files into one, in the order you choose.</small></a>
+  <a href="fill-pdf-form.html"><strong>Fill a PDF form</strong><small>Type into a fillable form and save the answers into the file.</small></a>
   <a href="ocr-pdf.html"><strong>OCR a scan</strong><small>Make a scanned PDF searchable, with the engine running on your device.</small></a>
   <a href="sign-pdf.html"><strong>Sign PDF</strong><small>Draw or type a signature and click the page to place it.</small></a>
   <a href="crop-pdf.html"><strong>Crop PDF</strong><small>Trim margins with a live preview, or detect where the content stops.</small></a>
@@ -1473,6 +1573,7 @@ pages.push({
     <tr><td>Crop</td><td>Yes</td><td>The page boundary changes; content is hidden, not deleted</td></tr>
     <tr><td>Sign</td><td>Mostly</td><td>An image is drawn on; the page beneath is untouched</td></tr>
     <tr><td>OCR</td><td>Yes</td><td>An invisible text layer is added; pages are not rasterised</td></tr>
+    <tr><td>Fill a form</td><td>Yes</td><td>Field values are written in; flattening is optional and permanent</td></tr>
     <tr><td>Add page numbers</td><td>Mostly</td><td>Text is drawn on; the page beneath is untouched</td></tr>
     <tr><td>Add watermark</td><td>Mostly</td><td>Text is drawn on; the page beneath is untouched</td></tr>
     <tr><td>Compress &mdash; Target size</td><td><strong>No</strong></td><td>Pages become images; the text layer is lost</td></tr>

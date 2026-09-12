@@ -1,8 +1,11 @@
-node_modules/
-.DS_Store
-Thumbs.db
 *.log
+.DS_Store
 .env
 .env.*
-.vscode/
 .idea/
+.vscode/
+Thumbs.db
+node_modules/
+worker/.wrangler/
+worker/dev.log
+worker/node_modules/

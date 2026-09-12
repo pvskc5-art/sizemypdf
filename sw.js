@@ -6,7 +6,7 @@ const PRECACHE = [
   "./offline.html",
   "./css/style.css?v=2e8b2acb",
   "./js/pdfjs-raf.js?v=2e128684",
-  "./js/metrics.js?v=a83c46f8",
+  "./js/metrics.js?v=64508c84",
   "./js/compress-core.js?v=b1ddd715",
   "./js/app.js?v=e9a825c1",
   "./js/compress-worker.js?v=a5a4ac09"

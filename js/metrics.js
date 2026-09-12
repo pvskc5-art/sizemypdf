@@ -20,7 +20,7 @@
 window.Metrics = (function () {
   'use strict';
 
-  var ENDPOINT = '';                 // no collector configured: stays on-device
+  var ENDPOINT = '/api/n';           // first-party collector, same origin
   var KEY = 'smp.metrics.v1';
   var MAX_EVENTS = 500;              // keep the stored blob small
 
@@ -69,9 +69,12 @@ window.Metrics = (function () {
   function load() {
     try {
       var raw = localStorage.getItem(KEY);
-      return raw ? JSON.parse(raw) : { started: Date.now(), counts: {}, n: 0 };
+      var s = raw ? JSON.parse(raw) : null;
+            if (!s) return { started: Date.now(), counts: {}, n: 0, sent: {} };
+            if (!s.sent) s.sent = {};     // upgrade state written before batching
+            return s;
     } catch (e) {
-      return { started: Date.now(), counts: {}, n: 0 };
+      return { started: Date.now(), counts: {}, n: 0, sent: {} };
     }
   }
 
@@ -98,18 +101,36 @@ window.Metrics = (function () {
     maybeSend(state);
   }
 
-  var sent = 0;
+  /* The counters are cumulative, so what goes to the collector has to be the
+     increment since the last beacon the browser accepted. Sending the totals
+     instead - which is what this did first - re-sends a returning visitor's
+     entire history on every page load, because the watermark started at zero
+     each time the script was parsed. Summed server-side that is not a small
+     error, it is a number with no meaning. The watermark therefore lives in
+     storage next to the counters. */
   function maybeSend(state) {
     if (!ENDPOINT) return;                       // nothing configured: no network
-    if (state.n - sent < 10) return;             // batch, never per keystroke
-    sent = state.n;
+    var sent = state.sent || {};
+    var delta = {}, pending = 0;
+    Object.keys(state.counts).forEach(function (k) {
+      var d = state.counts[k] - (sent[k] || 0);
+      if (d > 0) { delta[k] = d; pending += d; }
+    });
+    if (pending < 10) return;                    // batch, never per keystroke
+
     try {
-      var blob = new Blob([JSON.stringify({ v: 1, counts: state.counts })],
+      var blob = new Blob([JSON.stringify({ v: 1, counts: delta })],
                           { type: 'application/json' });
-      navigator.sendBeacon(ENDPOINT, blob);
+      // advance the watermark only once the browser has taken the payload, so
+      // a refused beacon is retried with the next batch rather than lost
+      if (navigator.sendBeacon(ENDPOINT, blob)) {
+        var snap = {};
+        Object.keys(state.counts).forEach(function (k) { snap[k] = state.counts[k]; });
+        state.sent = snap;
+        save(state);
+      }
     } catch (e) {}
   }
-
   return {
     record: record,
     kb: kbBucket,

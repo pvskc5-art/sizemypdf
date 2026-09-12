@@ -1,0 +1,21 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "sizemypdf-metrics",
+  "main": "src/index.js",
+  "compatibility_date": "2026-09-12",
+  "observability": { "enabled": true },
+
+  // A first-party route on the zone, not a workers.dev subdomain. The site's
+  // whole claim is that nothing goes to a third party, and a beacon to
+  // *.workers.dev would be exactly that - visible in the network tab and true.
+  // www is included because it 301s to the apex at the page level, and a route
+  // is matched before that redirect.
+  "routes": [
+    { "pattern": "sizemypdf.com/api/n", "zone_name": "sizemypdf.com" },
+    { "pattern": "www.sizemypdf.com/api/n", "zone_name": "sizemypdf.com" }
+  ],
+
+  "analytics_engine_datasets": [
+    { "binding": "SMP", "dataset": "smp_metrics" }
+  ]
+}

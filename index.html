@@ -22,7 +22,7 @@
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="manifest" href="site.webmanifest">
 <meta name="theme-color" content="#2f6df6">
-<link rel="stylesheet" href="css/style.css?v=abd394c7">
+<link rel="stylesheet" href="css/style.css?v=2e1e71ca">
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5619759216593458" crossorigin="anonymous"></script>
 <script type="application/ld+json">
 {
@@ -107,8 +107,28 @@
   <div class="privacy-badge">🔒 Your file never leaves this device</div>
 
   <div class="tool">
+    <div class="sizepick" id="targetField">
+      <span class="sizelabel">1. What size do you need?</span>
+      <div class="presets" role="group" aria-label="Common size limits">
+        <button type="button" class="preset" data-kb="20">20 KB</button>
+        <button type="button" class="preset" data-kb="50">50 KB</button>
+        <button type="button" class="preset" data-kb="100">100 KB</button>
+        <button type="button" class="preset" data-kb="200">200 KB</button>
+        <button type="button" class="preset" data-kb="250">250 KB</button>
+        <button type="button" class="preset" data-kb="300">300 KB</button>
+        <button type="button" class="preset" data-kb="500">500 KB</button>
+        <button type="button" class="preset" data-kb="1024">1 MB</button>
+      </div>
+      <div class="customsize">
+        <label for="target">or type any limit</label>
+        <input type="number" id="target" min="5" step="10" placeholder="250"
+               aria-label="Target size in kilobytes">
+        <span>KB</span>
+      </div>
+    </div>
+
     <label class="drop" id="drop" for="file">
-      <strong>Choose a PDF or drop it here</strong>
+      <strong>2. Choose a PDF or drop it here</strong>
       <small>Nothing is uploaded — processing happens in your browser</small>
       <input type="file" id="file" accept="application/pdf,.pdf" class="vh">
     </label>
@@ -121,10 +141,6 @@
             <option value="target">Target size — hit an exact KB limit</option>
             <option value="lossless">Lossless — keep text selectable</option>
           </select>
-        </div>
-        <div class="field" id="targetField">
-          <label for="target">Target size (KB)</label>
-          <input type="number" id="target" min="10" step="10" placeholder="200">
         </div>
         <div>
           <button class="btn" id="go">Compress</button>
@@ -225,7 +241,7 @@
 <script src="vendor/pdf-lib.min.js"></script>
 <script src="js/metrics.js?v=a83c46f8"></script>
 <script src="js/compress-core.js?v=b1ddd715"></script>
-<script src="js/app.js?v=c24270d5"></script>
+<script src="js/app.js?v=e9a825c1"></script>
 <script>document.getElementById('yr').textContent=new Date().getFullYear();
 if('serviceWorker' in navigator){addEventListener('load',function(){navigator.serviceWorker.register('/sw.js').catch(function(){});});}</script>
 </body>

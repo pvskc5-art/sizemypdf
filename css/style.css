@@ -195,3 +195,22 @@ footer.site a{color:var(--muted)}
    only acts as a floor for auto table layout, so a table that already fits is
    untouched and nothing starts scrolling that did not need to. */
 .tablewrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+
+/* ---- size picker ----
+   The target size is the product. It is asked for before the file and the
+   common limits are one tap, because a form that says "max 250 KB" should not
+   require the visitor to discover a hidden number box after uploading. */
+.sizepick{margin:0 0 18px}
+.sizelabel{display:block;font-weight:600;font-size:15px;margin-bottom:10px;color:var(--ink)}
+.presets{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px}
+.preset{font:inherit;font-size:14px;font-weight:600;padding:0 14px;min-height:44px;
+  border:1px solid var(--line);background:var(--surface);color:var(--ink);
+  border-radius:999px;cursor:pointer;transition:border-color .12s,background .12s}
+.preset:hover{border-color:var(--brand)}
+.preset:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
+.preset.on{background:var(--brand);border-color:var(--brand);color:#fff}
+.customsize{display:flex;align-items:center;gap:9px;flex-wrap:wrap;font-size:14px;color:var(--muted)}
+.customsize label{font-size:14px;color:var(--muted)}
+.customsize input{width:110px;min-height:44px;font:inherit;padding:0 10px;
+  border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--ink)}
+.customsize input:focus-visible{outline:2px solid var(--brand);outline-offset:1px}

@@ -59,6 +59,33 @@
       });
   }
 
+  /* ---------- size presets ----------
+     The target size is the reason this site exists, so it is asked for before
+     a file and the common limits are one tap. Everything a form actually
+     demands is here; the box still takes any number. */
+  var presets = [].slice.call(document.querySelectorAll('.preset'));
+  var targetEl = $('#target');
+
+  function paintPresets() {
+    var v = parseInt(targetEl.value, 10);
+    presets.forEach(function (b) {
+      var on = parseInt(b.getAttribute('data-kb'), 10) === v;
+      b.classList.toggle('on', on);
+      b.setAttribute('aria-pressed', on ? 'true' : 'false');
+    });
+  }
+
+  presets.forEach(function (b) {
+    b.setAttribute('aria-pressed', 'false');
+    b.addEventListener('click', function () {
+      targetEl.value = b.getAttribute('data-kb');
+      paintPresets();
+      if (srcBytes) go.focus();     // file already chosen: next step is obvious
+    });
+  });
+  targetEl.addEventListener('input', paintPresets);
+  paintPresets();
+
   /* ---------- file intake ---------- */
   // the drop zone is a <label for="file">, so click and Enter/Space are handled
   // natively by the browser - a click listener here would double-fire
@@ -74,9 +101,40 @@
     if (file.files.length) accept(file.files[0]);
   });
 
+  /* Someone dropping a JPG here has not made an error, they have landed on
+     the wrong tool - so point at the right one instead of refusing. This was
+     the single most common way to hit a dead end on the site. */
+  var ELSEWHERE = [
+    [/^image\//, /\.(jpe?g|png|gif|bmp|webp|hei[cf])$/i,
+     'That is an image, not a PDF.', 'jpg-to-pdf.html', 'Convert images to PDF'],
+    [/zip|compressed/, /\.zip$/i,
+     'That is a ZIP archive.', 'tools.html', 'See all tools'],
+    [/word|officedocument|opendocument|msword/, /\.(docx?|odt|rtf|pptx?|xlsx?)$/i,
+     'That is an Office document, not a PDF. Save or print it as a PDF first, then come back.',
+     'tools.html', 'See all tools']
+  ];
+
+  function wrongTool(f) {
+    for (var i = 0; i < ELSEWHERE.length; i++) {
+      var r = ELSEWHERE[i];
+      if (r[0].test(f.type || '') || r[1].test(f.name || '')) return r;
+    }
+    return null;
+  }
+
   function accept(f) {
     if (f.type !== 'application/pdf' && !/\.pdf$/i.test(f.name)) {
-      say('That does not look like a PDF file.'); return;
+      var w = wrongTool(f);
+      if (w) {
+        statusEl.innerHTML = '';
+        statusEl.appendChild(document.createTextNode(w[2] + ' '));
+        var a = document.createElement('a');
+        a.href = w[3]; a.textContent = w[4];
+        statusEl.appendChild(a);
+      } else {
+        say('That does not look like a PDF file.');
+      }
+      return;
     }
     srcName = f.name.replace(/\.pdf$/i, '');
     srcSize = f.size;
@@ -190,6 +248,7 @@
   }
 
   $('#mode').addEventListener('change', function () {
+    // lossless cannot promise a size, so the size picker has nothing to say
     $('#targetField').style.display = this.value === 'lossless' ? 'none' : '';
   });
 })();

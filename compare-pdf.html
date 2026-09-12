@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Compare Two PDFs — See What Changed, No Upload | SizeMyPDF</title>
+<meta name="description" content="Compare two PDF files and see exactly which words were added or removed, page by page. Runs in your browser — neither file is uploaded. Free, no signup.">
+<link rel="canonical" href="https://sizemypdf.com/compare-pdf.html">
+<meta property="og:title" content="Compare Two PDFs — See What Changed, No Upload | SizeMyPDF">
+<meta property="og:description" content="Compare two PDF files and see exactly which words were added or removed, page by page. Runs in your browser — neither file is uploaded. Free, no signup.">
+<meta property="og:url" content="https://sizemypdf.com/compare-pdf.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="SizeMyPDF">
+<meta property="og:image" content="https://sizemypdf.com/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="favicon.ico" sizes="48x48">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="icon" type="image/png" sizes="96x96" href="icon-96.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="manifest" href="site.webmanifest">
+<meta name="theme-color" content="#2f6df6">
+<link rel="stylesheet" href="css/style.css?v=2e8b2acb">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5619759216593458" crossorigin="anonymous"></script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Does this compare the appearance or the words?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The words. That is the more useful of the two: a document reflowed by a single line will light up a pixel comparison from that point onwards while telling you nothing about whether any wording changed. Here an inserted clause is reported as an inserted clause."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Will it spot a changed image or a changed font?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. Only text is compared. A replaced logo, a colour change or different formatting will not appear, and the result says so rather than implying it checked everything."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "It says there is no text to compare.",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Then at least one of the files is a scan — a photograph of a page contains no text, only pixels. Run both through OCR first and compare the results; the text layer is what makes comparison possible."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What about very long pages?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Word-by-word alignment is quadratic, so a page beyond a few thousand words is reported as changed without the word detail rather than freezing the tab. Most documents never reach that."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Are the files uploaded?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. Both are read in your browser and compared there. For two versions of a contract or an agreement, that is usually the whole reason to avoid an online comparison tool."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Why are long unchanged stretches collapsed?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Because the point is to find what moved. Runs of identical text are summarised so the additions and deletions are actually visible, with a few words of context either side."
+      }
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://sizemypdf.com/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Compare two PDFs",
+      "item": "https://sizemypdf.com/compare-pdf.html"
+    }
+  ]
+}
+</script>
+
+</head>
+<body>
+
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site">
+  <div class="wrap">
+    <a class="logo" href="index.html">Size<span>My</span>PDF</a>
+    <nav class="main">
+      <a href="tools.html">All&nbsp;tools</a>
+      <a href="merge-pdf.html">Merge</a>
+      <a href="split-pdf.html">Split</a>
+      <a href="batch-compress-pdf.html">Batch</a>
+      <a href="compress-image-to-size.html">Image</a>
+      <a href="about.html">About</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap" id="main">
+
+<h1>Compare two PDFs</h1>
+<p class="lede">Put two versions side by side and find out what actually changed &mdash; which words were added, which were removed, and on which page. Neither file is uploaded.</p>
+
+<div class="privacy-badge">&#128274; Neither file leaves this device</div>
+
+<div class="tool">
+  <div class="twoup">
+    <label class="drop" id="drop-a" for="file-a">
+      <strong>Original &mdash; choose or drop a PDF</strong>
+      <small>the earlier version</small>
+      <input type="file" id="file-a" accept="application/pdf,.pdf" class="vh">
+    </label>
+    <label class="drop" id="drop-b" for="file-b">
+      <strong>Changed &mdash; choose or drop a PDF</strong>
+      <small>the version to check</small>
+      <input type="file" id="file-b" accept="application/pdf,.pdf" class="vh">
+    </label>
+  </div>
+
+  <p class="note" id="info" style="margin-top:12px"></p>
+  <div class="row"><div><button class="btn" id="go" disabled>Compare</button></div></div>
+  <div class="status" id="status" role="status" aria-live="polite"></div>
+
+  <div class="result" id="result">
+    <div class="big" id="rBig"></div>
+    <div class="meta" id="rMeta"></div>
+    <div class="diffbox" id="diff"></div>
+  </div>
+</div>
+
+
+
+<h2>Words, not pixels</h2>
+<p>There are two ways to compare documents and they answer different questions. A visual comparison overlays the pages and highlights anything that looks different, which is useful for checking a layout but nearly useless for checking wording: add one sentence on page 2 and everything after it shifts down, so a visual tool reports the rest of the document as changed.</p>
+<p>A text comparison extracts the words and aligns them, so inserting a sentence is reported as inserting a sentence and the following pages come back clean. That is what this does, using a longest-common-subsequence alignment over words &mdash; the same approach code review tools use on source files.</p>
+
+<h2>What it will and will not tell you</h2>
+<div class="tablewrap"><table>
+  <thead><tr><th>Change</th><th>Detected?</th></tr></thead>
+  <tbody>
+    <tr><td>Words added, removed or reworded</td><td>Yes</td></tr>
+    <tr><td>Pages added or removed</td><td>Yes</td></tr>
+    <tr><td>Numbers or dates altered</td><td>Yes &mdash; they are words too</td></tr>
+    <tr><td>A replaced image or logo</td><td>No</td></tr>
+    <tr><td>Font, colour or spacing changes</td><td>No</td></tr>
+    <tr><td>Two scans of the same page</td><td>No &mdash; there is no text to read</td></tr>
+  </tbody>
+</table></div>
+
+<div class="note"><strong>Comparing scans?</strong> Run both through <a href="ocr-pdf.html">OCR</a> first. That gives each one a text layer, and the comparison then works normally &mdash; though bear in mind you are comparing what the recognition read, so a misread word can look like an edit.</div>
+
+<h2>Why do it in the browser</h2>
+<p>The documents people compare are contracts, tenancy agreements, settlement drafts and policies &mdash; two versions of something where the question is precisely what the other side changed. Uploading both copies to a comparison service to answer that question is an odd trade. Here both files are read and aligned on your own machine.</p>
+
+<h2>Common questions</h2>
+<details><summary>Does this compare the appearance or the words?</summary><p>The words. That is the more useful of the two: a document reflowed by a single line will light up a pixel comparison from that point onwards while telling you nothing about whether any wording changed. Here an inserted clause is reported as an inserted clause.</p></details>
+<details><summary>Will it spot a changed image or a changed font?</summary><p>No. Only text is compared. A replaced logo, a colour change or different formatting will not appear, and the result says so rather than implying it checked everything.</p></details>
+<details><summary>It says there is no text to compare.</summary><p>Then at least one of the files is a scan — a photograph of a page contains no text, only pixels. Run both through OCR first and compare the results; the text layer is what makes comparison possible.</p></details>
+<details><summary>What about very long pages?</summary><p>Word-by-word alignment is quadratic, so a page beyond a few thousand words is reported as changed without the word detail rather than freezing the tab. Most documents never reach that.</p></details>
+<details><summary>Are the files uploaded?</summary><p>No. Both are read in your browser and compared there. For two versions of a contract or an agreement, that is usually the whole reason to avoid an online comparison tool.</p></details>
+<details><summary>Why are long unchanged stretches collapsed?</summary><p>Because the point is to find what moved. Runs of identical text are summarised so the additions and deletions are actually visible, with a few words of context either side.</p></details>
+
+<h2>Other tools</h2>
+<div class="grid">
+  <a href="ocr-pdf.html"><strong>OCR a scan</strong><small>Give a scanned version a text layer so it can be compared.</small></a>
+  <a href="organise-pdf.html"><strong>Organise pages</strong><small>Line two documents up before comparing them.</small></a>
+  <a href="index.html"><strong>Compress to an exact size</strong><small>The tool this site is built around.</small></a>
+</div>
+
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <nav>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+      <a href="privacy.html">Privacy Policy</a>
+      <a href="terms.html">Terms</a>
+    </nav>
+    <div class="copy">&copy; <span id="yr">2026</span> SizeMyPDF &middot; Files are processed in your browser and never uploaded.</div>
+  </div>
+</footer>
+<script src="vendor/pdf-lib.min.js"></script>
+<script src="js/thumbs.js?v=35352335"></script>
+<script src="js/compare.js?v=aecc31d0"></script>
+<script>document.getElementById('yr').textContent=new Date().getFullYear();
+if('serviceWorker' in navigator){addEventListener('load',function(){navigator.serviceWorker.register('/sw.js').catch(function(){});});}</script>
+</body>
+</html>

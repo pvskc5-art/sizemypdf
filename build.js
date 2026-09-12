@@ -1083,6 +1083,7 @@ ${faqBlock(organiseFaq)}
 <h2>Other tools</h2>
 <div class="grid">
   <a href="index.html"><strong>Compress to an exact size</strong><small>The last step &mdash; hit the KB limit a form demands.</small></a>
+  <a href="compare-pdf.html"><strong>Compare two PDFs</strong><small>See which words changed between two versions, page by page.</small></a>
   <a href="scan-to-pdf.html"><strong>Scan to PDF</strong><small>Photograph pages with your phone camera, no app and no pairing.</small></a>
   <a href="fill-pdf-form.html"><strong>Fill a PDF form</strong><small>Type into a fillable form and save the answers into the file.</small></a>
   <a href="ocr-pdf.html"><strong>OCR a scan</strong><small>Make a scanned PDF searchable, with the engine running on your device.</small></a>
@@ -1200,6 +1201,7 @@ ${faqBlock(cropFaq)}
 <h2>Other tools</h2>
 <div class="grid">
   <a href="index.html"><strong>Compress to an exact size</strong><small>The step after cropping, when a form names a KB limit.</small></a>
+  <a href="compare-pdf.html"><strong>Compare two PDFs</strong><small>See which words changed between two versions, page by page.</small></a>
   <a href="scan-to-pdf.html"><strong>Scan to PDF</strong><small>Photograph pages with your phone camera, no app and no pairing.</small></a>
   <a href="fill-pdf-form.html"><strong>Fill a PDF form</strong><small>Type into a fillable form and save the answers into the file.</small></a>
   <a href="ocr-pdf.html"><strong>OCR a scan</strong><small>Make a scanned PDF searchable, with the engine running on your device.</small></a>
@@ -1645,6 +1647,97 @@ ${faqBlock(camScanFaq)}
 `
 });
 
+/* ---- compare ---- */
+
+const compareFaq = [
+  ['Does this compare the appearance or the words?',
+   'The words. That is the more useful of the two: a document reflowed by a single line will light up a pixel comparison from that point onwards while telling you nothing about whether any wording changed. Here an inserted clause is reported as an inserted clause.'],
+  ['Will it spot a changed image or a changed font?',
+   'No. Only text is compared. A replaced logo, a colour change or different formatting will not appear, and the result says so rather than implying it checked everything.'],
+  ['It says there is no text to compare.',
+   'Then at least one of the files is a scan — a photograph of a page contains no text, only pixels. Run both through OCR first and compare the results; the text layer is what makes comparison possible.'],
+  ['What about very long pages?',
+   'Word-by-word alignment is quadratic, so a page beyond a few thousand words is reported as changed without the word detail rather than freezing the tab. Most documents never reach that.'],
+  ['Are the files uploaded?',
+   'No. Both are read in your browser and compared there. For two versions of a contract or an agreement, that is usually the whole reason to avoid an online comparison tool.'],
+  ['Why are long unchanged stretches collapsed?',
+   'Because the point is to find what moved. Runs of identical text are summarised so the additions and deletions are actually visible, with a few words of context either side.']
+];
+
+pages.push({
+  slug: 'compare-pdf.html',
+  title: `Compare Two PDFs — See What Changed, No Upload | ${NAME}`,
+  desc: 'Compare two PDF files and see exactly which words were added or removed, page by page. Runs in your browser — neither file is uploaded. Free, no signup.',
+  h1: 'Compare two PDFs',
+  faq: compareFaq,
+  scripts: ['vendor/pdf-lib.min.js', 'js/thumbs.js', 'js/compare.js'],
+  body: `
+<h1>Compare two PDFs</h1>
+<p class="lede">Put two versions side by side and find out what actually changed &mdash; which words were added, which were removed, and on which page. Neither file is uploaded.</p>
+
+<div class="privacy-badge">&#128274; Neither file leaves this device</div>
+
+<div class="tool">
+  <div class="twoup">
+    <label class="drop" id="drop-a" for="file-a">
+      <strong>Original &mdash; choose or drop a PDF</strong>
+      <small>the earlier version</small>
+      <input type="file" id="file-a" accept="application/pdf,.pdf" class="vh">
+    </label>
+    <label class="drop" id="drop-b" for="file-b">
+      <strong>Changed &mdash; choose or drop a PDF</strong>
+      <small>the version to check</small>
+      <input type="file" id="file-b" accept="application/pdf,.pdf" class="vh">
+    </label>
+  </div>
+
+  <p class="note" id="info" style="margin-top:12px"></p>
+  <div class="row"><div><button class="btn" id="go" disabled>Compare</button></div></div>
+  <div class="status" id="status" role="status" aria-live="polite"></div>
+
+  <div class="result" id="result">
+    <div class="big" id="rBig"></div>
+    <div class="meta" id="rMeta"></div>
+    <div class="diffbox" id="diff"></div>
+  </div>
+</div>
+
+${AD}
+
+<h2>Words, not pixels</h2>
+<p>There are two ways to compare documents and they answer different questions. A visual comparison overlays the pages and highlights anything that looks different, which is useful for checking a layout but nearly useless for checking wording: add one sentence on page 2 and everything after it shifts down, so a visual tool reports the rest of the document as changed.</p>
+<p>A text comparison extracts the words and aligns them, so inserting a sentence is reported as inserting a sentence and the following pages come back clean. That is what this does, using a longest-common-subsequence alignment over words &mdash; the same approach code review tools use on source files.</p>
+
+<h2>What it will and will not tell you</h2>
+<table>
+  <thead><tr><th>Change</th><th>Detected?</th></tr></thead>
+  <tbody>
+    <tr><td>Words added, removed or reworded</td><td>Yes</td></tr>
+    <tr><td>Pages added or removed</td><td>Yes</td></tr>
+    <tr><td>Numbers or dates altered</td><td>Yes &mdash; they are words too</td></tr>
+    <tr><td>A replaced image or logo</td><td>No</td></tr>
+    <tr><td>Font, colour or spacing changes</td><td>No</td></tr>
+    <tr><td>Two scans of the same page</td><td>No &mdash; there is no text to read</td></tr>
+  </tbody>
+</table>
+
+<div class="note"><strong>Comparing scans?</strong> Run both through <a href="ocr-pdf.html">OCR</a> first. That gives each one a text layer, and the comparison then works normally &mdash; though bear in mind you are comparing what the recognition read, so a misread word can look like an edit.</div>
+
+<h2>Why do it in the browser</h2>
+<p>The documents people compare are contracts, tenancy agreements, settlement drafts and policies &mdash; two versions of something where the question is precisely what the other side changed. Uploading both copies to a comparison service to answer that question is an odd trade. Here both files are read and aligned on your own machine.</p>
+
+<h2>Common questions</h2>
+${faqBlock(compareFaq)}
+
+<h2>Other tools</h2>
+<div class="grid">
+  <a href="ocr-pdf.html"><strong>OCR a scan</strong><small>Give a scanned version a text layer so it can be compared.</small></a>
+  <a href="organise-pdf.html"><strong>Organise pages</strong><small>Line two documents up before comparing them.</small></a>
+  <a href="index.html"><strong>Compress to an exact size</strong><small>The tool this site is built around.</small></a>
+</div>
+`
+});
+
 /* ---- tools hub ---- */
 
 pages.push({
@@ -1654,7 +1747,7 @@ pages.push({
   h1: 'All tools',
   body: `
 <h1>All tools</h1>
-<p class="lede">Seventeen tools, all free, all running entirely in your browser. No account, no upload, no watermark, no file size limit imposed by us.</p>
+<p class="lede">Eighteen tools, all free, all running entirely in your browser. No account, no upload, no watermark, no file size limit imposed by us.</p>
 
 <div class="privacy-badge">&#128274; Every tool here runs on your device</div>
 
@@ -1662,6 +1755,7 @@ pages.push({
   <a href="index.html"><strong>Compress PDF</strong><small>Hit an exact size in KB &mdash; 100, 200, 500 or any number a form demands.</small></a>
   <a href="batch-compress-pdf.html"><strong>Compress many at once</strong><small>One target, a whole folder of PDFs, downloaded individually or as a ZIP.</small></a>
   <a href="merge-pdf.html"><strong>Merge PDFs</strong><small>Combine any number of files into one, in the order you choose.</small></a>
+  <a href="compare-pdf.html"><strong>Compare two PDFs</strong><small>See which words changed between two versions, page by page.</small></a>
   <a href="scan-to-pdf.html"><strong>Scan to PDF</strong><small>Photograph pages with your phone camera, no app and no pairing.</small></a>
   <a href="fill-pdf-form.html"><strong>Fill a PDF form</strong><small>Type into a fillable form and save the answers into the file.</small></a>
   <a href="ocr-pdf.html"><strong>OCR a scan</strong><small>Make a scanned PDF searchable, with the engine running on your device.</small></a>

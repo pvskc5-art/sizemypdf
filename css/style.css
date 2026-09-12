@@ -281,3 +281,16 @@ footer.site a{color:var(--muted)}
 .camwrap video{width:100%;max-height:60vh;background:#111;border-radius:8px;display:block}
 .camtools{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
 label.btn{display:inline-flex;align-items:center;justify-content:center;cursor:pointer}
+
+/* ---- compare ---- */
+.twoup{display:flex;flex-wrap:wrap;gap:14px}
+.twoup .drop{flex:1 1 260px;min-width:0}
+.drop.has{border-style:solid;border-color:var(--brand)}
+.diffbox{margin-top:14px;max-height:520px;overflow-y:auto}
+.dpage{margin-bottom:18px}
+.dpage h4{margin:0 0 6px;font-size:14px;font-weight:600;color:var(--ink)}
+.dtext{font-size:14.5px;line-height:1.75;margin:0;word-break:break-word}
+.dtext ins{background:#dff3e6;color:#14714a;text-decoration:none;
+  padding:1px 2px;border-radius:2px;font-weight:600}
+.dtext del{background:#fbe3e5;color:#9e2a33;padding:1px 2px;border-radius:2px}
+.dtext .dgap{color:var(--muted);font-style:italic}

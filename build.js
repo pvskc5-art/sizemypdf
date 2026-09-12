@@ -1083,6 +1083,7 @@ ${faqBlock(organiseFaq)}
 <h2>Other tools</h2>
 <div class="grid">
   <a href="index.html"><strong>Compress to an exact size</strong><small>The last step &mdash; hit the KB limit a form demands.</small></a>
+  <a href="extract-images-from-pdf.html"><strong>Extract images</strong><small>Pull out the embedded pictures at the resolution they are stored.</small></a>
   <a href="compare-pdf.html"><strong>Compare two PDFs</strong><small>See which words changed between two versions, page by page.</small></a>
   <a href="scan-to-pdf.html"><strong>Scan to PDF</strong><small>Photograph pages with your phone camera, no app and no pairing.</small></a>
   <a href="fill-pdf-form.html"><strong>Fill a PDF form</strong><small>Type into a fillable form and save the answers into the file.</small></a>
@@ -1201,6 +1202,7 @@ ${faqBlock(cropFaq)}
 <h2>Other tools</h2>
 <div class="grid">
   <a href="index.html"><strong>Compress to an exact size</strong><small>The step after cropping, when a form names a KB limit.</small></a>
+  <a href="extract-images-from-pdf.html"><strong>Extract images</strong><small>Pull out the embedded pictures at the resolution they are stored.</small></a>
   <a href="compare-pdf.html"><strong>Compare two PDFs</strong><small>See which words changed between two versions, page by page.</small></a>
   <a href="scan-to-pdf.html"><strong>Scan to PDF</strong><small>Photograph pages with your phone camera, no app and no pairing.</small></a>
   <a href="fill-pdf-form.html"><strong>Fill a PDF form</strong><small>Type into a fillable form and save the answers into the file.</small></a>
@@ -1738,6 +1740,99 @@ ${faqBlock(compareFaq)}
 `
 });
 
+/* ---- extract images ---- */
+
+const extractFaq = [
+  ['How is this different from PDF to images?',
+   'PDF to images renders each page and gives you a picture of the page. This finds the image objects stored inside the file and returns them at their own resolution. A photograph placed into a report at postcard size is often embedded at several times that, and this is how you get the original rather than the shrunken version on the page.'],
+  ['It found no images.',
+   'Then the file probably has none. A PDF exported from a word processor is mostly text and vector drawing — real text rather than pictures of text. If you want an image of each page, use PDF to images instead.'],
+  ['Why are there more images than I expected?',
+   'Documents often contain images you never think of as images: a logo in the header, a signature block, a scanned stamp, a chart exported as a picture. Very small objects under eight pixels are skipped, because they are usually spacers and rules rather than pictures, and an image reused on many pages is listed once rather than forty times.'],
+  ['PNG or JPEG?',
+   'PNG is lossless, so it is the honest default — what comes out is what was stored. Choose JPEG if the images are photographs and you want smaller files, accepting a re-encode.'],
+  ['Does this recover the exact original file?',
+   'It recovers the pixels at full resolution, re-encoded into the format you pick. It is not a byte-for-byte extraction of the original JPEG, because the image is rebuilt from the decoded data. For every practical purpose — reusing a photograph, recovering a logo — that is the same thing.'],
+  ['Is the PDF uploaded?',
+   'No. It is parsed in your browser and the images are rebuilt from its own objects, so a document full of private photographs stays where it is.']
+];
+
+pages.push({
+  slug: 'extract-images-from-pdf.html',
+  title: `Extract Images from a PDF — Full Resolution, No Upload | ${NAME}`,
+  desc: 'Pull the embedded images out of a PDF at the resolution they are stored, not the size they appear. Runs in your browser, nothing uploaded. Free, no signup.',
+  h1: 'Extract images from a PDF',
+  faq: extractFaq,
+  scripts: ['js/pdfjs-raf.js', 'vendor/pdf.min.js', 'vendor/jszip.min.js', 'js/thumbs.js', 'js/extract.js'],
+  body: `
+<h1>Extract images from a PDF</h1>
+<p class="lede">Get the pictures that are actually inside the file, at the resolution they were stored &mdash; which is usually larger than the size they appear on the page. Nothing is uploaded.</p>
+
+<div class="privacy-badge">&#128274; Your file never leaves this device</div>
+
+<div class="tool">
+  <label class="drop" id="drop" for="file">
+    <strong>Choose a PDF or drop it here</strong>
+    <small>Nothing is uploaded &mdash; processing happens in your browser</small>
+    <input type="file" id="file" accept="application/pdf,.pdf" class="vh">
+  </label>
+
+  <div class="row">
+    <div class="field">
+      <label for="format">Save as</label>
+      <select id="format">
+        <option value="png">PNG &mdash; lossless</option>
+        <option value="jpeg">JPEG &mdash; smaller files</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="status" id="status" role="status" aria-live="polite"></div>
+
+  <div class="controls" id="controls">
+    <p class="note" id="info" style="margin-top:0"></p>
+    <div class="pagegrid" id="imgs"></div>
+    <div class="row">
+      <div><button class="btn" id="zip" disabled>Download all as ZIP</button></div>
+    </div>
+  </div>
+</div>
+
+${AD}
+
+<h2>Stored size, not displayed size</h2>
+<p>This is the distinction that makes the tool worth having. When somebody drops a photograph into a document, the image is embedded at whatever resolution the camera produced and then simply displayed smaller. A picture occupying a quarter of an A4 page might be three thousand pixels across in the file.</p>
+<p>Rendering the page gives you the quarter-page version. Reading the image object gives you the three thousand pixels. If you are trying to recover a photograph, a logo or a scanned signature that only exists inside a PDF now, that difference is the whole job &mdash; and it is also why these files are so often much larger than they look.</p>
+
+<h2>Which tool do you actually want?</h2>
+<table>
+  <thead><tr><th>You want</th><th>Use</th></tr></thead>
+  <tbody>
+    <tr><td>The photographs that were put into the document</td><td>This tool</td></tr>
+    <tr><td>A picture of each page as it looks</td><td><a href="pdf-to-jpg.html">PDF to images</a></td></tr>
+    <tr><td>The words, from a scan</td><td><a href="ocr-pdf.html">OCR</a></td></tr>
+    <tr><td>A smaller file, keeping the pages</td><td><a href="index.html">Compress to an exact size</a></td></tr>
+  </tbody>
+</table>
+
+<div class="note"><strong>Why your PDF is enormous.</strong> If this tool reports a handful of images totalling far more than you expected, that is your answer: the file is large because full-resolution photographs are sitting inside it being displayed small. <a href="index.html">Compressing to a target size</a> re-encodes exactly those.</div>
+
+<h2>What gets skipped</h2>
+<p>Objects smaller than eight pixels on a side are ignored. Documents are full of these &mdash; single-pixel images stretched into rules and borders, spacer graphics, tiny gradient strips &mdash; and listing them as extracted images would bury the pictures you were looking for.</p>
+<p>An image reused across pages &mdash; a logo, a letterhead, a watermark &mdash; is listed once. Each page references it separately inside the file, but it is one picture and there is nothing useful about handing you forty copies of it.</p>
+
+<h2>Common questions</h2>
+${faqBlock(extractFaq)}
+
+<h2>Other tools</h2>
+<div class="grid">
+  <a href="pdf-to-jpg.html"><strong>PDF to images</strong><small>A picture of each page, rather than the images inside it.</small></a>
+  <a href="compress-image-to-size.html"><strong>Compress an image</strong><small>Get an extracted photograph under a size limit.</small></a>
+  <a href="index.html"><strong>Compress to an exact size</strong><small>Shrink the PDF those images are making large.</small></a>
+</div>
+`
+});
+
 /* ---- tools hub ---- */
 
 pages.push({
@@ -1747,7 +1842,7 @@ pages.push({
   h1: 'All tools',
   body: `
 <h1>All tools</h1>
-<p class="lede">Eighteen tools, all free, all running entirely in your browser. No account, no upload, no watermark, no file size limit imposed by us.</p>
+<p class="lede">Nineteen tools, all free, all running entirely in your browser. No account, no upload, no watermark, no file size limit imposed by us.</p>
 
 <div class="privacy-badge">&#128274; Every tool here runs on your device</div>
 
@@ -1755,6 +1850,7 @@ pages.push({
   <a href="index.html"><strong>Compress PDF</strong><small>Hit an exact size in KB &mdash; 100, 200, 500 or any number a form demands.</small></a>
   <a href="batch-compress-pdf.html"><strong>Compress many at once</strong><small>One target, a whole folder of PDFs, downloaded individually or as a ZIP.</small></a>
   <a href="merge-pdf.html"><strong>Merge PDFs</strong><small>Combine any number of files into one, in the order you choose.</small></a>
+  <a href="extract-images-from-pdf.html"><strong>Extract images</strong><small>Pull out the embedded pictures at the resolution they are stored.</small></a>
   <a href="compare-pdf.html"><strong>Compare two PDFs</strong><small>See which words changed between two versions, page by page.</small></a>
   <a href="scan-to-pdf.html"><strong>Scan to PDF</strong><small>Photograph pages with your phone camera, no app and no pairing.</small></a>
   <a href="fill-pdf-form.html"><strong>Fill a PDF form</strong><small>Type into a fillable form and save the answers into the file.</small></a>

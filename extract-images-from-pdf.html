@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Extract Images from a PDF — Full Resolution, No Upload | SizeMyPDF</title>
+<meta name="description" content="Pull the embedded images out of a PDF at the resolution they are stored, not the size they appear. Runs in your browser, nothing uploaded. Free, no signup.">
+<link rel="canonical" href="https://sizemypdf.com/extract-images-from-pdf.html">
+<meta property="og:title" content="Extract Images from a PDF — Full Resolution, No Upload | SizeMyPDF">
+<meta property="og:description" content="Pull the embedded images out of a PDF at the resolution they are stored, not the size they appear. Runs in your browser, nothing uploaded. Free, no signup.">
+<meta property="og:url" content="https://sizemypdf.com/extract-images-from-pdf.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="SizeMyPDF">
+<meta property="og:image" content="https://sizemypdf.com/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="favicon.ico" sizes="48x48">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="icon" type="image/png" sizes="96x96" href="icon-96.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="manifest" href="site.webmanifest">
+<meta name="theme-color" content="#2f6df6">
+<link rel="stylesheet" href="css/style.css?v=2e8b2acb">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5619759216593458" crossorigin="anonymous"></script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "How is this different from PDF to images?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "PDF to images renders each page and gives you a picture of the page. This finds the image objects stored inside the file and returns them at their own resolution. A photograph placed into a report at postcard size is often embedded at several times that, and this is how you get the original rather than the shrunken version on the page."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "It found no images.",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Then the file probably has none. A PDF exported from a word processor is mostly text and vector drawing — real text rather than pictures of text. If you want an image of each page, use PDF to images instead."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Why are there more images than I expected?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Documents often contain images you never think of as images: a logo in the header, a signature block, a scanned stamp, a chart exported as a picture. Very small objects under eight pixels are skipped, because they are usually spacers and rules rather than pictures, and an image reused on many pages is listed once rather than forty times."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "PNG or JPEG?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "PNG is lossless, so it is the honest default — what comes out is what was stored. Choose JPEG if the images are photographs and you want smaller files, accepting a re-encode."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does this recover the exact original file?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "It recovers the pixels at full resolution, re-encoded into the format you pick. It is not a byte-for-byte extraction of the original JPEG, because the image is rebuilt from the decoded data. For every practical purpose — reusing a photograph, recovering a logo — that is the same thing."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is the PDF uploaded?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. It is parsed in your browser and the images are rebuilt from its own objects, so a document full of private photographs stays where it is."
+      }
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://sizemypdf.com/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Extract images from a PDF",
+      "item": "https://sizemypdf.com/extract-images-from-pdf.html"
+    }
+  ]
+}
+</script>
+
+</head>
+<body>
+
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site">
+  <div class="wrap">
+    <a class="logo" href="index.html">Size<span>My</span>PDF</a>
+    <nav class="main">
+      <a href="tools.html">All&nbsp;tools</a>
+      <a href="merge-pdf.html">Merge</a>
+      <a href="split-pdf.html">Split</a>
+      <a href="batch-compress-pdf.html">Batch</a>
+      <a href="compress-image-to-size.html">Image</a>
+      <a href="about.html">About</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap" id="main">
+
+<h1>Extract images from a PDF</h1>
+<p class="lede">Get the pictures that are actually inside the file, at the resolution they were stored &mdash; which is usually larger than the size they appear on the page. Nothing is uploaded.</p>
+
+<div class="privacy-badge">&#128274; Your file never leaves this device</div>
+
+<div class="tool">
+  <label class="drop" id="drop" for="file">
+    <strong>Choose a PDF or drop it here</strong>
+    <small>Nothing is uploaded &mdash; processing happens in your browser</small>
+    <input type="file" id="file" accept="application/pdf,.pdf" class="vh">
+  </label>
+
+  <div class="row">
+    <div class="field">
+      <label for="format">Save as</label>
+      <select id="format">
+        <option value="png">PNG &mdash; lossless</option>
+        <option value="jpeg">JPEG &mdash; smaller files</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="status" id="status" role="status" aria-live="polite"></div>
+
+  <div class="controls" id="controls">
+    <p class="note" id="info" style="margin-top:0"></p>
+    <div class="pagegrid" id="imgs"></div>
+    <div class="row">
+      <div><button class="btn" id="zip" disabled>Download all as ZIP</button></div>
+    </div>
+  </div>
+</div>
+
+
+
+<h2>Stored size, not displayed size</h2>
+<p>This is the distinction that makes the tool worth having. When somebody drops a photograph into a document, the image is embedded at whatever resolution the camera produced and then simply displayed smaller. A picture occupying a quarter of an A4 page might be three thousand pixels across in the file.</p>
+<p>Rendering the page gives you the quarter-page version. Reading the image object gives you the three thousand pixels. If you are trying to recover a photograph, a logo or a scanned signature that only exists inside a PDF now, that difference is the whole job &mdash; and it is also why these files are so often much larger than they look.</p>
+
+<h2>Which tool do you actually want?</h2>
+<div class="tablewrap"><table>
+  <thead><tr><th>You want</th><th>Use</th></tr></thead>
+  <tbody>
+    <tr><td>The photographs that were put into the document</td><td>This tool</td></tr>
+    <tr><td>A picture of each page as it looks</td><td><a href="pdf-to-jpg.html">PDF to images</a></td></tr>
+    <tr><td>The words, from a scan</td><td><a href="ocr-pdf.html">OCR</a></td></tr>
+    <tr><td>A smaller file, keeping the pages</td><td><a href="index.html">Compress to an exact size</a></td></tr>
+  </tbody>
+</table></div>
+
+<div class="note"><strong>Why your PDF is enormous.</strong> If this tool reports a handful of images totalling far more than you expected, that is your answer: the file is large because full-resolution photographs are sitting inside it being displayed small. <a href="index.html">Compressing to a target size</a> re-encodes exactly those.</div>
+
+<h2>What gets skipped</h2>
+<p>Objects smaller than eight pixels on a side are ignored. Documents are full of these &mdash; single-pixel images stretched into rules and borders, spacer graphics, tiny gradient strips &mdash; and listing them as extracted images would bury the pictures you were looking for.</p>
+<p>An image reused across pages &mdash; a logo, a letterhead, a watermark &mdash; is listed once. Each page references it separately inside the file, but it is one picture and there is nothing useful about handing you forty copies of it.</p>
+
+<h2>Common questions</h2>
+<details><summary>How is this different from PDF to images?</summary><p>PDF to images renders each page and gives you a picture of the page. This finds the image objects stored inside the file and returns them at their own resolution. A photograph placed into a report at postcard size is often embedded at several times that, and this is how you get the original rather than the shrunken version on the page.</p></details>
+<details><summary>It found no images.</summary><p>Then the file probably has none. A PDF exported from a word processor is mostly text and vector drawing — real text rather than pictures of text. If you want an image of each page, use PDF to images instead.</p></details>
+<details><summary>Why are there more images than I expected?</summary><p>Documents often contain images you never think of as images: a logo in the header, a signature block, a scanned stamp, a chart exported as a picture. Very small objects under eight pixels are skipped, because they are usually spacers and rules rather than pictures, and an image reused on many pages is listed once rather than forty times.</p></details>
+<details><summary>PNG or JPEG?</summary><p>PNG is lossless, so it is the honest default — what comes out is what was stored. Choose JPEG if the images are photographs and you want smaller files, accepting a re-encode.</p></details>
+<details><summary>Does this recover the exact original file?</summary><p>It recovers the pixels at full resolution, re-encoded into the format you pick. It is not a byte-for-byte extraction of the original JPEG, because the image is rebuilt from the decoded data. For every practical purpose — reusing a photograph, recovering a logo — that is the same thing.</p></details>
+<details><summary>Is the PDF uploaded?</summary><p>No. It is parsed in your browser and the images are rebuilt from its own objects, so a document full of private photographs stays where it is.</p></details>
+
+<h2>Other tools</h2>
+<div class="grid">
+  <a href="pdf-to-jpg.html"><strong>PDF to images</strong><small>A picture of each page, rather than the images inside it.</small></a>
+  <a href="compress-image-to-size.html"><strong>Compress an image</strong><small>Get an extracted photograph under a size limit.</small></a>
+  <a href="index.html"><strong>Compress to an exact size</strong><small>Shrink the PDF those images are making large.</small></a>
+</div>
+
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <nav>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+      <a href="privacy.html">Privacy Policy</a>
+      <a href="terms.html">Terms</a>
+    </nav>
+    <div class="copy">&copy; <span id="yr">2026</span> SizeMyPDF &middot; Files are processed in your browser and never uploaded.</div>
+  </div>
+</footer>
+<script src="js/pdfjs-raf.js?v=2e128684"></script>
+<script src="vendor/pdf.min.js"></script>
+<script src="vendor/jszip.min.js"></script>
+<script src="js/thumbs.js?v=35352335"></script>
+<script src="js/extract.js?v=6fba3fb1"></script>
+<script>document.getElementById('yr').textContent=new Date().getFullYear();
+if('serviceWorker' in navigator){addEventListener('load',function(){navigator.serviceWorker.register('/sw.js').catch(function(){});});}</script>
+</body>
+</html>

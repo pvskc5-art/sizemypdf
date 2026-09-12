@@ -1083,9 +1083,122 @@ ${faqBlock(organiseFaq)}
 <h2>Other tools</h2>
 <div class="grid">
   <a href="index.html"><strong>Compress to an exact size</strong><small>The last step &mdash; hit the KB limit a form demands.</small></a>
+  <a href="crop-pdf.html"><strong>Crop PDF</strong><small>Trim margins with a live preview, or detect where the content stops.</small></a>
   <a href="organise-pdf.html"><strong>Organise pages</strong><small>Reorder, rotate and remove pages with every page on screen.</small></a>
   <a href="split-pdf.html"><strong>Split PDF</strong><small>For documents too long to organise in one view.</small></a>
   <a href="merge-pdf.html"><strong>Merge PDFs</strong><small>Join the organised file to others.</small></a>
+</div>
+`
+});
+
+/* ---- crop ---- */
+
+const cropFaq = [
+  ['Does cropping make the file smaller?',
+   'Usually only slightly. Cropping sets the page boundary rather than deleting anything, so the content outside it is hidden but still in the file. If you need a specific size, crop first and then run the result through the compressor.'],
+  ['Is it reversible?',
+   'In principle yes, because nothing is removed - the crop is a box in the page record. A later tool can widen it again. That also means a crop is not a way to hide sensitive material: the content is still there.'],
+  ['What does "Detect content" do?',
+   'It renders the first page and finds the box where the ink actually stops, then pads it slightly. On a scan with a grey border, or a photo of a document on a desk, that is usually the crop you wanted.'],
+  ['Will text still be selectable?',
+   'Yes. Cropping does not re-encode the page, so text, links and image quality are exactly as they were.'],
+  ['Can I crop only some pages?',
+   'Yes. Leave the page box as "all", or give a range such as 1-3, 7. Margins are percentages, so they apply sensibly to mixed page sizes.'],
+  ['What about sideways pages?',
+   'Margins follow the page as you see it, not the file’s internal orientation. A page stored rotated is handled so that "top" means the top of what you are looking at.']
+];
+
+pages.push({
+  slug: 'crop-pdf.html',
+  title: `Crop PDF Margins Online — Free, No Upload | ${NAME}`,
+  desc: 'Crop the margins off a PDF with a live preview, or detect where the content stops automatically. Runs in your browser, nothing uploaded. Free, no signup.',
+  h1: 'Crop a PDF',
+  faq: cropFaq,
+  scripts: ['vendor/pdf-lib.min.js', 'js/thumbs.js', 'js/pageops.js', 'js/crop.js'],
+  body: `
+<h1>Crop a PDF</h1>
+<p class="lede">Trim the margins and see exactly what you are keeping before you commit. Or let it find where the content stops on its own &mdash; the usual answer for a scan. Nothing is uploaded.</p>
+
+<div class="privacy-badge">&#128274; Your file never leaves this device</div>
+
+<div class="tool">
+  <label class="drop" id="drop" for="file">
+    <strong>Choose a PDF or drop it here</strong>
+    <small>Nothing is uploaded &mdash; processing happens in your browser</small>
+    <input type="file" id="file" accept="application/pdf,.pdf" class="vh">
+  </label>
+
+  <div class="controls" id="controls">
+    <div class="cropwrap">
+      <div class="cropstage">
+        <canvas id="cropCanvas" aria-label="First page with the crop area shown"></canvas>
+        <div class="cropbox" id="cropBox" aria-hidden="true"></div>
+      </div>
+      <div class="cropfields">
+        <div class="field"><label for="m-top">Top %</label>
+          <input type="number" id="m-top" value="0" min="0" max="45" step="0.5"></div>
+        <div class="field"><label for="m-right">Right %</label>
+          <input type="number" id="m-right" value="0" min="0" max="45" step="0.5"></div>
+        <div class="field"><label for="m-bottom">Bottom %</label>
+          <input type="number" id="m-bottom" value="0" min="0" max="45" step="0.5"></div>
+        <div class="field"><label for="m-left">Left %</label>
+          <input type="number" id="m-left" value="0" min="0" max="45" step="0.5"></div>
+        <div class="field"><label for="range">Pages</label>
+          <input type="text" id="range" placeholder="all"></div>
+        <div class="cropbtns">
+          <button class="btn ghost" type="button" id="detect">Detect content</button>
+          <button class="btn ghost" type="button" id="reset">Reset</button>
+        </div>
+      </div>
+    </div>
+
+    <p class="note" id="info" style="margin-top:0"></p>
+    <div class="row"><div><button class="btn" id="go">Crop PDF</button></div></div>
+
+    <div class="status" id="status" role="status" aria-live="polite"></div>
+
+    <div class="result" id="result">
+      <div class="big" id="rBig"></div>
+      <div class="meta" id="rMeta"></div>
+      <button class="btn" id="dl">Download PDF</button>
+    </div>
+  </div>
+</div>
+
+${AD}
+
+<h2>Why crop at all</h2>
+<p>Three reasons come up again and again. A scan carries a border the scanner added rather than anything on the document. A photographed page has a desk round the edges. And a document built for A4 is being read on a phone, where the margins waste a third of a screen that is already small.</p>
+<p>Cropping fixes all three without touching the content, which is why it is worth doing before anything else: the page looks the way it should, and every later step works on what you actually want to keep.</p>
+
+<h2>Detect content, and when not to trust it</h2>
+<p>The detector renders the first page and finds the rectangle where non-white pixels stop, then leaves a small margin around it. On a typical scan that lands within a millimetre or two of the right answer.</p>
+<p>It measures <strong>the first page only</strong>, because measuring every page and taking the union would give you the widest margin in the document rather than a tight crop. If page one is unrepresentative &mdash; a cover sheet, or a page with a footer the others do not have &mdash; check the number it produces before applying it to the whole file.</p>
+
+<div class="note"><strong>Cropping is not redaction.</strong> The content outside the crop is hidden, not deleted, and a determined reader can recover it. To remove something permanently, delete the page, or convert the page to an image with <a href="pdf-to-jpg.html">PDF to images</a> and rebuild it.</div>
+
+<h2>What it does to the file</h2>
+<table>
+  <thead><tr><th>Property</th><th>Effect</th></tr></thead>
+  <tbody>
+    <tr><td>Text and links</td><td>Untouched &mdash; still selectable and clickable</td></tr>
+    <tr><td>Image quality</td><td>Unchanged; nothing is re-encoded</td></tr>
+    <tr><td>File size</td><td>Roughly the same. Cropping hides margins, it does not delete them</td></tr>
+    <tr><td>Page dimensions</td><td>Reduced to the crop, so readers and printers use the new size</td></tr>
+  </tbody>
+</table>
+
+<div class="note"><strong>Need a size limit too?</strong> Crop first, then <a href="index.html">compress to an exact number of kilobytes</a>. A cropped page rasterises to fewer pixels, so the compressor has an easier job and keeps more quality for the same target.</div>
+
+<h2>Common questions</h2>
+${faqBlock(cropFaq)}
+
+<h2>Other tools</h2>
+<div class="grid">
+  <a href="index.html"><strong>Compress to an exact size</strong><small>The step after cropping, when a form names a KB limit.</small></a>
+  <a href="crop-pdf.html"><strong>Crop PDF</strong><small>Trim margins with a live preview, or detect where the content stops.</small></a>
+  <a href="organise-pdf.html"><strong>Organise pages</strong><small>Reorder, turn and remove pages with all of them on screen.</small></a>
+  <a href="rotate-pdf.html"><strong>Rotate PDF</strong><small>Straighten sideways pages before you crop them.</small></a>
 </div>
 `
 });
@@ -1099,7 +1212,7 @@ pages.push({
   h1: 'All tools',
   body: `
 <h1>All tools</h1>
-<p class="lede">Twelve tools, all free, all running entirely in your browser. No account, no upload, no watermark, no file size limit imposed by us.</p>
+<p class="lede">Thirteen tools, all free, all running entirely in your browser. No account, no upload, no watermark, no file size limit imposed by us.</p>
 
 <div class="privacy-badge">&#128274; Every tool here runs on your device</div>
 
@@ -1107,6 +1220,7 @@ pages.push({
   <a href="index.html"><strong>Compress PDF</strong><small>Hit an exact size in KB &mdash; 100, 200, 500 or any number a form demands.</small></a>
   <a href="batch-compress-pdf.html"><strong>Compress many at once</strong><small>One target, a whole folder of PDFs, downloaded individually or as a ZIP.</small></a>
   <a href="merge-pdf.html"><strong>Merge PDFs</strong><small>Combine any number of files into one, in the order you choose.</small></a>
+  <a href="crop-pdf.html"><strong>Crop PDF</strong><small>Trim margins with a live preview, or detect where the content stops.</small></a>
   <a href="organise-pdf.html"><strong>Organise pages</strong><small>Reorder, rotate and remove pages with every page on screen.</small></a>
   <a href="split-pdf.html"><strong>Split PDF</strong><small>Extract specific pages, or break one document into several files.</small></a>
   <a href="compress-image-to-size.html"><strong>Compress an image</strong><small>Hit an exact size in KB for a photo, signature or scan.</small></a>
@@ -1129,6 +1243,7 @@ pages.push({
     <tr><td>Compress &mdash; Lossless mode</td><td>Yes</td><td>Metadata stripped, file structure repacked</td></tr>
     <tr><td>Delete pages</td><td>Yes</td><td>Remaining page objects are copied unchanged</td></tr>
     <tr><td>Organise pages</td><td>Yes</td><td>Pages copied in your order; rotation is metadata</td></tr>
+    <tr><td>Crop</td><td>Yes</td><td>The page boundary changes; content is hidden, not deleted</td></tr>
     <tr><td>Add page numbers</td><td>Mostly</td><td>Text is drawn on; the page beneath is untouched</td></tr>
     <tr><td>Add watermark</td><td>Mostly</td><td>Text is drawn on; the page beneath is untouched</td></tr>
     <tr><td>Compress &mdash; Target size</td><td><strong>No</strong></td><td>Pages become images; the text layer is lost</td></tr>

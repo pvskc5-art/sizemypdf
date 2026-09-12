@@ -228,3 +228,18 @@ footer.site a{color:var(--muted)}
 .ptile .pnum{font-size:12px;color:var(--muted);text-align:center;line-height:1.3}
 .ptools{display:flex;gap:4px}
 .ptools .iconbtn{min-width:34px;min-height:34px;font-size:14px}
+
+/* ---- crop ---- */
+.cropwrap{display:flex;flex-wrap:wrap;gap:18px;margin:0 0 14px}
+.cropstage{position:relative;flex:1 1 300px;min-width:0;align-self:flex-start;
+  border:1px solid var(--line);border-radius:6px;overflow:hidden;background:#f4f5f7;line-height:0}
+.cropstage canvas{display:block;max-width:100%;height:auto}
+/* everything outside the box is dimmed, so the crop reads as what you keep */
+.cropbox{position:absolute;border:2px solid var(--brand);
+  box-shadow:0 0 0 9999px rgba(15,21,30,.45);pointer-events:none}
+.cropfields{flex:0 0 200px;display:flex;flex-direction:column;gap:10px}
+.cropfields .field{margin:0}
+.cropfields input{width:100%;min-height:44px}
+.cropbtns{display:flex;flex-wrap:wrap;gap:8px;margin-top:2px}
+.btn.ghost{background:var(--surface);color:var(--brand);border:1px solid var(--line)}
+.btn.ghost:hover{border-color:var(--brand)}

@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>OCR a Scanned PDF — Searchable Text, No Upload | SizeMyPDF</title>
+<meta name="description" content="Make a scanned PDF searchable with OCR that runs in your browser — your document is never uploaded. Keeps your pages unchanged and adds an invisible text layer. Free.">
+<link rel="canonical" href="https://sizemypdf.com/ocr-pdf.html">
+<meta property="og:title" content="OCR a Scanned PDF — Searchable Text, No Upload | SizeMyPDF">
+<meta property="og:description" content="Make a scanned PDF searchable with OCR that runs in your browser — your document is never uploaded. Keeps your pages unchanged and adds an invisible text layer. Free.">
+<meta property="og:url" content="https://sizemypdf.com/ocr-pdf.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="SizeMyPDF">
+<meta property="og:image" content="https://sizemypdf.com/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="favicon.ico" sizes="48x48">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="icon" type="image/png" sizes="96x96" href="icon-96.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="manifest" href="site.webmanifest">
+<meta name="theme-color" content="#2f6df6">
+<link rel="stylesheet" href="css/style.css?v=b26204f3">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5619759216593458" crossorigin="anonymous"></script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Is my document really not uploaded?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Really. The recognition engine is Tesseract compiled to WebAssembly and it runs inside this page, the same way the compressor does. You can watch it: open your browser’s network tab, and after the engine itself downloads you will see no further requests while it reads your pages."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Why is it a 9 MB download?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "That is the recognition engine and the English language model. Doing OCR without a server means the engine has to come to you. It is fetched the first time you open this page, cached afterwards, and no other page on this site loads it."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does it change how my document looks?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No, and that is deliberate. Most OCR services hand back your pages as flat images with text hidden behind them, which discards any real text or vector graphics the file still had. Here your pages are left exactly as they are and an invisible text layer is added on top."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How accurate is it?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "On a clean 300 DPI scan of printed text, very good. On a phone photo taken at an angle in poor light, noticeably worse. It does not read handwriting. Always check figures, names and anything you are relying on — OCR misreads are usually plausible rather than obvious."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How long does it take?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Roughly a second or two per page on a laptop, several on a phone. It is real work on your own processor rather than a queue on somebody’s server, so a long document takes a while and the page will tell you which page it is on."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I just get the text?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. Alongside the searchable PDF there is a plain-text download of everything it read, which is often what you actually wanted."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Which languages?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "English at the moment. Each additional language is another model to host, so they will be added based on what people ask for rather than all at once."
+      }
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://sizemypdf.com/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Make a scanned PDF searchable",
+      "item": "https://sizemypdf.com/ocr-pdf.html"
+    }
+  ]
+}
+</script>
+
+</head>
+<body>
+
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site">
+  <div class="wrap">
+    <a class="logo" href="index.html">Size<span>My</span>PDF</a>
+    <nav class="main">
+      <a href="tools.html">All&nbsp;tools</a>
+      <a href="merge-pdf.html">Merge</a>
+      <a href="split-pdf.html">Split</a>
+      <a href="batch-compress-pdf.html">Batch</a>
+      <a href="compress-image-to-size.html">Image</a>
+      <a href="about.html">About</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap" id="main">
+
+<h1>Make a scanned PDF searchable</h1>
+<p class="lede">A scan is a photograph of text: you cannot search it, select it or copy from it. OCR reads the words and puts them back into the file. This runs on your device &mdash; the document is not uploaded, which for OCR is unusual.</p>
+
+<div class="privacy-badge">&#128274; Your file never leaves this device</div>
+
+<div class="tool">
+  <label class="drop" id="drop" for="file">
+    <strong>Choose a scanned PDF or drop it here</strong>
+    <small>Nothing is uploaded &mdash; the OCR engine runs in your browser</small>
+    <input type="file" id="file" accept="application/pdf,.pdf" class="vh">
+  </label>
+
+  <div class="controls" id="controls">
+    <p class="note" id="info" style="margin-top:0"></p>
+    <div class="row">
+      <div class="field">
+        <label for="lang">Language</label>
+        <select id="lang"><option value="eng">English</option></select>
+      </div>
+      <div><button class="btn" id="go">Read the text</button></div>
+    </div>
+
+    <div class="bar" id="bar" role="progressbar" aria-valuemin="0" aria-valuemax="100"><i id="barFill"></i></div>
+    <div class="status" id="status" role="status" aria-live="polite"></div>
+
+    <div class="result" id="result">
+      <div class="big" id="rBig"></div>
+      <div class="meta" id="rMeta"></div>
+      <button class="btn" id="dl">Download searchable PDF</button>
+      <button class="btn ghost" id="dlText">Download the text</button>
+    </div>
+  </div>
+</div>
+
+
+
+<h2>Why this one is different</h2>
+<p>Every other tool on this site is in your browser because it can be. OCR is in your browser because it should be, and almost never is.</p>
+<p>Recognition is expensive, so the usual arrangement is that you upload the document, a server reads it, and you download the result &mdash; which means the scan sat on somebody else’s disk for a while. The documents people run OCR on are exactly the ones that argument matters for: contracts, medical letters, bank statements, passports, deeds. The engine here is about 9 MB, which arrives once and then reads your pages locally.</p>
+
+<h2>Your pages are not rasterised</h2>
+<p>This is worth understanding, because it is the part most OCR tools get wrong. A common implementation renders every page to an image, lays invisible text over it, and returns that. The result is searchable but flattened: any genuine text, vector drawing or crisp line art in the original has been turned into pixels.</p>
+<p>Here the original pages are kept byte-for-byte and only the text layer is added. A file that was part scan and part real text keeps the real text exactly as it was.</p>
+
+<div class="note"><strong>Check the output.</strong> OCR errors are rarely obvious &mdash; a misread digit looks like a digit. Search the result for a few figures and names you know before relying on it, particularly on anything financial or legal.</div>
+
+<h2>What makes recognition better or worse</h2>
+<div class="tablewrap"><table>
+  <thead><tr><th>Condition</th><th>Effect</th></tr></thead>
+  <tbody>
+    <tr><td>Flatbed scan, 300 DPI, printed text</td><td>Best case &mdash; usually near-perfect</td></tr>
+    <tr><td>Phone photo, flat and evenly lit</td><td>Good</td></tr>
+    <tr><td>Photo at an angle, or with a shadow across it</td><td>Noticeably worse; straighten and re-take if you can</td></tr>
+    <tr><td>Very low resolution, or heavy JPEG artefacts</td><td>Poor &mdash; there is no detail left to read</td></tr>
+    <tr><td>Handwriting</td><td>Not supported</td></tr>
+  </tbody>
+</table></div>
+
+<div class="note"><strong>Do OCR before compressing, not after.</strong> Compressing to a small target rasterises and softens the page, which is exactly the detail recognition needs. Read the text first, then <a href="index.html">compress to an exact size</a> &mdash; the text layer survives compression because it is text, not pixels.</div>
+
+<h2>Common questions</h2>
+<details><summary>Is my document really not uploaded?</summary><p>Really. The recognition engine is Tesseract compiled to WebAssembly and it runs inside this page, the same way the compressor does. You can watch it: open your browser’s network tab, and after the engine itself downloads you will see no further requests while it reads your pages.</p></details>
+<details><summary>Why is it a 9 MB download?</summary><p>That is the recognition engine and the English language model. Doing OCR without a server means the engine has to come to you. It is fetched the first time you open this page, cached afterwards, and no other page on this site loads it.</p></details>
+<details><summary>Does it change how my document looks?</summary><p>No, and that is deliberate. Most OCR services hand back your pages as flat images with text hidden behind them, which discards any real text or vector graphics the file still had. Here your pages are left exactly as they are and an invisible text layer is added on top.</p></details>
+<details><summary>How accurate is it?</summary><p>On a clean 300 DPI scan of printed text, very good. On a phone photo taken at an angle in poor light, noticeably worse. It does not read handwriting. Always check figures, names and anything you are relying on — OCR misreads are usually plausible rather than obvious.</p></details>
+<details><summary>How long does it take?</summary><p>Roughly a second or two per page on a laptop, several on a phone. It is real work on your own processor rather than a queue on somebody’s server, so a long document takes a while and the page will tell you which page it is on.</p></details>
+<details><summary>Can I just get the text?</summary><p>Yes. Alongside the searchable PDF there is a plain-text download of everything it read, which is often what you actually wanted.</p></details>
+<details><summary>Which languages?</summary><p>English at the moment. Each additional language is another model to host, so they will be added based on what people ask for rather than all at once.</p></details>
+
+<h2>Other tools</h2>
+<div class="grid">
+  <a href="compress-scanned-pdf.html"><strong>Compress a scan</strong><small>Where the biggest size savings are, once the text is readable.</small></a>
+  <a href="crop-pdf.html"><strong>Crop PDF</strong><small>Trim the scanner border before reading the text.</small></a>
+  <a href="index.html"><strong>Compress to an exact size</strong><small>The last step, when a form names a KB limit.</small></a>
+</div>
+
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <nav>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+      <a href="privacy.html">Privacy Policy</a>
+      <a href="terms.html">Terms</a>
+    </nav>
+    <div class="copy">&copy; <span id="yr">2026</span> SizeMyPDF &middot; Files are processed in your browser and never uploaded.</div>
+  </div>
+</footer>
+<script src="vendor/pdf-lib.min.js"></script>
+<script src="js/thumbs.js?v=35352335"></script>
+<script src="js/ocr.js?v=c3f509cb"></script>
+<script>document.getElementById('yr').textContent=new Date().getFullYear();
+if('serviceWorker' in navigator){addEventListener('load',function(){navigator.serviceWorker.register('/sw.js').catch(function(){});});}</script>
+</body>
+</html>

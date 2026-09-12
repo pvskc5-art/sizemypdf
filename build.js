@@ -1083,6 +1083,7 @@ ${faqBlock(organiseFaq)}
 <h2>Other tools</h2>
 <div class="grid">
   <a href="index.html"><strong>Compress to an exact size</strong><small>The last step &mdash; hit the KB limit a form demands.</small></a>
+  <a href="ocr-pdf.html"><strong>OCR a scan</strong><small>Make a scanned PDF searchable, with the engine running on your device.</small></a>
   <a href="sign-pdf.html"><strong>Sign PDF</strong><small>Draw or type a signature and click the page to place it.</small></a>
   <a href="crop-pdf.html"><strong>Crop PDF</strong><small>Trim margins with a live preview, or detect where the content stops.</small></a>
   <a href="organise-pdf.html"><strong>Organise pages</strong><small>Reorder, rotate and remove pages with every page on screen.</small></a>
@@ -1197,6 +1198,7 @@ ${faqBlock(cropFaq)}
 <h2>Other tools</h2>
 <div class="grid">
   <a href="index.html"><strong>Compress to an exact size</strong><small>The step after cropping, when a form names a KB limit.</small></a>
+  <a href="ocr-pdf.html"><strong>OCR a scan</strong><small>Make a scanned PDF searchable, with the engine running on your device.</small></a>
   <a href="sign-pdf.html"><strong>Sign PDF</strong><small>Draw or type a signature and click the page to place it.</small></a>
   <a href="crop-pdf.html"><strong>Crop PDF</strong><small>Trim margins with a live preview, or detect where the content stops.</small></a>
   <a href="organise-pdf.html"><strong>Organise pages</strong><small>Reorder, turn and remove pages with all of them on screen.</small></a>
@@ -1327,6 +1329,105 @@ ${faqBlock(signFaq)}
 `
 });
 
+/* ---- OCR ---- */
+
+const ocrFaq = [
+  ['Is my document really not uploaded?',
+   'Really. The recognition engine is Tesseract compiled to WebAssembly and it runs inside this page, the same way the compressor does. You can watch it: open your browser’s network tab, and after the engine itself downloads you will see no further requests while it reads your pages.'],
+  ['Why is it a 9 MB download?',
+   'That is the recognition engine and the English language model. Doing OCR without a server means the engine has to come to you. It is fetched the first time you open this page, cached afterwards, and no other page on this site loads it.'],
+  ['Does it change how my document looks?',
+   'No, and that is deliberate. Most OCR services hand back your pages as flat images with text hidden behind them, which discards any real text or vector graphics the file still had. Here your pages are left exactly as they are and an invisible text layer is added on top.'],
+  ['How accurate is it?',
+   'On a clean 300 DPI scan of printed text, very good. On a phone photo taken at an angle in poor light, noticeably worse. It does not read handwriting. Always check figures, names and anything you are relying on — OCR misreads are usually plausible rather than obvious.'],
+  ['How long does it take?',
+   'Roughly a second or two per page on a laptop, several on a phone. It is real work on your own processor rather than a queue on somebody’s server, so a long document takes a while and the page will tell you which page it is on.'],
+  ['Can I just get the text?',
+   'Yes. Alongside the searchable PDF there is a plain-text download of everything it read, which is often what you actually wanted.'],
+  ['Which languages?',
+   'English at the moment. Each additional language is another model to host, so they will be added based on what people ask for rather than all at once.']
+];
+
+pages.push({
+  slug: 'ocr-pdf.html',
+  title: `OCR a Scanned PDF — Searchable Text, No Upload | ${NAME}`,
+  desc: 'Make a scanned PDF searchable with OCR that runs in your browser — your document is never uploaded. Keeps your pages unchanged and adds an invisible text layer. Free.',
+  h1: 'Make a scanned PDF searchable',
+  faq: ocrFaq,
+  scripts: ['vendor/pdf-lib.min.js', 'js/thumbs.js', 'js/ocr.js'],
+  body: `
+<h1>Make a scanned PDF searchable</h1>
+<p class="lede">A scan is a photograph of text: you cannot search it, select it or copy from it. OCR reads the words and puts them back into the file. This runs on your device &mdash; the document is not uploaded, which for OCR is unusual.</p>
+
+<div class="privacy-badge">&#128274; Your file never leaves this device</div>
+
+<div class="tool">
+  <label class="drop" id="drop" for="file">
+    <strong>Choose a scanned PDF or drop it here</strong>
+    <small>Nothing is uploaded &mdash; the OCR engine runs in your browser</small>
+    <input type="file" id="file" accept="application/pdf,.pdf" class="vh">
+  </label>
+
+  <div class="controls" id="controls">
+    <p class="note" id="info" style="margin-top:0"></p>
+    <div class="row">
+      <div class="field">
+        <label for="lang">Language</label>
+        <select id="lang"><option value="eng">English</option></select>
+      </div>
+      <div><button class="btn" id="go">Read the text</button></div>
+    </div>
+
+    <div class="bar" id="bar" role="progressbar" aria-valuemin="0" aria-valuemax="100"><i id="barFill"></i></div>
+    <div class="status" id="status" role="status" aria-live="polite"></div>
+
+    <div class="result" id="result">
+      <div class="big" id="rBig"></div>
+      <div class="meta" id="rMeta"></div>
+      <button class="btn" id="dl">Download searchable PDF</button>
+      <button class="btn ghost" id="dlText">Download the text</button>
+    </div>
+  </div>
+</div>
+
+${AD}
+
+<h2>Why this one is different</h2>
+<p>Every other tool on this site is in your browser because it can be. OCR is in your browser because it should be, and almost never is.</p>
+<p>Recognition is expensive, so the usual arrangement is that you upload the document, a server reads it, and you download the result &mdash; which means the scan sat on somebody else’s disk for a while. The documents people run OCR on are exactly the ones that argument matters for: contracts, medical letters, bank statements, passports, deeds. The engine here is about 9 MB, which arrives once and then reads your pages locally.</p>
+
+<h2>Your pages are not rasterised</h2>
+<p>This is worth understanding, because it is the part most OCR tools get wrong. A common implementation renders every page to an image, lays invisible text over it, and returns that. The result is searchable but flattened: any genuine text, vector drawing or crisp line art in the original has been turned into pixels.</p>
+<p>Here the original pages are kept byte-for-byte and only the text layer is added. A file that was part scan and part real text keeps the real text exactly as it was.</p>
+
+<div class="note"><strong>Check the output.</strong> OCR errors are rarely obvious &mdash; a misread digit looks like a digit. Search the result for a few figures and names you know before relying on it, particularly on anything financial or legal.</div>
+
+<h2>What makes recognition better or worse</h2>
+<table>
+  <thead><tr><th>Condition</th><th>Effect</th></tr></thead>
+  <tbody>
+    <tr><td>Flatbed scan, 300 DPI, printed text</td><td>Best case &mdash; usually near-perfect</td></tr>
+    <tr><td>Phone photo, flat and evenly lit</td><td>Good</td></tr>
+    <tr><td>Photo at an angle, or with a shadow across it</td><td>Noticeably worse; straighten and re-take if you can</td></tr>
+    <tr><td>Very low resolution, or heavy JPEG artefacts</td><td>Poor &mdash; there is no detail left to read</td></tr>
+    <tr><td>Handwriting</td><td>Not supported</td></tr>
+  </tbody>
+</table>
+
+<div class="note"><strong>Do OCR before compressing, not after.</strong> Compressing to a small target rasterises and softens the page, which is exactly the detail recognition needs. Read the text first, then <a href="index.html">compress to an exact size</a> &mdash; the text layer survives compression because it is text, not pixels.</div>
+
+<h2>Common questions</h2>
+${faqBlock(ocrFaq)}
+
+<h2>Other tools</h2>
+<div class="grid">
+  <a href="compress-scanned-pdf.html"><strong>Compress a scan</strong><small>Where the biggest size savings are, once the text is readable.</small></a>
+  <a href="crop-pdf.html"><strong>Crop PDF</strong><small>Trim the scanner border before reading the text.</small></a>
+  <a href="index.html"><strong>Compress to an exact size</strong><small>The last step, when a form names a KB limit.</small></a>
+</div>
+`
+});
+
 /* ---- tools hub ---- */
 
 pages.push({
@@ -1336,7 +1437,7 @@ pages.push({
   h1: 'All tools',
   body: `
 <h1>All tools</h1>
-<p class="lede">Fourteen tools, all free, all running entirely in your browser. No account, no upload, no watermark, no file size limit imposed by us.</p>
+<p class="lede">Fifteen tools, all free, all running entirely in your browser. No account, no upload, no watermark, no file size limit imposed by us.</p>
 
 <div class="privacy-badge">&#128274; Every tool here runs on your device</div>
 
@@ -1344,6 +1445,7 @@ pages.push({
   <a href="index.html"><strong>Compress PDF</strong><small>Hit an exact size in KB &mdash; 100, 200, 500 or any number a form demands.</small></a>
   <a href="batch-compress-pdf.html"><strong>Compress many at once</strong><small>One target, a whole folder of PDFs, downloaded individually or as a ZIP.</small></a>
   <a href="merge-pdf.html"><strong>Merge PDFs</strong><small>Combine any number of files into one, in the order you choose.</small></a>
+  <a href="ocr-pdf.html"><strong>OCR a scan</strong><small>Make a scanned PDF searchable, with the engine running on your device.</small></a>
   <a href="sign-pdf.html"><strong>Sign PDF</strong><small>Draw or type a signature and click the page to place it.</small></a>
   <a href="crop-pdf.html"><strong>Crop PDF</strong><small>Trim margins with a live preview, or detect where the content stops.</small></a>
   <a href="organise-pdf.html"><strong>Organise pages</strong><small>Reorder, rotate and remove pages with every page on screen.</small></a>
@@ -1370,6 +1472,7 @@ pages.push({
     <tr><td>Organise pages</td><td>Yes</td><td>Pages copied in your order; rotation is metadata</td></tr>
     <tr><td>Crop</td><td>Yes</td><td>The page boundary changes; content is hidden, not deleted</td></tr>
     <tr><td>Sign</td><td>Mostly</td><td>An image is drawn on; the page beneath is untouched</td></tr>
+    <tr><td>OCR</td><td>Yes</td><td>An invisible text layer is added; pages are not rasterised</td></tr>
     <tr><td>Add page numbers</td><td>Mostly</td><td>Text is drawn on; the page beneath is untouched</td></tr>
     <tr><td>Add watermark</td><td>Mostly</td><td>Text is drawn on; the page beneath is untouched</td></tr>
     <tr><td>Compress &mdash; Target size</td><td><strong>No</strong></td><td>Pages become images; the text layer is lost</td></tr>
@@ -1384,7 +1487,6 @@ pages.push({
 <p>Everything on this site runs in your browser. That rules out a category of tools other sites offer, and it is worth being straight about which:</p>
 <ul>
   <li><strong>PDF to Word, Excel or PowerPoint.</strong> Reconstructing an editable document needs layout analysis that is not practical in a browser tab. Any site offering it is uploading your file to a server.</li>
-  <li><strong>OCR.</strong> Making a scan searchable needs a recognition engine measured in tens of megabytes. Possible in principle, punishing to download.</li>
   <li><strong>Password protection and unlocking.</strong> The library used here does not implement PDF encryption. Removing protection from documents is also not something this site wants to help with.</li>
   <li><strong>Editing text.</strong> PDF was designed as a final format; genuine text editing means rebuilding the document.</li>
 </ul>

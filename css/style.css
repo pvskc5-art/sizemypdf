@@ -243,3 +243,16 @@ footer.site a{color:var(--muted)}
 .cropbtns{display:flex;flex-wrap:wrap;gap:8px;margin-top:2px}
 .btn.ghost{background:var(--surface);color:var(--brand);border:1px solid var(--line)}
 .btn.ghost:hover{border-color:var(--brand)}
+
+/* ---- sign ---- */
+.signwrap{display:flex;flex-wrap:wrap;gap:20px;margin:0 0 14px}
+.signleft{flex:1 1 260px;min-width:0;display:flex;flex-direction:column;gap:10px}
+.signright{flex:1 1 320px;min-width:0}
+.sigpad{width:100%;height:auto;aspect-ratio:3/1;border:1px dashed var(--line);
+  border-radius:8px;background:var(--surface);touch-action:none;cursor:crosshair;display:block}
+.signstage{position:relative;border:1px solid var(--line);border-radius:6px;
+  overflow:hidden;background:#f4f5f7;line-height:0;display:inline-block;max-width:100%}
+.signstage canvas{display:block;max-width:100%;height:auto;cursor:crosshair}
+.ghost{position:absolute;display:none;background-size:100% 100%;
+  background-repeat:no-repeat;outline:1px dashed var(--brand);pointer-events:none}
+.signleft input[type=range]{width:100%}

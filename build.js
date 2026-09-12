@@ -1083,6 +1083,7 @@ ${faqBlock(organiseFaq)}
 <h2>Other tools</h2>
 <div class="grid">
   <a href="index.html"><strong>Compress to an exact size</strong><small>The last step &mdash; hit the KB limit a form demands.</small></a>
+  <a href="sign-pdf.html"><strong>Sign PDF</strong><small>Draw or type a signature and click the page to place it.</small></a>
   <a href="crop-pdf.html"><strong>Crop PDF</strong><small>Trim margins with a live preview, or detect where the content stops.</small></a>
   <a href="organise-pdf.html"><strong>Organise pages</strong><small>Reorder, rotate and remove pages with every page on screen.</small></a>
   <a href="split-pdf.html"><strong>Split PDF</strong><small>For documents too long to organise in one view.</small></a>
@@ -1196,9 +1197,132 @@ ${faqBlock(cropFaq)}
 <h2>Other tools</h2>
 <div class="grid">
   <a href="index.html"><strong>Compress to an exact size</strong><small>The step after cropping, when a form names a KB limit.</small></a>
+  <a href="sign-pdf.html"><strong>Sign PDF</strong><small>Draw or type a signature and click the page to place it.</small></a>
   <a href="crop-pdf.html"><strong>Crop PDF</strong><small>Trim margins with a live preview, or detect where the content stops.</small></a>
   <a href="organise-pdf.html"><strong>Organise pages</strong><small>Reorder, turn and remove pages with all of them on screen.</small></a>
   <a href="rotate-pdf.html"><strong>Rotate PDF</strong><small>Straighten sideways pages before you crop them.</small></a>
+</div>
+`
+});
+
+/* ---- sign ---- */
+
+const signFaq = [
+  ['Is this a legally binding signature?',
+   'It is a visible signature: an image of your mark drawn onto the page, which is what most forms, letters and internal approvals actually ask for. It is not a cryptographic signature, so it does not certify who signed or prove the document has not changed since. If you have been asked for a digital certificate or a qualified electronic signature, this is not that.'],
+  ['Is my signature uploaded anywhere?',
+   'No, and that matters more here than anywhere else on this site. The drawing never leaves your browser, the PDF is assembled on your device, and nothing is stored between visits. A signature is the last thing that should be sitting on somebody else’s server.'],
+  ['Can I draw with my finger?',
+   'Yes. The pad takes touch as well as a mouse or stylus, so a phone or tablet generally gives a better-looking signature than a trackpad does.'],
+  ['What does typing my name give me?',
+   'A cursive rendering of it, using a handwriting face if your device has one and an italic serif if not. It is quicker than drawing and looks tidier, though it is obviously not your handwriting.'],
+  ['How do I place it accurately?',
+   'Click the page where you want the middle of the signature to sit. It appears there, and clicking again moves it. The size slider scales it against the page width, so a signature that looks right on screen is the size it will print.'],
+  ['Can I sign more than one page?',
+   'One page per pass at the moment. Sign, download, and run the result through again for the next page. Pages are not re-encoded, so doing it twice costs nothing in quality.']
+];
+
+pages.push({
+  slug: 'sign-pdf.html',
+  title: `Sign a PDF Online — Draw or Type, No Upload | ${NAME}`,
+  desc: 'Sign a PDF by drawing with your finger or typing your name, then click the page to place it. Runs entirely in your browser — your signature is never uploaded. Free.',
+  h1: 'Sign a PDF',
+  faq: signFaq,
+  scripts: ['vendor/pdf-lib.min.js', 'js/thumbs.js', 'js/sign.js'],
+  body: `
+<h1>Sign a PDF</h1>
+<p class="lede">Draw your signature with a finger or a mouse, or type your name, then click the page where it should go. Your signature never leaves this device.</p>
+
+<div class="privacy-badge">&#128274; Your file and your signature never leave this device</div>
+
+<div class="tool">
+  <label class="drop" id="drop" for="file">
+    <strong>Choose a PDF or drop it here</strong>
+    <small>Nothing is uploaded &mdash; processing happens in your browser</small>
+    <input type="file" id="file" accept="application/pdf,.pdf" class="vh">
+  </label>
+
+  <div class="controls" id="controls">
+    <div class="signwrap">
+      <div class="signleft">
+        <span class="sizelabel">1. Your signature</span>
+        <canvas id="pad" class="sigpad" aria-label="Draw your signature here"></canvas>
+        <div class="row">
+          <div class="field">
+            <label for="typed">or type your name</label>
+            <input type="text" id="typed" placeholder="A. Patel" autocomplete="off">
+          </div>
+          <div><button class="btn ghost" type="button" id="clearpad">Clear</button></div>
+        </div>
+        <div class="field">
+          <label for="size">Size (% of page width)</label>
+          <input type="range" id="size" min="10" max="60" value="30">
+        </div>
+        <div class="field">
+          <label for="pageNo">Page</label>
+          <select id="pageNo"></select>
+        </div>
+      </div>
+      <div class="signright">
+        <span class="sizelabel">2. Click where it goes</span>
+        <div class="signstage">
+          <canvas id="pageCanvas" aria-label="Page preview: click to place the signature"></canvas>
+          <div class="ghost" id="ghost" aria-hidden="true"></div>
+        </div>
+      </div>
+    </div>
+
+    <p class="note" id="info" style="margin-top:0"></p>
+    <div class="row"><div><button class="btn" id="go">Sign PDF</button></div></div>
+
+    <div class="status" id="status" role="status" aria-live="polite"></div>
+
+    <div class="result" id="result">
+      <div class="big" id="rBig"></div>
+      <div class="meta" id="rMeta"></div>
+      <button class="btn" id="dl">Download PDF</button>
+    </div>
+  </div>
+</div>
+
+${AD}
+
+<h2>What kind of signature this is</h2>
+<p>There are two quite different things called an electronic signature, and it is worth knowing which one you have been asked for.</p>
+<table>
+  <thead><tr><th></th><th>Visible signature</th><th>Cryptographic signature</th></tr></thead>
+  <tbody>
+    <tr><td>What it is</td><td>A picture of your mark on the page</td><td>A certificate bound to the file</td></tr>
+    <tr><td>Proves who signed</td><td>No</td><td>Yes, via a certificate authority</td></tr>
+    <tr><td>Detects later edits</td><td>No</td><td>Yes &mdash; the signature breaks</td></tr>
+    <tr><td>Usually enough for</td><td>Forms, letters, approvals, most day-to-day paperwork</td><td>Contracts and filings that specifically demand it</td></tr>
+    <tr><td>This tool</td><td><strong>Yes</strong></td><td>No</td></tr>
+  </tbody>
+</table>
+<p>This tool does the first one. Plenty of sites sell the first while implying the second, and that is worth being blunt about: if a form has asked you for a qualified electronic signature or a digital certificate, you need a certificate authority, not a drawing tool.</p>
+
+<h2>Why doing it in the browser matters here</h2>
+<p>Every other file on this site is private because it is your document. A signature is different in kind: it is a reusable credential. Once an image of your signature is sitting in somebody’s upload folder, it can be lifted and placed on a document you never saw.</p>
+<p>Nothing here is uploaded. The pad, the page rendering and the assembled PDF all happen on your device, and nothing is remembered between visits &mdash; which also means you will need to draw it again next time, deliberately.</p>
+
+<div class="note"><strong>Signing a scan that is too large?</strong> Sign first, then <a href="index.html">compress to an exact size</a>. Compressing before signing wastes effort on a file you are about to change, and a heavy rasterising pass can make a thin signature line look ragged.</div>
+
+<h2>Getting a signature that looks right</h2>
+<ul>
+  <li><strong>Use a phone or tablet if you can.</strong> A finger or stylus on glass produces a far better line than a trackpad, which tends to give an angular scrawl.</li>
+  <li><strong>Draw it large.</strong> The pad is scaled down when it is placed, so a big signature comes out smoother than a cramped one.</li>
+  <li><strong>Keep it around 25&ndash;35% of the page width.</strong> Much larger reads as a novelty; much smaller disappears when printed.</li>
+  <li><strong>Check the placement before you download.</strong> The preview is the actual page, so what you see is where it lands.</li>
+</ul>
+
+<h2>Common questions</h2>
+${faqBlock(signFaq)}
+
+<h2>Other tools</h2>
+<div class="grid">
+  <a href="index.html"><strong>Compress to an exact size</strong><small>For when the signed file still has to meet a KB limit.</small></a>
+  <a href="jpg-to-pdf.html"><strong>Images to PDF</strong><small>Turn a photographed form into a PDF, then sign it.</small></a>
+  <a href="merge-pdf.html"><strong>Merge PDFs</strong><small>Attach the signed page to the rest of a bundle.</small></a>
 </div>
 `
 });
@@ -1212,7 +1336,7 @@ pages.push({
   h1: 'All tools',
   body: `
 <h1>All tools</h1>
-<p class="lede">Thirteen tools, all free, all running entirely in your browser. No account, no upload, no watermark, no file size limit imposed by us.</p>
+<p class="lede">Fourteen tools, all free, all running entirely in your browser. No account, no upload, no watermark, no file size limit imposed by us.</p>
 
 <div class="privacy-badge">&#128274; Every tool here runs on your device</div>
 
@@ -1220,6 +1344,7 @@ pages.push({
   <a href="index.html"><strong>Compress PDF</strong><small>Hit an exact size in KB &mdash; 100, 200, 500 or any number a form demands.</small></a>
   <a href="batch-compress-pdf.html"><strong>Compress many at once</strong><small>One target, a whole folder of PDFs, downloaded individually or as a ZIP.</small></a>
   <a href="merge-pdf.html"><strong>Merge PDFs</strong><small>Combine any number of files into one, in the order you choose.</small></a>
+  <a href="sign-pdf.html"><strong>Sign PDF</strong><small>Draw or type a signature and click the page to place it.</small></a>
   <a href="crop-pdf.html"><strong>Crop PDF</strong><small>Trim margins with a live preview, or detect where the content stops.</small></a>
   <a href="organise-pdf.html"><strong>Organise pages</strong><small>Reorder, rotate and remove pages with every page on screen.</small></a>
   <a href="split-pdf.html"><strong>Split PDF</strong><small>Extract specific pages, or break one document into several files.</small></a>
@@ -1244,6 +1369,7 @@ pages.push({
     <tr><td>Delete pages</td><td>Yes</td><td>Remaining page objects are copied unchanged</td></tr>
     <tr><td>Organise pages</td><td>Yes</td><td>Pages copied in your order; rotation is metadata</td></tr>
     <tr><td>Crop</td><td>Yes</td><td>The page boundary changes; content is hidden, not deleted</td></tr>
+    <tr><td>Sign</td><td>Mostly</td><td>An image is drawn on; the page beneath is untouched</td></tr>
     <tr><td>Add page numbers</td><td>Mostly</td><td>Text is drawn on; the page beneath is untouched</td></tr>
     <tr><td>Add watermark</td><td>Mostly</td><td>Text is drawn on; the page beneath is untouched</td></tr>
     <tr><td>Compress &mdash; Target size</td><td><strong>No</strong></td><td>Pages become images; the text layer is lost</td></tr>

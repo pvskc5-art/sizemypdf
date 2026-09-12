@@ -1,0 +1,244 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Sign a PDF Online — Draw or Type, No Upload | SizeMyPDF</title>
+<meta name="description" content="Sign a PDF by drawing with your finger or typing your name, then click the page to place it. Runs entirely in your browser — your signature is never uploaded. Free.">
+<link rel="canonical" href="https://sizemypdf.com/sign-pdf.html">
+<meta property="og:title" content="Sign a PDF Online — Draw or Type, No Upload | SizeMyPDF">
+<meta property="og:description" content="Sign a PDF by drawing with your finger or typing your name, then click the page to place it. Runs entirely in your browser — your signature is never uploaded. Free.">
+<meta property="og:url" content="https://sizemypdf.com/sign-pdf.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="SizeMyPDF">
+<meta property="og:image" content="https://sizemypdf.com/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="favicon.ico" sizes="48x48">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="icon" type="image/png" sizes="96x96" href="icon-96.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="manifest" href="site.webmanifest">
+<meta name="theme-color" content="#2f6df6">
+<link rel="stylesheet" href="css/style.css?v=b26204f3">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5619759216593458" crossorigin="anonymous"></script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Is this a legally binding signature?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "It is a visible signature: an image of your mark drawn onto the page, which is what most forms, letters and internal approvals actually ask for. It is not a cryptographic signature, so it does not certify who signed or prove the document has not changed since. If you have been asked for a digital certificate or a qualified electronic signature, this is not that."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is my signature uploaded anywhere?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No, and that matters more here than anywhere else on this site. The drawing never leaves your browser, the PDF is assembled on your device, and nothing is stored between visits. A signature is the last thing that should be sitting on somebody else’s server."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I draw with my finger?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. The pad takes touch as well as a mouse or stylus, so a phone or tablet generally gives a better-looking signature than a trackpad does."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What does typing my name give me?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "A cursive rendering of it, using a handwriting face if your device has one and an italic serif if not. It is quicker than drawing and looks tidier, though it is obviously not your handwriting."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How do I place it accurately?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Click the page where you want the middle of the signature to sit. It appears there, and clicking again moves it. The size slider scales it against the page width, so a signature that looks right on screen is the size it will print."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I sign more than one page?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "One page per pass at the moment. Sign, download, and run the result through again for the next page. Pages are not re-encoded, so doing it twice costs nothing in quality."
+      }
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://sizemypdf.com/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Sign a PDF",
+      "item": "https://sizemypdf.com/sign-pdf.html"
+    }
+  ]
+}
+</script>
+
+</head>
+<body>
+
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site">
+  <div class="wrap">
+    <a class="logo" href="index.html">Size<span>My</span>PDF</a>
+    <nav class="main">
+      <a href="tools.html">All&nbsp;tools</a>
+      <a href="merge-pdf.html">Merge</a>
+      <a href="split-pdf.html">Split</a>
+      <a href="batch-compress-pdf.html">Batch</a>
+      <a href="compress-image-to-size.html">Image</a>
+      <a href="about.html">About</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap" id="main">
+
+<h1>Sign a PDF</h1>
+<p class="lede">Draw your signature with a finger or a mouse, or type your name, then click the page where it should go. Your signature never leaves this device.</p>
+
+<div class="privacy-badge">&#128274; Your file and your signature never leave this device</div>
+
+<div class="tool">
+  <label class="drop" id="drop" for="file">
+    <strong>Choose a PDF or drop it here</strong>
+    <small>Nothing is uploaded &mdash; processing happens in your browser</small>
+    <input type="file" id="file" accept="application/pdf,.pdf" class="vh">
+  </label>
+
+  <div class="controls" id="controls">
+    <div class="signwrap">
+      <div class="signleft">
+        <span class="sizelabel">1. Your signature</span>
+        <canvas id="pad" class="sigpad" aria-label="Draw your signature here"></canvas>
+        <div class="row">
+          <div class="field">
+            <label for="typed">or type your name</label>
+            <input type="text" id="typed" placeholder="A. Patel" autocomplete="off">
+          </div>
+          <div><button class="btn ghost" type="button" id="clearpad">Clear</button></div>
+        </div>
+        <div class="field">
+          <label for="size">Size (% of page width)</label>
+          <input type="range" id="size" min="10" max="60" value="30">
+        </div>
+        <div class="field">
+          <label for="pageNo">Page</label>
+          <select id="pageNo"></select>
+        </div>
+      </div>
+      <div class="signright">
+        <span class="sizelabel">2. Click where it goes</span>
+        <div class="signstage">
+          <canvas id="pageCanvas" aria-label="Page preview: click to place the signature"></canvas>
+          <div class="ghost" id="ghost" aria-hidden="true"></div>
+        </div>
+      </div>
+    </div>
+
+    <p class="note" id="info" style="margin-top:0"></p>
+    <div class="row"><div><button class="btn" id="go">Sign PDF</button></div></div>
+
+    <div class="status" id="status" role="status" aria-live="polite"></div>
+
+    <div class="result" id="result">
+      <div class="big" id="rBig"></div>
+      <div class="meta" id="rMeta"></div>
+      <button class="btn" id="dl">Download PDF</button>
+    </div>
+  </div>
+</div>
+
+
+
+<h2>What kind of signature this is</h2>
+<p>There are two quite different things called an electronic signature, and it is worth knowing which one you have been asked for.</p>
+<div class="tablewrap"><table>
+  <thead><tr><th></th><th>Visible signature</th><th>Cryptographic signature</th></tr></thead>
+  <tbody>
+    <tr><td>What it is</td><td>A picture of your mark on the page</td><td>A certificate bound to the file</td></tr>
+    <tr><td>Proves who signed</td><td>No</td><td>Yes, via a certificate authority</td></tr>
+    <tr><td>Detects later edits</td><td>No</td><td>Yes &mdash; the signature breaks</td></tr>
+    <tr><td>Usually enough for</td><td>Forms, letters, approvals, most day-to-day paperwork</td><td>Contracts and filings that specifically demand it</td></tr>
+    <tr><td>This tool</td><td><strong>Yes</strong></td><td>No</td></tr>
+  </tbody>
+</table></div>
+<p>This tool does the first one. Plenty of sites sell the first while implying the second, and that is worth being blunt about: if a form has asked you for a qualified electronic signature or a digital certificate, you need a certificate authority, not a drawing tool.</p>
+
+<h2>Why doing it in the browser matters here</h2>
+<p>Every other file on this site is private because it is your document. A signature is different in kind: it is a reusable credential. Once an image of your signature is sitting in somebody’s upload folder, it can be lifted and placed on a document you never saw.</p>
+<p>Nothing here is uploaded. The pad, the page rendering and the assembled PDF all happen on your device, and nothing is remembered between visits &mdash; which also means you will need to draw it again next time, deliberately.</p>
+
+<div class="note"><strong>Signing a scan that is too large?</strong> Sign first, then <a href="index.html">compress to an exact size</a>. Compressing before signing wastes effort on a file you are about to change, and a heavy rasterising pass can make a thin signature line look ragged.</div>
+
+<h2>Getting a signature that looks right</h2>
+<ul>
+  <li><strong>Use a phone or tablet if you can.</strong> A finger or stylus on glass produces a far better line than a trackpad, which tends to give an angular scrawl.</li>
+  <li><strong>Draw it large.</strong> The pad is scaled down when it is placed, so a big signature comes out smoother than a cramped one.</li>
+  <li><strong>Keep it around 25&ndash;35% of the page width.</strong> Much larger reads as a novelty; much smaller disappears when printed.</li>
+  <li><strong>Check the placement before you download.</strong> The preview is the actual page, so what you see is where it lands.</li>
+</ul>
+
+<h2>Common questions</h2>
+<details><summary>Is this a legally binding signature?</summary><p>It is a visible signature: an image of your mark drawn onto the page, which is what most forms, letters and internal approvals actually ask for. It is not a cryptographic signature, so it does not certify who signed or prove the document has not changed since. If you have been asked for a digital certificate or a qualified electronic signature, this is not that.</p></details>
+<details><summary>Is my signature uploaded anywhere?</summary><p>No, and that matters more here than anywhere else on this site. The drawing never leaves your browser, the PDF is assembled on your device, and nothing is stored between visits. A signature is the last thing that should be sitting on somebody else’s server.</p></details>
+<details><summary>Can I draw with my finger?</summary><p>Yes. The pad takes touch as well as a mouse or stylus, so a phone or tablet generally gives a better-looking signature than a trackpad does.</p></details>
+<details><summary>What does typing my name give me?</summary><p>A cursive rendering of it, using a handwriting face if your device has one and an italic serif if not. It is quicker than drawing and looks tidier, though it is obviously not your handwriting.</p></details>
+<details><summary>How do I place it accurately?</summary><p>Click the page where you want the middle of the signature to sit. It appears there, and clicking again moves it. The size slider scales it against the page width, so a signature that looks right on screen is the size it will print.</p></details>
+<details><summary>Can I sign more than one page?</summary><p>One page per pass at the moment. Sign, download, and run the result through again for the next page. Pages are not re-encoded, so doing it twice costs nothing in quality.</p></details>
+
+<h2>Other tools</h2>
+<div class="grid">
+  <a href="index.html"><strong>Compress to an exact size</strong><small>For when the signed file still has to meet a KB limit.</small></a>
+  <a href="jpg-to-pdf.html"><strong>Images to PDF</strong><small>Turn a photographed form into a PDF, then sign it.</small></a>
+  <a href="merge-pdf.html"><strong>Merge PDFs</strong><small>Attach the signed page to the rest of a bundle.</small></a>
+</div>
+
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <nav>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+      <a href="privacy.html">Privacy Policy</a>
+      <a href="terms.html">Terms</a>
+    </nav>
+    <div class="copy">&copy; <span id="yr">2026</span> SizeMyPDF &middot; Files are processed in your browser and never uploaded.</div>
+  </div>
+</footer>
+<script src="vendor/pdf-lib.min.js"></script>
+<script src="js/thumbs.js?v=35352335"></script>
+<script src="js/sign.js?v=4b4866ce"></script>
+<script>document.getElementById('yr').textContent=new Date().getFullYear();
+if('serviceWorker' in navigator){addEventListener('load',function(){navigator.serviceWorker.register('/sw.js').catch(function(){});});}</script>
+</body>
+</html>

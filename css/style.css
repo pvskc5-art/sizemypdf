@@ -214,3 +214,17 @@ footer.site a{color:var(--muted)}
 .customsize input{width:110px;min-height:44px;font:inherit;padding:0 10px;
   border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--ink)}
 .customsize input:focus-visible{outline:2px solid var(--brand);outline-offset:1px}
+
+/* ---- page organiser ----
+   Every page on screen with its own controls, so moving and turning happen
+   where you can see the consequence. */
+.pagegrid{display:flex;flex-wrap:wrap;gap:12px;margin:12px 0 16px;
+  max-height:520px;overflow-y:auto;padding:2px}
+.ptile{border:1px solid var(--line);background:var(--surface);border-radius:8px;
+  padding:6px;display:flex;flex-direction:column;align-items:center;gap:6px}
+.ptile .sh{min-width:96px;display:flex;align-items:center;justify-content:center;
+  background:#f4f5f7;border-radius:4px}
+.ptile canvas{display:block;max-width:100%;height:auto;border-radius:3px}
+.ptile .pnum{font-size:12px;color:var(--muted);text-align:center;line-height:1.3}
+.ptools{display:flex;gap:4px}
+.ptools .iconbtn{min-width:34px;min-height:34px;font-size:14px}

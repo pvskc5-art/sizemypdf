@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Organise PDF Pages — Reorder, Rotate, Delete | SizeMyPDF</title>
+<meta name="description" content="Reorder, rotate and delete PDF pages in one view, with every page on screen. Lossless and completely in your browser — no upload, no signup, free.">
+<link rel="canonical" href="https://sizemypdf.com/organise-pdf.html">
+<meta property="og:title" content="Organise PDF Pages — Reorder, Rotate, Delete | SizeMyPDF">
+<meta property="og:description" content="Reorder, rotate and delete PDF pages in one view, with every page on screen. Lossless and completely in your browser — no upload, no signup, free.">
+<meta property="og:url" content="https://sizemypdf.com/organise-pdf.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="SizeMyPDF">
+<meta property="og:image" content="https://sizemypdf.com/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="favicon.ico" sizes="48x48">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="icon" type="image/png" sizes="96x96" href="icon-96.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="manifest" href="site.webmanifest">
+<meta name="theme-color" content="#2f6df6">
+<link rel="stylesheet" href="css/style.css?v=e030e59a">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5619759216593458" crossorigin="anonymous"></script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Is reordering lossless?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. Pages are copied as objects into a new document and rotation is a number in the page record, so nothing is re-encoded. Text stays selectable, images keep their resolution, and the file will not grow."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I do all three things at once?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "That is the point of this view. Move pages, turn the ones that are sideways, drop the ones you do not want, then save once. Doing it as three separate passes through three separate tools is how pages end up in the wrong order."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Why arrows instead of dragging?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Arrows work with a keyboard and on a phone, where dragging a thumbnail into position between two others is fiddly and easy to get wrong. Each page also shows where it came from, so you can see what moved."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What is the page limit?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Two hundred pages. Beyond that the grid itself becomes the problem rather than the document. Split the file first, organise the parts, then merge them back."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does this make the file smaller?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Only by however much the removed pages weighed. If you need to hit a size limit, organise first and then run the result through the compressor, which is the tool that targets an exact number of kilobytes."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Are my pages uploaded?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. The document is read, rendered and rebuilt in your browser. Nothing is sent anywhere, which is the whole basis of this site."
+      }
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://sizemypdf.com/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Organise PDF pages",
+      "item": "https://sizemypdf.com/organise-pdf.html"
+    }
+  ]
+}
+</script>
+
+</head>
+<body>
+
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site">
+  <div class="wrap">
+    <a class="logo" href="index.html">Size<span>My</span>PDF</a>
+    <nav class="main">
+      <a href="tools.html">All&nbsp;tools</a>
+      <a href="merge-pdf.html">Merge</a>
+      <a href="split-pdf.html">Split</a>
+      <a href="batch-compress-pdf.html">Batch</a>
+      <a href="compress-image-to-size.html">Image</a>
+      <a href="about.html">About</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap" id="main">
+
+<h1>Organise PDF pages</h1>
+<p class="lede">See every page at once, then move it, turn it or drop it. One pass, one save, and nothing is re-encoded. Nothing is uploaded.</p>
+
+<div class="privacy-badge">&#128274; Your file never leaves this device</div>
+
+<div class="tool">
+  <label class="drop" id="drop" for="file">
+    <strong>Choose a PDF or drop it here</strong>
+    <small>Nothing is uploaded &mdash; processing happens in your browser</small>
+    <input type="file" id="file" accept="application/pdf,.pdf" class="vh">
+  </label>
+
+  <div class="controls" id="controls">
+    <p class="note" id="info" style="margin-top:0"></p>
+    <div class="pagegrid" id="pagegrid"></div>
+    <div class="row">
+      <div><button class="btn" id="go">Save</button></div>
+    </div>
+
+    <div class="status" id="status" role="status" aria-live="polite"></div>
+
+    <div class="result" id="result">
+      <div class="big" id="rBig"></div>
+      <div class="meta" id="rMeta"></div>
+      <button class="btn" id="dl">Download PDF</button>
+    </div>
+  </div>
+</div>
+
+
+
+<h2>Why one view instead of three tools</h2>
+<p>Most sites split this work up: one page to delete, another to rotate, a third to reorder. Each one means uploading the file again, waiting again, and downloading again &mdash; and because you cannot see the document while you work, the mistakes only show up at the end. Rotating page 7 is easy. Knowing that the sideways page is page 7 and not page 8 is the hard part, and a list of page numbers does not tell you.</p>
+<p>Here the pages are in front of you. Each one shows its new position and, when it has moved, where it came from, so a document you have rearranged can still be checked against the original.</p>
+
+<h2>What this does to the file</h2>
+<div class="tablewrap"><table>
+  <thead><tr><th>Action</th><th>Lossless?</th><th>What actually changes</th></tr></thead>
+  <tbody>
+    <tr><td>Reorder</td><td>Yes</td><td>Page objects are copied into a new document in your order</td></tr>
+    <tr><td>Rotate</td><td>Yes</td><td>A rotation value in the page record; the content is untouched</td></tr>
+    <tr><td>Remove</td><td>Yes</td><td>The page is simply not copied across</td></tr>
+  </tbody>
+</table></div>
+<p>Because none of it re-encodes anything, the result is the same quality as the original and the file will not grow. Removing pages is the only thing that changes the size, and only by whatever those pages weighed.</p>
+
+<div class="note"><strong>Need to hit a size limit as well?</strong> Organise first, then <a href="index.html">compress the result to an exact number of kilobytes</a>. Doing it the other way round means compressing pages you were about to throw away.</div>
+
+<h2>A sensible order of operations</h2>
+<ol>
+  <li><strong>Organise</strong> &mdash; get the right pages, the right way up, in the right order.</li>
+  <li><strong>Merge</strong> if the document needs to join others.</li>
+  <li><strong>Compress</strong> last, once the page count is final, so the size target is calculated on what you are actually submitting.</li>
+</ol>
+
+<h2>Common questions</h2>
+<details><summary>Is reordering lossless?</summary><p>Yes. Pages are copied as objects into a new document and rotation is a number in the page record, so nothing is re-encoded. Text stays selectable, images keep their resolution, and the file will not grow.</p></details>
+<details><summary>Can I do all three things at once?</summary><p>That is the point of this view. Move pages, turn the ones that are sideways, drop the ones you do not want, then save once. Doing it as three separate passes through three separate tools is how pages end up in the wrong order.</p></details>
+<details><summary>Why arrows instead of dragging?</summary><p>Arrows work with a keyboard and on a phone, where dragging a thumbnail into position between two others is fiddly and easy to get wrong. Each page also shows where it came from, so you can see what moved.</p></details>
+<details><summary>What is the page limit?</summary><p>Two hundred pages. Beyond that the grid itself becomes the problem rather than the document. Split the file first, organise the parts, then merge them back.</p></details>
+<details><summary>Does this make the file smaller?</summary><p>Only by however much the removed pages weighed. If you need to hit a size limit, organise first and then run the result through the compressor, which is the tool that targets an exact number of kilobytes.</p></details>
+<details><summary>Are my pages uploaded?</summary><p>No. The document is read, rendered and rebuilt in your browser. Nothing is sent anywhere, which is the whole basis of this site.</p></details>
+
+<h2>Other tools</h2>
+<div class="grid">
+  <a href="index.html"><strong>Compress to an exact size</strong><small>The last step &mdash; hit the KB limit a form demands.</small></a>
+  <a href="organise-pdf.html"><strong>Organise pages</strong><small>Reorder, rotate and remove pages with every page on screen.</small></a>
+  <a href="split-pdf.html"><strong>Split PDF</strong><small>For documents too long to organise in one view.</small></a>
+  <a href="merge-pdf.html"><strong>Merge PDFs</strong><small>Join the organised file to others.</small></a>
+</div>
+
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <nav>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+      <a href="privacy.html">Privacy Policy</a>
+      <a href="terms.html">Terms</a>
+    </nav>
+    <div class="copy">&copy; <span id="yr">2026</span> SizeMyPDF &middot; Files are processed in your browser and never uploaded.</div>
+  </div>
+</footer>
+<script src="vendor/pdf-lib.min.js"></script>
+<script src="js/thumbs.js?v=35352335"></script>
+<script src="js/organise.js?v=ab569d71"></script>
+<script>document.getElementById('yr').textContent=new Date().getFullYear();
+if('serviceWorker' in navigator){addEventListener('load',function(){navigator.serviceWorker.register('/sw.js').catch(function(){});});}</script>
+</body>
+</html>

@@ -997,6 +997,99 @@ ${faqBlock(imgSizeFaq)}
 `
 });
 
+/* ---- organise pages ---- */
+
+const organiseFaq = [
+  ['Is reordering lossless?',
+   'Yes. Pages are copied as objects into a new document and rotation is a number in the page record, so nothing is re-encoded. Text stays selectable, images keep their resolution, and the file will not grow.'],
+  ['Can I do all three things at once?',
+   'That is the point of this view. Move pages, turn the ones that are sideways, drop the ones you do not want, then save once. Doing it as three separate passes through three separate tools is how pages end up in the wrong order.'],
+  ['Why arrows instead of dragging?',
+   'Arrows work with a keyboard and on a phone, where dragging a thumbnail into position between two others is fiddly and easy to get wrong. Each page also shows where it came from, so you can see what moved.'],
+  ['What is the page limit?',
+   'Two hundred pages. Beyond that the grid itself becomes the problem rather than the document. Split the file first, organise the parts, then merge them back.'],
+  ['Does this make the file smaller?',
+   'Only by however much the removed pages weighed. If you need to hit a size limit, organise first and then run the result through the compressor, which is the tool that targets an exact number of kilobytes.'],
+  ['Are my pages uploaded?',
+   'No. The document is read, rendered and rebuilt in your browser. Nothing is sent anywhere, which is the whole basis of this site.']
+];
+
+pages.push({
+  slug: 'organise-pdf.html',
+  title: `Organise PDF Pages — Reorder, Rotate, Delete | ${NAME}`,
+  desc: 'Reorder, rotate and delete PDF pages in one view, with every page on screen. Lossless and completely in your browser — no upload, no signup, free.',
+  h1: 'Organise PDF pages',
+  faq: organiseFaq,
+  scripts: ['vendor/pdf-lib.min.js', 'js/thumbs.js', 'js/organise.js'],
+  body: `
+<h1>Organise PDF pages</h1>
+<p class="lede">See every page at once, then move it, turn it or drop it. One pass, one save, and nothing is re-encoded. Nothing is uploaded.</p>
+
+<div class="privacy-badge">&#128274; Your file never leaves this device</div>
+
+<div class="tool">
+  <label class="drop" id="drop" for="file">
+    <strong>Choose a PDF or drop it here</strong>
+    <small>Nothing is uploaded &mdash; processing happens in your browser</small>
+    <input type="file" id="file" accept="application/pdf,.pdf" class="vh">
+  </label>
+
+  <div class="controls" id="controls">
+    <p class="note" id="info" style="margin-top:0"></p>
+    <div class="pagegrid" id="pagegrid"></div>
+    <div class="row">
+      <div><button class="btn" id="go">Save</button></div>
+    </div>
+
+    <div class="status" id="status" role="status" aria-live="polite"></div>
+
+    <div class="result" id="result">
+      <div class="big" id="rBig"></div>
+      <div class="meta" id="rMeta"></div>
+      <button class="btn" id="dl">Download PDF</button>
+    </div>
+  </div>
+</div>
+
+${AD}
+
+<h2>Why one view instead of three tools</h2>
+<p>Most sites split this work up: one page to delete, another to rotate, a third to reorder. Each one means uploading the file again, waiting again, and downloading again &mdash; and because you cannot see the document while you work, the mistakes only show up at the end. Rotating page 7 is easy. Knowing that the sideways page is page 7 and not page 8 is the hard part, and a list of page numbers does not tell you.</p>
+<p>Here the pages are in front of you. Each one shows its new position and, when it has moved, where it came from, so a document you have rearranged can still be checked against the original.</p>
+
+<h2>What this does to the file</h2>
+<table>
+  <thead><tr><th>Action</th><th>Lossless?</th><th>What actually changes</th></tr></thead>
+  <tbody>
+    <tr><td>Reorder</td><td>Yes</td><td>Page objects are copied into a new document in your order</td></tr>
+    <tr><td>Rotate</td><td>Yes</td><td>A rotation value in the page record; the content is untouched</td></tr>
+    <tr><td>Remove</td><td>Yes</td><td>The page is simply not copied across</td></tr>
+  </tbody>
+</table>
+<p>Because none of it re-encodes anything, the result is the same quality as the original and the file will not grow. Removing pages is the only thing that changes the size, and only by whatever those pages weighed.</p>
+
+<div class="note"><strong>Need to hit a size limit as well?</strong> Organise first, then <a href="index.html">compress the result to an exact number of kilobytes</a>. Doing it the other way round means compressing pages you were about to throw away.</div>
+
+<h2>A sensible order of operations</h2>
+<ol>
+  <li><strong>Organise</strong> &mdash; get the right pages, the right way up, in the right order.</li>
+  <li><strong>Merge</strong> if the document needs to join others.</li>
+  <li><strong>Compress</strong> last, once the page count is final, so the size target is calculated on what you are actually submitting.</li>
+</ol>
+
+<h2>Common questions</h2>
+${faqBlock(organiseFaq)}
+
+<h2>Other tools</h2>
+<div class="grid">
+  <a href="index.html"><strong>Compress to an exact size</strong><small>The last step &mdash; hit the KB limit a form demands.</small></a>
+  <a href="organise-pdf.html"><strong>Organise pages</strong><small>Reorder, rotate and remove pages with every page on screen.</small></a>
+  <a href="split-pdf.html"><strong>Split PDF</strong><small>For documents too long to organise in one view.</small></a>
+  <a href="merge-pdf.html"><strong>Merge PDFs</strong><small>Join the organised file to others.</small></a>
+</div>
+`
+});
+
 /* ---- tools hub ---- */
 
 pages.push({
@@ -1006,7 +1099,7 @@ pages.push({
   h1: 'All tools',
   body: `
 <h1>All tools</h1>
-<p class="lede">Eleven tools, all free, all running entirely in your browser. No account, no upload, no watermark, no file size limit imposed by us.</p>
+<p class="lede">Twelve tools, all free, all running entirely in your browser. No account, no upload, no watermark, no file size limit imposed by us.</p>
 
 <div class="privacy-badge">&#128274; Every tool here runs on your device</div>
 
@@ -1014,6 +1107,7 @@ pages.push({
   <a href="index.html"><strong>Compress PDF</strong><small>Hit an exact size in KB &mdash; 100, 200, 500 or any number a form demands.</small></a>
   <a href="batch-compress-pdf.html"><strong>Compress many at once</strong><small>One target, a whole folder of PDFs, downloaded individually or as a ZIP.</small></a>
   <a href="merge-pdf.html"><strong>Merge PDFs</strong><small>Combine any number of files into one, in the order you choose.</small></a>
+  <a href="organise-pdf.html"><strong>Organise pages</strong><small>Reorder, rotate and remove pages with every page on screen.</small></a>
   <a href="split-pdf.html"><strong>Split PDF</strong><small>Extract specific pages, or break one document into several files.</small></a>
   <a href="compress-image-to-size.html"><strong>Compress an image</strong><small>Hit an exact size in KB for a photo, signature or scan.</small></a>
   <a href="jpg-to-pdf.html"><strong>Images to PDF</strong><small>Turn JPGs, PNGs or photos of documents into a single PDF.</small></a>
@@ -1034,6 +1128,7 @@ pages.push({
     <tr><td>Rotate</td><td>Yes</td><td>A number in the page metadata changes</td></tr>
     <tr><td>Compress &mdash; Lossless mode</td><td>Yes</td><td>Metadata stripped, file structure repacked</td></tr>
     <tr><td>Delete pages</td><td>Yes</td><td>Remaining page objects are copied unchanged</td></tr>
+    <tr><td>Organise pages</td><td>Yes</td><td>Pages copied in your order; rotation is metadata</td></tr>
     <tr><td>Add page numbers</td><td>Mostly</td><td>Text is drawn on; the page beneath is untouched</td></tr>
     <tr><td>Add watermark</td><td>Mostly</td><td>Text is drawn on; the page beneath is untouched</td></tr>
     <tr><td>Compress &mdash; Target size</td><td><strong>No</strong></td><td>Pages become images; the text layer is lost</td></tr>

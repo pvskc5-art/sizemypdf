@@ -199,6 +199,15 @@ const targets = [
 <p>The usual culprit is resolution. A phone camera photographs a sheet of A4 at something like 3000&times;4000 pixels &mdash; far more detail than anyone reading the document needs. Bringing that down to roughly 150 DPI keeps every word legible while removing most of the bytes.</p>`
   },
   {
+    kb: 250,
+    who: 'recruitment portals, banking KYC uploads and forms whose limit was written in bytes',
+    realistic: 'four to six text pages, or two to three scanned pages',
+    extra: `<p>250 KB is an odd number, and the oddness is the interesting part. Round limits like 100 KB or 1 MB are usually chosen by a person. A limit of 250 KB is usually a number written into code &mdash; and that is where it gets slippery, because two perfectly reasonable programmers will write it two different ways.</p>
+<p>One writes <code>250 * 1024</code>, which is 256,000 bytes. The other writes <code>250000</code>. The form says &ldquo;250 KB&rdquo; either way and gives you no clue which it meant. A file of 254,000 bytes sails through the first and is rejected by the second, with the same unhelpful error either way.</p>
+<p>This tool takes the smaller reading. Ask for 250 KB and you get a file under 250,000 bytes, which is also under 256,000, so it is accepted whichever way the form counts. It costs about two per cent of image quality to remove the doubt, which is a trade worth making when the alternative is an upload that fails for a reason nobody explains.</p>
+<p>If a form has already rejected a file you were told was small enough, this is very often why.</p>`
+  },
+  {
     kb: 300,
     who: 'university portals, tender submissions and municipal e-services',
     realistic: 'five to eight text pages, or three to four scanned pages',

@@ -183,6 +183,7 @@
   <div class="grid">
     <a href="compress-pdf-to-100kb.html"><strong>Compress to 100 KB</strong><small>The tightest limit most forms use. Realistic for text documents up to a few pages.</small></a>
     <a href="compress-pdf-to-200kb.html"><strong>Compress to 200 KB</strong><small>The most common government upload limit worldwide.</small></a>
+    <a href="compress-pdf-to-250kb.html"><strong>Compress to 250 KB</strong><small>An odd limit, usually written in code. We aim under 250,000 bytes so it passes either way.</small></a>
     <a href="compress-pdf-to-300kb.html"><strong>Compress to 300 KB</strong><small>Enough room for a short scan that still has to stay legible.</small></a>
     <a href="compress-pdf-to-500kb.html"><strong>Compress to 500 KB</strong><small>The usual ceiling for university and job application uploads.</small></a>
     <a href="compress-pdf-to-1mb.html"><strong>Compress to 1 MB</strong><small>Generous enough to keep a long document readable.</small></a>
@@ -232,6 +233,10 @@
   <details><summary>Is my PDF uploaded anywhere?</summary>
     <p>No. Everything runs in your browser. You can verify it yourself: load this page, turn off your Wi-Fi, and compress a file. It still works, because there is nothing to talk to.</p></details>
 
+  <details><summary>The form still rejected my file, even though it was under the limit</summary>
+    <p>Almost always a disagreement about what a kilobyte is. A form that says 200 KB may be checking against 204,800 bytes or against 200,000, depending on how it was written, and it will not tell you which. A file can be comfortably under one and over the other.</p>
+    <p>This tool takes the smaller reading: ask for 200 KB and you get a file under 200,000 bytes, which is under 204,800 as well, so it is accepted whichever way the form counts. It costs about two per cent of image quality and removes a failure that is impossible to diagnose from the error message.</p></details>
+
   <details><summary>Why did my file only shrink a little?</summary>
     <p>You were probably in Lossless mode, which cannot touch image data. A PDF that is mostly scanned photographs is nearly all image bytes, and the only way to make it meaningfully smaller is to re-encode those images — which is what Target Size mode does.</p></details>
 
@@ -263,7 +268,7 @@
 <script src="vendor/pdf-lib.min.js"></script>
 <script src="js/metrics.js?v=64508c84"></script>
 <script src="js/compress-core.js?v=e9acb7f1"></script>
-<script src="js/app.js?v=e9a825c1"></script>
+<script src="js/app.js?v=17427e4e"></script>
 <script>document.getElementById('yr').textContent=new Date().getFullYear();
 if('serviceWorker' in navigator){addEventListener('load',function(){navigator.serviceWorker.register('/sw.js').catch(function(){});});}</script>
 </body>

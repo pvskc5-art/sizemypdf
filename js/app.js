@@ -12,9 +12,9 @@
   var lastKeptText = true;
 
   function fmt(b) {
-    if (b < 1024) return b + ' B';
-    if (b < 1048576) return (b / 1024).toFixed(0) + ' KB';
-    return (b / 1048576).toFixed(2) + ' MB';
+    if (b < 1000) return b + ' B';
+    if (b < 1000000) return (b / 1000).toFixed(0) + ' KB';
+    return (b / 1000000).toFixed(2) + ' MB';
   }
   function say(t) { statusEl.textContent = t; }
 
@@ -149,7 +149,7 @@
       var pv = $('#preview'); if (pv) pv.classList.remove('on');
       say('');
       var t = $('#target');
-      if (!t.value) t.value = Math.max(50, Math.round(srcSize / 1024 * 0.35));
+      if (!t.value) t.value = Math.max(50, Math.round(srcSize / 1000 * 0.35));
     };
     fr.readAsArrayBuffer(f);
   }
@@ -159,7 +159,10 @@
     if (!srcBytes) return;
     var mode = $('#mode').value;
     var targetKB = parseInt($('#target').value, 10) || 200;
-    var targetBytes = Math.max(10, targetKB) * 1024;
+    // A form that says 250 KB may count 250,000 bytes or 256,000; nothing on
+    // the page tells us which. Taking the smaller reading is the only one
+    // that passes both, and costs 2.4% of quality to be certain.
+    var targetBytes = Math.max(10, targetKB) * 1000;
 
     go.disabled = true;
     result.classList.remove('on', 'miss');

@@ -24,9 +24,9 @@
   var outBlob = null, outW = 0, outH = 0;
 
   function fmt(b) {
-    if (b < 1024) return b + ' B';
-    if (b < 1048576) return (b / 1024).toFixed(0) + ' KB';
-    return (b / 1048576).toFixed(2) + ' MB';
+    if (b < 1000) return b + ' B';
+    if (b < 1000000) return (b / 1000).toFixed(0) + ' KB';
+    return (b / 1000000).toFixed(2) + ' MB';
   }
   function say(t) { statusEl.textContent = t; }
   function prog(p) {
@@ -63,7 +63,7 @@
         ' — click to choose a different image';
       controls.classList.add('on');
       var t = $('#target');
-      if (!t.value) t.value = Math.max(20, Math.round(f.size / 1024 * 0.3));
+      if (!t.value) t.value = Math.max(20, Math.round(f.size / 1000 * 0.3));
       say('');
       showBefore();
     }).catch(function (err) {
@@ -109,7 +109,10 @@
   go.addEventListener('click', function () {
     if (!srcBitmap) return;
     var targetKB = parseInt($('#target').value, 10) || 100;
-    var targetBytes = Math.max(5, targetKB) * 1024;
+    // A form that says 250 KB may count 250,000 bytes or 256,000; nothing on
+    // the page tells us which. Taking the smaller reading is the only one
+    // that passes both, and costs 2.4% of quality to be certain.
+    var targetBytes = Math.max(5, targetKB) * 1000;
     var allowResize = $('#resize').value === 'yes';
     var wantPng = $('#format').value === 'png';
     var type = wantPng ? 'image/png' : 'image/jpeg';
@@ -190,7 +193,7 @@
     var ext = outBlob.type === 'image/png' ? '.png' : '.jpg';
     var a = document.createElement('a');
     a.href = URL.createObjectURL(outBlob);
-    a.download = srcName + '-' + Math.round(outBlob.size / 1024) + 'kb' + ext;
+    a.download = srcName + '-' + Math.round(outBlob.size / 1000) + 'kb' + ext;
     document.body.appendChild(a); a.click();
     setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 1500);
   });

@@ -25,9 +25,9 @@
   var SIDES = ['top', 'right', 'bottom', 'left'];
 
   function fmt(b) {
-    if (b < 1024) return b + ' B';
-    if (b < 1048576) return (b / 1024).toFixed(0) + ' KB';
-    return (b / 1048576).toFixed(2) + ' MB';
+    if (b < 1000) return b + ' B';
+    if (b < 1000000) return (b / 1000).toFixed(0) + ' KB';
+    return (b / 1000000).toFixed(2) + ' MB';
   }
   function say(t) { statusEl.textContent = t; }
 

@@ -2837,4 +2837,33 @@ fs.writeFileSync(path.join(root, 'sitemap.xml'),
   '\n</urlset>\n', 'utf8');
 console.log('  wrote sitemap.xml (' + urls.length + ' urls)');
 
+/* Orphan check.
+
+   index.html is hand written while every other page is generated here, so the
+   two drift: a tool gets added, the generated page and the sitemap pick it up,
+   and the homepage grid quietly does not. That is not cosmetic. The homepage
+   is the strongest internal link on the site, and the pages that never got a
+   tile were measurably the ones Google had not indexed - three of them had no
+   inbound link from anywhere at all and existed only in the sitemap.
+
+   Cheap to check, so check it on every build. */
+const home = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
+const linked = new Set(
+  [...home.matchAll(/href="([a-z0-9-]+\.html)"/g)].map(m => m[1]));
+
+const orphans = pages
+  .filter(pg => !pg.noindex)
+  .map(pg => pg.slug)
+  .filter(slug => slug && !linked.has(slug));
+
+if (orphans.length) {
+  console.error('\nERROR: ' + orphans.length +
+    ' page(s) are in the sitemap but not linked from index.html:');
+  orphans.forEach(o => console.error('  ' + o));
+  console.error('\nAdd a tile for each on the homepage, or mark it noindex.');
+  process.exitCode = 1;
+} else {
+  console.log('  orphan check: every page is linked from the homepage');
+}
+
 console.log('\nDone - ' + written + ' pages generated.');

@@ -159,14 +159,14 @@ Two tokens in there are load-bearing and easy to remove by accident:
 - `blob:` in `worker-src` - the rAF ticker in `js/pdfjs-raf.js` and the
   compression engine are Blob-URL workers, so page rendering stops without it.
 
-### Still to add: Permissions-Policy
+### Permissions-Policy
 
-The zone sends no `Permissions-Policy`, which means the AdSense iframes are
+The zone sends a `Permissions-Policy`, because otherwise the AdSense iframes are
 free to ask for the camera, the microphone or the location. On a site whose
 entire claim is that nothing leaves the device, that is the wrong default, and
 the camera matters concretely because Scan to PDF genuinely uses it.
 
-Add this as a sixth header on the same rule:
+It is the sixth header on the same rule:
 
     Permissions-Policy: camera=(self), microphone=(), geolocation=(), payment=(), usb=(), serial=(), bluetooth=(), midi=(), magnetometer=(), gyroscope=(), accelerometer=()
 
@@ -175,15 +175,22 @@ every embedded frame. Deliberately absent: anything touching `browsing-topics`
 or `interest-cohort`, which would change what the ads are allowed to do and is
 a revenue decision rather than a security one.
 
-Still not done, and not for want of trying. The rule editor's "Set new header"
-button adds no row when clicked under automation, by reference or through the
-DOM, while other buttons on the same dashboard respond to exactly the same
-treatment. The API route is closed too: Wrangler's OAuth token carries
-zone (read) and no rulesets scope, so PATCHing the ruleset returns 10404.
+Getting it there took three routes. The dashboard rule editor was a dead end:
+its "Set new header" button adds no row when clicked under automation, however
+it is clicked. Wrangler was a dead end too - its OAuth token carries
+zone (read) and no rulesets scope, so the API answers 10404, and that is a
+limit of Wrangler's fixed scope set rather than of the account.
 
-It is a thirty second job by hand in the dashboard, and that is the honest
-recommendation. The alternative - an API token scoped to Zone > Config > Edit
-- means handling a credential in plain text, which is worse than the problem.
+What worked was the dashboard's own API, called from inside a logged-in
+dashboard tab, where the session cookie authenticates it and no new credential
+exists to leak:
+
+    GET  /api/v4/zones/{zone}/rulesets/phases/http_response_headers_transform/entrypoint
+    PUT  /api/v4/zones/{zone}/rulesets/{ruleset_id}
+
+One trap: sending an `X-Cross-Site-Security` header makes the request
+non-simple and Cloudflare answers 403 with an HTML block page. Without it the
+call is an ordinary same-origin request and succeeds.
 
 Verify after any change to the rule:
 

@@ -26,7 +26,11 @@ pdfjsLib.GlobalWorkerOptions.workerPort = new Worker('../vendor/pdf.worker.min.j
 var BASE_SCALE = 1.4;
 var SCALES = [BASE_SCALE, 1.0, 0.75, 0.55, 0.4];
 var MAX_EDGE = 2600;
-var PROBES = 6;
+/* One more than the bisection needs, because the first probe is now spent on
+   the floor quality to rule the scale in or out. Without this the search
+   would lose a refinement step and settle for a slightly worse image than
+   the size budget allows. */
+var PROBES = 7;
 
 function OffscreenCanvasFactory() {}
 OffscreenCanvasFactory.prototype.create = function (w, h) {
@@ -260,7 +264,22 @@ function rasterToTarget(bytes, targetBytes, onProgress, onStage) {
       });
     }
 
-    return step().then(function (winner) {
+    /* Probe the floor before bisecting. The bisection starts in the middle of
+       the quality range, so when a scale cannot reach the target at all it
+       takes the full six probes to find that out - and each probe re-encodes
+       every page in the document. On a heavy scan aiming at a small target the
+       first scales are hopeless by definition, which is a lot of work to spend
+       proving. One encode at the lowest quality settles it: if even that is
+       over budget the scale is impossible, and if it fits it becomes the
+       starting point to bisect upwards from, so the probe is never wasted. */
+    return src.encodeAt(s, lo).then(function (floor) {
+      steps++;
+      onProgress(4);
+      if (!fallback || floor.total < fallback.total) fallback = floor;
+      if (floor.total > budget) return null;      // nothing at this scale can fit
+      best = floor;
+      return step();
+    }).then(function (winner) {
       if (!winner) return tryScale();
       onStage('Building the PDF…');
       var needsRetry = lo > 0.2;

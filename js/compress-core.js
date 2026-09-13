@@ -252,7 +252,7 @@ window.PDFCompress = (function () {
     if (workerDead) return null;
     if (worker) return worker;
     try {
-      worker = new Worker('js/compress-worker.js?v=a5a4ac09');
+      worker = new Worker('js/compress-worker.js?v=5329fc3e');
       worker.onmessage = function (e) {
         var d = e.data || {};
         var job = jobs[d.id];

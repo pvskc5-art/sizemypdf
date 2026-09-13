@@ -162,6 +162,52 @@ ${JSON.stringify({
 
 /* ------------------------------------------------------- reusable blocks */
 
+/* The compressor itself.
+
+   A page that answers "compress pdf to 250 kb" with prose and a link to the
+   compressor is asking somebody who has already told us what they want to go
+   somewhere else and say it again. Every competitor that outranks us puts the
+   tool on the page, and so should we.
+
+   The markup is lifted out of index.html at build time rather than copied.
+   index.html is hand written and is the one that gets edited, so a copy would
+   drift the first time the tool changed and the size pages would quietly stop
+   matching the front page. Lifting it means that cannot happen; if the block
+   ever moves or loses a control, the build stops rather than shipping a page
+   with a broken tool on it. */
+const TOOL_HTML = (() => {
+  // built without escape sequences so the markers stay literal and obvious
+  const NL = String.fromCharCode(10), CR = String.fromCharCode(13);
+  const home = fs.readFileSync(path.join(__dirname, 'index.html'), 'utf8')
+                 .split(CR).join('');
+  const lines = home.split(NL);
+  const open = lines.findIndex(l => l === '  <div class="tool">');
+  if (open < 0) throw new Error('build: no tool block in index.html');
+  let close = -1;
+  for (let i = open + 1; i < lines.length; i++) {
+    if (lines[i] === '  </div>') { close = i; break; }
+  }
+  if (close < 0) throw new Error('build: the tool block in index.html is unterminated');
+  const html = lines.slice(open, close + 1).join(NL);
+  const required = ['id="target"', 'id="file"', 'id="go"', 'id="mode"',
+                    'id="result"', 'id="status"', 'class="preset"'];
+  for (const need of required) {
+    if (!html.includes(need)) {
+      throw new Error('build: the tool block from index.html has no ' + need);
+    }
+  }
+  return html;
+})();
+
+/* Everything index.html loads for the compressor, in the same order. */
+const TOOL_SCRIPTS = ['js/pdfjs-raf.js', 'vendor/pdf.min.js', 'vendor/pdf-lib.min.js',
+                      'js/metrics.js', 'js/compress-core.js', 'js/app.js'];
+
+/* Pre-fills the size the page is about. paintPresets() runs at load, so the
+   matching button lights up without any extra wiring. */
+const toolBlock = (kb) => !kb ? TOOL_HTML :
+  TOOL_HTML.replace('placeholder="250"', 'placeholder="250" value="' + kb + '"');
+
 /* Pages that are about one size pass it through, so the number somebody
    searched for survives the click instead of having to be typed again. */
 const toolCta = (kb) => `
@@ -245,12 +291,13 @@ for (const t of targets) {
     desc: `Compress a PDF to under ${t.kb} KB for form uploads. Runs in your browser, so the file is never uploaded. Free, no signup, no watermark.`,
     h1: `Compress a PDF to ${t.kb} KB`,
     faq,
+    scripts: TOOL_SCRIPTS,
     body: `
 <h1>Compress a PDF to ${t.kb} KB</h1>
 <p class="lede">For ${t.who}. The compressor searches quality settings until your file fits under ${t.kb} KB &mdash; and it runs on your own device, so nothing is uploaded.</p>
 
 <div class="privacy-badge">&#128274; Your file never leaves this device</div>
-${toolCta(t.kb)}
+${toolBlock(t.kb)}
 
 <h2>What ${t.kb} KB actually means in practice</h2>
 ${t.extra}
@@ -309,12 +356,13 @@ pages.push({
   desc: 'Shrink a PDF so it fits an email attachment limit. Covers the real Gmail and Outlook ceilings and the base64 overhead that catches people out. Runs in your browser.',
   h1: 'Compress a PDF for email',
   faq: emailFaq,
+  scripts: TOOL_SCRIPTS,
   body: `
 <h1>Compress a PDF for email</h1>
 <p class="lede">Attachment limits are lower than they look, because email inflates every file it carries. Here is what the real ceilings are and how to get under them.</p>
 
 <div class="privacy-badge">&#128274; Your file never leaves this device</div>
-${TOOL_CTA}
+${toolBlock()}
 
 <h2>The limits that actually apply</h2>
 <table>
@@ -375,12 +423,13 @@ pages.push({
   desc: 'Scanned PDFs are photographs of paper, which is why they are enormous. Here is how to shrink one without making it unreadable. Runs in your browser, no upload.',
   h1: 'Compress a scanned PDF',
   faq: scanFaq,
+  scripts: TOOL_SCRIPTS,
   body: `
 <h1>Compress a scanned PDF</h1>
 <p class="lede">Scans are where the real savings live &mdash; a 40 MB scanned document can often reach 300 KB and stay perfectly readable. Here is how far you can push it before quality genuinely suffers.</p>
 
 <div class="privacy-badge">&#128274; Your file never leaves this device</div>
-${TOOL_CTA}
+${toolBlock()}
 
 <h2>Why scans are so much bigger than documents</h2>
 <p>When you type a document, the PDF stores your words as text plus a reference to a font. A page of writing costs a few kilobytes. When you scan a document, the PDF stores a photograph of the paper &mdash; millions of individual pixels, most of them describing blank white space in painstaking detail.</p>
@@ -2040,12 +2089,13 @@ pages.push({
   desc: 'Compress a PDF to under 1 MB. A generous limit that usually keeps text selectable. Runs in your browser, nothing is uploaded. Free, no signup, no watermark.',
   h1: 'Compress a PDF to 1 MB',
   faq: oneMbFaq,
+  scripts: TOOL_SCRIPTS,
   body: `
 <h1>Compress a PDF to 1 MB</h1>
 <p class="lede">A comfortable limit &mdash; and often reachable without touching image quality at all.</p>
 
 <div class="privacy-badge">&#128274; Your file never leaves this device</div>
-${toolCta(1000)}
+${toolBlock(1000)}
 
 <h2>Try Lossless first at this size</h2>
 <p>1 MB is one of the few common limits where the lossless route stands a real chance. Stripping metadata and repacking the file structure typically saves between 5 and 25 per cent, which is often the whole gap &mdash; and it costs nothing: your text stays selectable, searchable and copyable.</p>
@@ -2086,12 +2136,13 @@ pages.push({
   desc: 'Get passport scans and supporting documents under a visa portal upload limit without making them unreadable. Runs in your browser, nothing is uploaded.',
   h1: 'Compress a PDF for a visa application',
   faq: visaFaq,
+  scripts: TOOL_SCRIPTS,
   body: `
 <h1>Compress a PDF for a visa application</h1>
 <p class="lede">Get under the portal's limit without making your documents unreadable &mdash; and without handing your passport scan to a stranger's server.</p>
 
 <div class="privacy-badge">&#128274; Your documents never leave this device</div>
-${TOOL_CTA}
+${toolBlock()}
 
 <h2>Why this one deserves care</h2>
 <p>Most compression tasks are low stakes: if the output is a bit soft, you try again. A visa application is not that. A document that passes the upload check but cannot be read may be rejected weeks later, and by then you may have lost an appointment slot, a filing window, or the fee.</p>
@@ -2151,12 +2202,13 @@ pages.push({
   desc: 'Compress a PDF on Android or iPhone with no app to install and no upload. Runs in your mobile browser. Free, no signup, no watermark.',
   h1: 'Compress a PDF on your phone',
   faq: phoneFaq,
+  scripts: TOOL_SCRIPTS,
   body: `
 <h1>Compress a PDF on your phone</h1>
 <p class="lede">No app to install, no account, no upload. It runs in the browser you already have open.</p>
 
 <div class="privacy-badge">&#128274; Your file never leaves your phone</div>
-${TOOL_CTA}
+${toolBlock()}
 
 <h2>Why no app</h2>
 <p>Compressing a PDF is a few seconds of work. Installing an app for it means granting storage permissions, accepting a privacy policy, and in most cases uploading your document to that company's servers anyway &mdash; app stores are full of PDF utilities that are thin wrappers around a web API.</p>

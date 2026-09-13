@@ -166,12 +166,7 @@
     var t = $('#target');
     if (!t) return;
     t.value = kb;
-    // light up the matching preset, if there is one
-    [].forEach.call(document.querySelectorAll('.preset'), function (b) {
-      var v = parseInt((b.dataset && b.dataset.kb) || b.textContent, 10);
-      if (/MB/i.test(b.textContent)) v = v * 1000;
-      b.classList.toggle('on', v === kb);
-    });
+    paintPresets();
   })();
 
   /* ---------- run ---------- */

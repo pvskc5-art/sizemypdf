@@ -195,8 +195,16 @@
 
       $('#sBig').textContent = ok.length + ' of ' + items.length + ' compressed — ' +
         fmt(before) + ' → ' + fmt(after);
+      // "0 kept their text layer" reads like a placeholder rather than a
+      // result, and the zero case is the one that needs explaining.
+      var keptPhrase = kept === 0
+        ? 'None kept their text layer, because reaching the target meant ' +
+          'rasterising the pages'
+        : kept === ok.length
+          ? (ok.length === 1 ? 'It kept its text layer' : 'All kept their text layer')
+          : kept + ' of ' + ok.length + ' kept their text layer';
       $('#sMeta').textContent =
-        kept + ' kept their text layer' +
+        keptPhrase +
         (over ? ', ' + over + ' could not reach the target' : '') +
         (failed ? ', ' + failed + ' could not be read' : '') + '.';
       try {

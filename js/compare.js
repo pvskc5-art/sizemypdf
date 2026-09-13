@@ -226,7 +226,8 @@
           : changedPages + (changedPages === 1 ? ' page differs' : ' pages differ');
         $('#rMeta').textContent = changedPages === 0
           ? 'The extracted text is identical. Formatting, images and layout are not compared.'
-          : added + ' words added, ' + removed + ' removed. Only text is compared — ' +
+          : added + (added === 1 ? ' word added, ' : ' words added, ') +
+            removed + ' removed. Only text is compared — ' +
             'a change to an image or to formatting alone will not appear here.';
         result.classList.add('on');
         say(''); go.disabled = false;

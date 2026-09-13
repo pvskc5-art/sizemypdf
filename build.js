@@ -2045,7 +2045,7 @@ pages.push({
 <p class="lede">A comfortable limit &mdash; and often reachable without touching image quality at all.</p>
 
 <div class="privacy-badge">&#128274; Your file never leaves this device</div>
-${TOOL_CTA}
+${toolCta(1000)}
 
 <h2>Try Lossless first at this size</h2>
 <p>1 MB is one of the few common limits where the lossless route stands a real chance. Stripping metadata and repacking the file structure typically saves between 5 and 25 per cent, which is often the whole gap &mdash; and it costs nothing: your text stays selectable, searchable and copyable.</p>

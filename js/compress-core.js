@@ -248,15 +248,19 @@ window.PDFCompress = (function () {
   var worker = null, workerDead = false, seq = 0;
   var jobs = Object.create(null);
 
+  // generous: this covers only postMessage plus the worker's first line
+  var ACK_TIMEOUT = 8000;
+
   function getWorker() {
     if (workerDead) return null;
     if (worker) return worker;
     try {
-      worker = new Worker('js/compress-worker.js?v=5329fc3e');
+      worker = new Worker('js/compress-worker.js?v=4327b9d7');
       worker.onmessage = function (e) {
         var d = e.data || {};
         var job = jobs[d.id];
         if (!job) return;
+        if (d.type === 'ack') { job.acked(); return; }
         if (d.type === 'progress') { job.onProgress(d.n); return; }
         if (d.type === 'stage') { job.onStage(d.msg); return; }
         delete jobs[d.id];
@@ -267,7 +271,10 @@ window.PDFCompress = (function () {
         // the worker itself is broken: fail every job on it and stop using it
         workerDead = true;
         var err = new Error(ev && ev.message ? ev.message : 'worker error');
-        Object.keys(jobs).forEach(function (k) { jobs[k].reject(err); delete jobs[k]; });
+        Object.keys(jobs).forEach(function (k) {
+          if (jobs[k].acked) jobs[k].acked();      // stop its handshake timer
+          jobs[k].reject(err); delete jobs[k];
+        });
         try { worker.terminate(); } catch (e2) {}
         worker = null;
       };
@@ -283,8 +290,20 @@ window.PDFCompress = (function () {
     if (!w) return Promise.reject(new Error('no worker'));
     var id = ++seq;
     return new Promise(function (resolve, reject) {
+      /* The worker acknowledges the job before doing anything, so this only
+         has to cover the gap between posting and that reply - no amount of
+         slow hardware belongs in it. Once acked the worker is trusted for as
+         long as it needs, because a genuinely large document on a phone can
+         sit between progress reports for a while and cutting it off to start
+         again on the main thread would be slower, not safer. */
+      var handshake = setTimeout(function () {
+        if (!jobs[id]) return;
+        delete jobs[id];
+        reject(new Error('the worker did not respond'));
+      }, ACK_TIMEOUT);
       jobs[id] = { resolve: resolve, reject: reject,
-                   onProgress: onProgress, onStage: onStage };
+                   onProgress: onProgress, onStage: onStage,
+                   acked: function () { clearTimeout(handshake); } };
       // deliberately not transferred: the fallback needs these bytes intact
       w.postMessage({ id: id, cmd: 'toTarget', bytes: bytes, targetBytes: targetBytes });
     });

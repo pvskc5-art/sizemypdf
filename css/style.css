@@ -109,7 +109,7 @@ details p{margin:10px 0 0;color:var(--muted);font-size:15px}
 footer.site{border-top:1px solid var(--line);background:var(--surface);margin-top:50px;padding:26px 0;font-size:14px}
 footer.site .wrap{display:flex;flex-wrap:wrap;gap:16px;align-items:center}
 footer.site nav{display:flex;flex-wrap:wrap;gap:16px}
-footer.site a{color:var(--muted)}
+footer.site a{color:var(--muted);display:inline-flex;align-items:center;min-height:44px}
 .copy{color:var(--muted);font-size:13px;width:100%;margin-top:6px}
 
 @media(max-width:620px){

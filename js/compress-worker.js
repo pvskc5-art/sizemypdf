@@ -331,6 +331,13 @@ self.onmessage = function (e) {
   var id = d.id;
   if (d.cmd === 'ping') { post(id, 'pong'); return; }
 
+  // Answer before starting, so the page can tell a worker that is alive from
+  // one that was constructed but will never run. A worker whose importScripts
+  // fails does not always fire onerror on the page, and without this the job
+  // simply never settles: the progress bar sits where it was and the person
+  // waits forever on a file the main thread could have compressed.
+  post(id, 'ack');
+
   toTarget(
     d.bytes,
     d.targetBytes,

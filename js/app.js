@@ -216,6 +216,8 @@
     var targetBytes = Math.max(10, targetKB) * 1000;
 
     go.disabled = true;
+    var cancelBtn = $('#cancel');
+    if (cancelBtn) cancelBtn.hidden = false;
     result.classList.remove('on', 'miss');
     var pv = $('#preview'); if (pv) pv.classList.remove('on');
 
@@ -230,6 +232,7 @@
         ' KB target, so it is unchanged. Compressing it further would only lose quality.';
       result.classList.add('on');
       say(''); bar.classList.remove('on'); go.disabled = false;
+      if (cancelBtn) cancelBtn.hidden = true;
       track({ mode: mode, target: Metrics.kb(targetKB), outcome: 'already-under',
               kept: 'text', took: '<1s' });
       showPreview();
@@ -246,7 +249,12 @@
     job.then(function (res) {
       prog(100);
       var bytes = res && res.bytes;
-      if (!bytes) { say('Could not process this PDF.'); go.disabled = false; return; }
+      if (!bytes) {
+        say('Could not process this PDF.');
+        go.disabled = false;
+        if (cancelBtn) cancelBtn.hidden = true;
+        return;
+      }
       outBlob = new Blob([bytes], { type: 'application/pdf' });
       lastKeptText = !!res.keptText;
       var pct = srcSize ? Math.round(((srcSize - outBlob.size) / srcSize) * 100) : 0;
@@ -265,6 +273,7 @@
       result.classList.add('on');
       if (!hit) result.classList.add('miss');
       say(''); bar.classList.remove('on'); go.disabled = false;
+      if (cancelBtn) cancelBtn.hidden = true;
       track({
         mode: mode,
         target: Metrics.kb(targetKB),
@@ -274,12 +283,29 @@
       });
       showPreview();
     }).catch(function (err) {
+      bar.classList.remove('on'); go.disabled = false;
+      if (cancelBtn) cancelBtn.hidden = true;
+      // being asked to stop is not a fault and must not read like one
+      if (err && err.message === 'cancelled') {
+        say('Stopped. Your file is untouched.');
+        return;
+      }
       console.error(err);
       say('Something went wrong: ' + (err && err.message ? err.message : 'unknown error') +
           '. If the PDF is password-protected, remove the password first.');
-      bar.classList.remove('on'); go.disabled = false;
     });
   });
+
+  if ($('#cancel')) {
+    $('#cancel').addEventListener('click', function () {
+      say('Stopping…');
+      this.disabled = true;
+      PDFCompress.cancel();
+      var self = this;
+      // the promise rejects on the next tick; re-arm for the next run
+      setTimeout(function () { self.disabled = false; }, 1500);
+    });
+  }
 
   $('#dl').addEventListener('click', function () {
     if (!outBlob) return;

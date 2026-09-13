@@ -159,6 +159,7 @@ window.PDFCompress = (function () {
           ? assembleFrom(fallback.canvases, fallback.blobs)
           : Promise.resolve(null);
       }
+      if (cancelled) throw new Error('cancelled');
       var s = scales[idx++];
       onStage('Testing quality at ' + Math.round(s * 100) + '% scale…');
       return r.canvasesAt(s).then(function (canvases) {
@@ -170,6 +171,7 @@ window.PDFCompress = (function () {
            rendered - so the extra probes cost far less than the quality. */
         var lo = 0.15, hi = 0.94, best = null, steps = 0;
         function step() {
+          if (cancelled) throw new Error('cancelled');
           if (steps++ >= 6) return Promise.resolve(best);
           var q = (lo + hi) / 2;
           return encodeAll(canvases, q).then(function (enc) {
@@ -251,6 +253,11 @@ window.PDFCompress = (function () {
   // generous: this covers only postMessage plus the worker's first line
   var ACK_TIMEOUT = 8000;
 
+  /* A long compression on a phone is minutes of nothing, and until now the
+     only way out was closing the tab and losing the file with it. */
+  var cancelled = false;
+  function isCancelled() { return cancelled; }
+
   function getWorker() {
     if (workerDead) return null;
     if (worker) return worker;
@@ -309,9 +316,26 @@ window.PDFCompress = (function () {
     });
   }
 
+  /* Terminating is the only way to stop a worker mid-encode. The next job
+     builds a fresh one, so this is not the same as the worker having failed
+     and must not mark it dead. */
+  function cancel() {
+    cancelled = true;
+    if (worker) {
+      try { worker.terminate(); } catch (e) {}
+      Object.keys(jobs).forEach(function (k) {
+        if (jobs[k].acked) jobs[k].acked();
+        jobs[k].reject(new Error('cancelled'));
+        delete jobs[k];
+      });
+      worker = null;
+    }
+  }
+
   function toTarget(bytes, targetBytes, onProgress, onStage) {
     onProgress = onProgress || noop;
     onStage = onStage || noop;
+    cancelled = false;
 
     if (!canUseWorker || workerDead) {
       return toTargetMain(bytes, targetBytes, onProgress, onStage);
@@ -321,6 +345,7 @@ window.PDFCompress = (function () {
         /* Any worker failure falls back rather than surfacing to the user. It
            costs the time already spent, which beats an error on a file the
            main-thread path can still compress. */
+        if (cancelled) throw err;          // asked to stop, not a failure
         console.warn('compression worker failed, using the main thread:',
                      err && err.message);
         workerDead = true;
@@ -328,6 +353,7 @@ window.PDFCompress = (function () {
       });
   }
 
-  return { toTarget: toTarget, repack: repack, BASE_SCALE: BASE_SCALE,
+  return { toTarget: toTarget, repack: repack, cancel: cancel,
+           isCancelled: isCancelled, BASE_SCALE: BASE_SCALE,
            usingWorker: function () { return canUseWorker && !workerDead; } };
 })();

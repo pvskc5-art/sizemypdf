@@ -87,6 +87,9 @@ input[type=number]:focus,select:focus{outline:2px solid var(--brand);outline-off
 .result.miss .big{color:var(--warn)}
 
 .note{font-size:13.5px;color:var(--muted);background:#f0f3f8;border-left:3px solid #c2cbd8;padding:11px 14px;border-radius:0 6px 6px 0;margin:16px 0}
+/* secondary action next to a primary one: present but not competing */
+.ghostbtn{background:transparent;color:var(--muted);border:1px solid var(--line);margin-left:8px}
+.ghostbtn:hover{color:var(--ink);border-color:var(--muted)}
 .privacy-badge{display:inline-flex;align-items:center;gap:7px;font-size:13.5px;color:var(--ok);font-weight:600;margin-bottom:18px}
 
 table{width:100%;border-collapse:collapse;font-size:14.5px;margin:0 0 18px}

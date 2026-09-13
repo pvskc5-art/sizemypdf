@@ -69,6 +69,51 @@ back to a timer while `document.hidden` is true.
 Note that pdf.js's documented `onContinue` hook does *not* solve this: it hands
 you `_scheduleNext`, which calls `requestAnimationFrame` itself.
 
+## Reading the usage numbers
+
+The collector is a Worker on `sizemypdf.com/api/n` (source in `worker/`),
+writing bucketed counters to an Analytics Engine dataset called
+`smp_metrics`. Nothing identifying is stored - no cookie, no device id, no IP,
+no fine-grained timestamp - so rows cannot be rejoined into a session.
+
+Blob positions are a wire format and are fixed for the life of the dataset:
+
+    blob1 event      compress | batch
+    blob2 mode       target | lossless
+    blob3 target     the size asked for, bucketed
+    blob4 outcome    hit | miss | already-under
+    blob5 kept       text | raster
+    blob6 took       how long it ran, bucketed
+    blob7 engine     worker | main
+    blob8 files      batch only, how many
+    blob9 over       batch only, any that missed the target
+    blob10 failed    batch only, any that would not open
+    double1          how many times that exact combination happened
+
+Query it with the SQL API. The question the site was built to answer - which
+target sizes people actually ask for:
+
+    SELECT blob3 AS target, SUM(double1) AS n
+    FROM smp_metrics
+    WHERE blob1 = 'compress'
+    GROUP BY target
+    ORDER BY n DESC
+
+And the one that says whether the promise is being kept:
+
+    SELECT blob3 AS target, blob4 AS outcome, SUM(double1) AS n
+    FROM smp_metrics
+    WHERE blob1 = 'compress'
+    GROUP BY target, outcome
+    ORDER BY target
+
+A rising share of `miss` against a given target means that target is out of
+reach for the documents people bring, which is a content problem rather than a
+bug: the page for that size should say so.
+
+Data is kept for three months. Ingestion lags by up to a minute or two, so an
+empty result straight after a test is not a failure.
+
 ## Local development
 
 ```bash
@@ -130,9 +175,15 @@ every embedded frame. Deliberately absent: anything touching `browsing-topics`
 or `interest-cohort`, which would change what the ads are allowed to do and is
 a revenue decision rather than a security one.
 
-Not done yet because the Cloudflare rule editor would not add a sixth header
-row under automation - the "Set new header" button does not produce a row.
-It takes a moment by hand in the dashboard.
+Still not done, and not for want of trying. The rule editor's "Set new header"
+button adds no row when clicked under automation, by reference or through the
+DOM, while other buttons on the same dashboard respond to exactly the same
+treatment. The API route is closed too: Wrangler's OAuth token carries
+zone (read) and no rulesets scope, so PATCHing the ruleset returns 10404.
+
+It is a thirty second job by hand in the dashboard, and that is the honest
+recommendation. The alternative - an API token scoped to Zone > Config > Edit
+- means handling a credential in plain text, which is worse than the problem.
 
 Verify after any change to the rule:
 

@@ -2,6 +2,15 @@
 (function () {
   'use strict';
 
+  /* iPhones photograph in HEIC by default and Chrome cannot decode it, which
+     is the single commonest reason an image will not open here. Checked by
+     suffix rather than by MIME type, because the type is often missing or
+     wrong once a file has been through a messaging app. */
+  function isHeic(name) {
+    var n = String(name || '').toLowerCase();
+    return n.slice(-5) === '.heic' || n.slice(-5) === '.heif';
+  }
+
   var $ = function (s) { return document.querySelector(s); };
   var drop = $('#drop'), file = $('#file'), controls = $('#controls'),
       list = $('#list'), statusEl = $('#status'), bar = $('#bar'),
@@ -57,7 +66,17 @@
         });
       });
     });
-    chain.then(function () { say(''); render(); });
+    chain.then(function () {
+      render();
+      // Flag it here rather than letting somebody press Build and find out.
+      var bad = items.filter(function (i) { return i.w === null; });
+      if (!bad.length) { say(''); return; }
+      var heic = bad.some(function (i) { return isHeic(i.name); });
+      say(bad.length + ' of these could not be read and will be left out' +
+          (heic ? '. HEIC photos from an iPhone cannot be opened by this browser. ' +
+                  'Share them as JPG, or set Settings > Camera > Formats to ' +
+                  '"Most Compatible".' : '.'));
+    });
   }
 
   function mkBtn(label, title, disabled, fn, cls) {
@@ -128,7 +147,11 @@
           });
         }, 'image/jpeg', 0.92);
       };
-      img.onerror = function () { rej(new Error('Could not decode ' + it.name)); };
+      // A picture the browser cannot decode is a page we skip, not a job we
+      // fail. HEIC is the case that matters: it is the iPhone camera default
+      // and Chrome cannot read it, so one holiday photo in a set used to
+      // throw away every other image the person had chosen.
+      img.onerror = function () { res(null); };
       img.src = it.url;
     });
   }
@@ -140,12 +163,15 @@
     result.classList.remove('on');
     prog(5);
     say('Building the PDF…');
+    // declared out here because the result text below reads them
+    var done = 0, skipped = [];
 
     PDFLib.PDFDocument.create().then(function (out) {
-      var chain = Promise.resolve(), done = 0;
+      var chain = Promise.resolve();
       items.forEach(function (it) {
         chain = chain.then(function () {
           return toEmbeddable(it).then(function (im) {
+            if (!im) { skipped.push(it.name); return; }
             return out.embedJpg(im.bytes).then(function (emb) {
               var page;
               if (mode === 'a4') {
@@ -166,15 +192,28 @@
           });
         });
       });
-      return chain.then(function () { return out.save({ useObjectStreams: true }); });
+      return chain.then(function () {
+        if (!done) {
+          throw new Error(skipped.some(function (n) { return isHeic(n); })
+            ? 'none of these images could be read. HEIC photos from an iPhone ' +
+              'cannot be opened by this browser. Set the camera to "Most ' +
+              'Compatible" in Settings > Camera > Formats, or share the photos ' +
+              'as JPG, and they will work here'
+            : 'none of these images could be read');
+        }
+        return out.save({ useObjectStreams: true });
+      });
     }).then(function (bytes) {
       prog(100);
       outBlob = new Blob([bytes], { type: 'application/pdf' });
-      $('#rBig').textContent = items.length +
-        (items.length === 1 ? ' page' : ' pages') + ' — ' + fmt(outBlob.size);
-      $('#rMeta').textContent = mode === 'a4'
+      $('#rBig').textContent = done +
+        (done === 1 ? ' page' : ' pages') + ' — ' + fmt(outBlob.size);
+      $('#rMeta').textContent = (mode === 'a4'
         ? 'Each image centred on an A4 page, aspect ratio preserved.'
-        : 'Each page matches its image exactly, with no margins.';
+        : 'Each page matches its image exactly, with no margins.') +
+        (skipped.length ? ' ' + skipped.length + ' image' + (skipped.length === 1 ? '' : 's') +
+          ' could not be read and ' + (skipped.length === 1 ? 'was' : 'were') +
+          ' left out: ' + skipped.join(', ') + '.' : '');
       result.classList.add('on');
       say(''); bar.classList.remove('on'); go.disabled = false;
     }).catch(function (err) {

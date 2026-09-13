@@ -6,6 +6,15 @@
 (function () {
   'use strict';
 
+  /* iPhones photograph in HEIC by default and Chrome cannot decode it, which
+     is the single commonest reason an image will not open here. Checked by
+     suffix rather than by MIME type, because the type is often missing or
+     wrong once a file has been through a messaging app. */
+  function isHeic(name) {
+    var n = String(name || '').toLowerCase();
+    return n.slice(-5) === '.heic' || n.slice(-5) === '.heif';
+  }
+
   var $ = function (s) { return document.querySelector(s); };
   var drop = $('#drop'), file = $('#file'), controls = $('#controls'),
       statusEl = $('#status'), bar = $('#bar'), barFill = $('#barFill'),
@@ -59,8 +68,12 @@
       showBefore();
     }).catch(function (err) {
       console.error(err);
+      var heic = isHeic(f.name) || f.type.toLowerCase().indexOf('hei') >= 0;
       say('Could not read this image: ' +
-          (err && err.message ? err.message : 'unknown error'));
+          (err && err.message ? err.message : 'unknown error') +
+          (heic ? '. HEIC photos from an iPhone cannot be opened by this browser. ' +
+          'Share them as JPG, or set Settings > Camera > Formats to ' +
+          '"Most Compatible".' : ''));
     });
   }
 

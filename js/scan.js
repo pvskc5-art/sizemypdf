@@ -13,6 +13,15 @@
 (function () {
   'use strict';
 
+  /* iPhones photograph in HEIC by default and Chrome cannot decode it, which
+     is the single commonest reason an image will not open here. Checked by
+     suffix rather than by MIME type, because the type is often missing or
+     wrong once a file has been through a messaging app. */
+  function isHeic(name) {
+    var n = String(name || '').toLowerCase();
+    return n.slice(-5) === '.heic' || n.slice(-5) === '.heif';
+  }
+
   var $ = function (s) { return document.querySelector(s); };
   var startBtn = $('#start'), shotBtn = $('#shoot'), stopBtn = $('#stop'),
       video = $('#cam'), shotsBox = $('#shots'), statusEl = $('#status'),
@@ -87,7 +96,7 @@
     var imgs = list.filter(function (f) { return /^image\//.test(f.type); });
     if (!imgs.length) { say('Those do not look like photographs.'); return; }
     say('Reading ' + imgs.length + ' photo(s)…');
-    var chain = Promise.resolve();
+    var chain = Promise.resolve(), failed = [];
     imgs.forEach(function (f) {
       chain = chain.then(function () {
         return decode(f).then(function (bm) {
@@ -95,10 +104,21 @@
           c.width = bm.width; c.height = bm.height;
           c.getContext('2d').drawImage(bm, 0, 0);
           addShot(c);
-        }).catch(function () {});
+        }).catch(function () { failed.push(f.name); });
       });
     });
-    chain.then(function () { say(''); file.value = ''; });
+    chain.then(function () {
+      file.value = '';
+      // Dropping a photo silently is how five chosen photos quietly become
+      // three pages, and HEIC from an iPhone is the usual reason.
+      if (!failed.length) { say(''); return; }
+      var heic = failed.some(function (n) { return isHeic(n); });
+      say(failed.length + ' photo' + (failed.length === 1 ? '' : 's') +
+          ' could not be read and ' + (failed.length === 1 ? 'was' : 'were') +
+          ' left out' + (heic ? '. HEIC photos from an iPhone cannot be opened by this browser. ' +
+          'Share them as JPG, or set Settings > Camera > Formats to ' +
+          '"Most Compatible".' : '.'));
+    });
   });
 
   // EXIF orientation, same reasoning as the image compressor

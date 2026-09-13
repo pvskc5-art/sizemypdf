@@ -102,6 +102,13 @@ ${p.faq ? faqSchema(p.faq) : ''}${p.breadcrumb === false ? '' : crumbSchema(p)}
 </header>
 
 <main class="wrap" id="main">
+${(p.scripts || []).length ? `<noscript>
+  <p class="noscript"><strong>These tools need JavaScript turned on.</strong>
+  Not as a tracking tax: the point of this site is that your file is never
+  uploaded, which means the work has to happen in your browser, and that is what
+  JavaScript is here. There is no server to do it instead. Nothing is sent
+  anywhere either way.</p>
+</noscript>` : ''}
 `;
 
 const foot = (p) => `

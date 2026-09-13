@@ -183,7 +183,26 @@
       controls.classList.add('on');
       result.classList.remove('on');
       var pv = $('#preview'); if (pv) pv.classList.remove('on');
-      say('');
+
+      /* Say so before they commit to it, not after. The work is proportional
+         to pixels, so a heavy scan and a long document are both slow, and the
+         phone this site keeps talking about is several times slower again.
+         Measured: a four page 7.5 MB scan is about half a minute on a laptop.
+         This is a warning and not a limit - there is no server to protect, and
+         a big file on a patient device still works. */
+      var bulky = srcSize > 20 * 1000 * 1000;
+      var long = pageCount > 50;
+      // name the reason it will be slow, rather than calling a 12 KB file big
+      var why = bulky && long ? 'a large file (' + fmt(srcSize) + ') and ' + pageCount + ' pages long'
+              : bulky ? 'a large file (' + fmt(srcSize) + ')'
+              : long ? pageCount + ' pages long'
+              : '';
+      say(why
+        ? 'This is ' + why + ', so it will take a while: a minute or more on a ' +
+          'laptop and several on a phone. It will still work, and Cancel stops ' +
+          'it at any point.'
+        : '');
+
       var t = $('#target');
       if (!t.value) t.value = Math.max(50, Math.round(srcSize / 1000 * 0.35));
     }

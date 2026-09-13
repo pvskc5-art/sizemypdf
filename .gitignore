@@ -5,6 +5,7 @@
 .idea/
 .vscode/
 Thumbs.db
+a11y-audit.js
 node_modules/
 worker/.wrangler/
 worker/dev.log

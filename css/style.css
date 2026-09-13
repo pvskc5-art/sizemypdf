@@ -1,7 +1,7 @@
 :root{
   --bg:#f7f8fa; --surface:#fff; --ink:#14181f; --muted:#5a6472;
-  --line:#e3e7ed; --brand:#2f6df6; --brand-dark:#1f52c9;
-  --ok:#0f8a56; --warn:#b4690e; --radius:10px;
+  --line:#e3e7ed; --brand:#2a62dd; --brand-dark:#1a49b8;
+  --ok:#0c7a4c; --warn:#8d520b; --radius:10px;
   --maxw:760px;
 }
 *{box-sizing:border-box}
@@ -25,6 +25,9 @@ nav.main a:hover{color:var(--ink)}
 h1{font-size:31px;line-height:1.22;letter-spacing:-.02em;margin:34px 0 12px}
 h2{font-size:22px;line-height:1.3;letter-spacing:-.01em;margin:34px 0 10px}
 h3{font-size:17px;margin:24px 0 8px}
+/* an h2 that is a panel caption rather than a section: keeps the smaller
+   look the markup used to get from an h4, without skipping a level */
+h2.tight{font-size:15px;margin:18px 0 6px;letter-spacing:0}
 p{margin:0 0 15px}
 .lede{font-size:18px;color:var(--muted);margin-bottom:26px}
 ul,ol{margin:0 0 16px;padding-left:22px}
@@ -107,7 +110,7 @@ footer.site{border-top:1px solid var(--line);background:var(--surface);margin-to
 footer.site .wrap{display:flex;flex-wrap:wrap;gap:16px;align-items:center}
 footer.site nav{display:flex;flex-wrap:wrap;gap:16px}
 footer.site a{color:var(--muted)}
-.copy{color:#9aa5b4;font-size:13px;width:100%;margin-top:6px}
+.copy{color:var(--muted);font-size:13px;width:100%;margin-top:6px}
 
 @media(max-width:620px){
   h1{font-size:26px;margin-top:26px} h2{font-size:20px}

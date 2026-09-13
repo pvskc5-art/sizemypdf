@@ -195,7 +195,12 @@
     a.href = URL.createObjectURL(outBlob);
     a.download = srcName + '-' + Math.round(outBlob.size / 1000) + 'kb' + ext;
     document.body.appendChild(a); a.click();
-    setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 1500);
+    // Sixty seconds, not one and a half. The browser takes its blob reference
+    // when the download actually starts, and on a loaded phone that can be well
+    // after the click - revoking first makes the download fail with nothing shown.
+    // It costs no memory to wait: the blob is held in a variable here anyway, so
+    // releasing the URL early frees nothing, and the page dropping takes both.
+    setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 60000);
   });
 
   $('#format').addEventListener('change', function () {

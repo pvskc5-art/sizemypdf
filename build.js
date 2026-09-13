@@ -162,11 +162,14 @@ ${JSON.stringify({
 
 /* ------------------------------------------------------- reusable blocks */
 
-const TOOL_CTA = `
+/* Pages that are about one size pass it through, so the number somebody
+   searched for survives the click instead of having to be typed again. */
+const toolCta = (kb) => `
 <div class="card" style="text-align:center;margin:26px 0">
   <p style="margin-bottom:14px"><strong>The compressor is on the front page.</strong> Set your target and go &mdash; nothing is uploaded.</p>
-  <a class="btn" href="index.html">Open the compressor</a>
+  <a class="btn" href="index.html${kb ? '?to=' + kb : ''}">Open the compressor</a>
 </div>`;
+const TOOL_CTA = toolCta();
 
 /* Ad placeholders are deliberately empty until AdSense approval. Showing
    empty "ad slot" boxes makes a content site look like a shell built around
@@ -247,14 +250,14 @@ for (const t of targets) {
 <p class="lede">For ${t.who}. The compressor searches quality settings until your file fits under ${t.kb} KB &mdash; and it runs on your own device, so nothing is uploaded.</p>
 
 <div class="privacy-badge">&#128274; Your file never leaves this device</div>
-${TOOL_CTA}
+${toolCta(t.kb)}
 
 <h2>What ${t.kb} KB actually means in practice</h2>
 ${t.extra}
 
 <h2>How to do it</h2>
 <ol>
-  <li>Open the <a href="index.html">compressor on the front page</a> and choose your PDF.</li>
+  <li>Open the <a href="index.html?to=${t.kb}">compressor on the front page</a> and choose your PDF.</li>
   <li>Leave the method on <strong>Target size</strong>.</li>
   <li>Type <strong>${t.kb}</strong> into the target box.</li>
   <li>Press Compress. The tool tries progressively lower resolutions and quality levels, measuring the real output each time.</li>

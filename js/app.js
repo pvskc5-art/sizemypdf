@@ -154,6 +154,26 @@
     fr.readAsArrayBuffer(f);
   }
 
+  /* Somebody who searched for a size, landed on that page and pressed the
+     button has already told us the number twice. Carrying it across the click
+     means they do not have to type it a third time. Bounded rather than
+     trusted, because it arrives in a URL anyone can edit. */
+  (function () {
+    var raw = new URLSearchParams(location.search).get('to');
+    if (!raw) return;
+    var kb = parseInt(raw, 10);
+    if (!(kb >= 10 && kb <= 51200)) return;        // 10 KB to 50 MB
+    var t = $('#target');
+    if (!t) return;
+    t.value = kb;
+    // light up the matching preset, if there is one
+    [].forEach.call(document.querySelectorAll('.preset'), function (b) {
+      var v = parseInt((b.dataset && b.dataset.kb) || b.textContent, 10);
+      if (/MB/i.test(b.textContent)) v = v * 1000;
+      b.classList.toggle('on', v === kb);
+    });
+  })();
+
   /* ---------- run ---------- */
   go.addEventListener('click', function () {
     if (!srcBytes) return;

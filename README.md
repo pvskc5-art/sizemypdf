@@ -114,6 +114,26 @@ Two tokens in there are load-bearing and easy to remove by accident:
 - `blob:` in `worker-src` - the rAF ticker in `js/pdfjs-raf.js` and the
   compression engine are Blob-URL workers, so page rendering stops without it.
 
+### Still to add: Permissions-Policy
+
+The zone sends no `Permissions-Policy`, which means the AdSense iframes are
+free to ask for the camera, the microphone or the location. On a site whose
+entire claim is that nothing leaves the device, that is the wrong default, and
+the camera matters concretely because Scan to PDF genuinely uses it.
+
+Add this as a sixth header on the same rule:
+
+    Permissions-Policy: camera=(self), microphone=(), geolocation=(), payment=(), usb=(), serial=(), bluetooth=(), midi=(), magnetometer=(), gyroscope=(), accelerometer=()
+
+`camera=(self)` keeps Scan to PDF working on our own pages while denying it to
+every embedded frame. Deliberately absent: anything touching `browsing-topics`
+or `interest-cohort`, which would change what the ads are allowed to do and is
+a revenue decision rather than a security one.
+
+Not done yet because the Cloudflare rule editor would not add a sixth header
+row under automation - the "Set new header" button does not produce a row.
+It takes a moment by hand in the dashboard.
+
 Verify after any change to the rule:
 
 ```bash

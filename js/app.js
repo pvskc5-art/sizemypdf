@@ -141,16 +141,52 @@
     var fr = new FileReader();
     fr.onload = function () {
       srcBytes = new Uint8Array(fr.result);
+
+      /* Until now this trusted the file name. A .pdf that is not a PDF - an
+         export that failed, a download that stopped early, the wrong file
+         entirely - was accepted without a murmur, and because it was tiny it
+         then fell through the under-target shortcut and came back as
+         "no compression needed". Somebody could be handed their own broken
+         file back, told it was fine, and send it to a portal that rejects it.
+
+         So read the header, then actually open it. Every other tool on the
+         site opens the document at this point and says how many pages it has;
+         this one showed only a size. */
+      var head = new TextDecoder('latin1').decode(srcBytes.subarray(0, 1024));
+      if (head.indexOf('%PDF-') === -1) {
+        srcBytes = null;
+        controls.classList.remove('on');
+        say(srcSize === 0
+          ? 'That file is empty. It may not have finished downloading.'
+          : 'That file is named .pdf but is not a PDF inside. It may be a ' +
+            'failed export or an incomplete download - try saving it again.');
+        return;
+      }
+
+      PDFLib.PDFDocument.load(srcBytes.slice(0), { ignoreEncryption: true })
+        .then(function (doc) { ready(doc.getPageCount()); })
+        .catch(function (err) {
+          srcBytes = null;
+          controls.classList.remove('on');
+          console.error(err);
+          say('This PDF could not be opened: ' +
+              (err && err.message ? err.message : 'unknown error') +
+              '. If it is password-protected, remove the password first.');
+        });
+    };
+
+    function ready(pageCount) {
       drop.querySelector('strong').textContent = f.name;
       drop.querySelector('small').textContent =
-        fmt(srcSize) + ' — click to choose a different file';
+        pageCount + (pageCount === 1 ? ' page, ' : ' pages, ') + fmt(srcSize) +
+        ' — click to choose a different file';
       controls.classList.add('on');
       result.classList.remove('on');
       var pv = $('#preview'); if (pv) pv.classList.remove('on');
       say('');
       var t = $('#target');
       if (!t.value) t.value = Math.max(50, Math.round(srcSize / 1000 * 0.35));
-    };
+    }
     fr.readAsArrayBuffer(f);
   }
 

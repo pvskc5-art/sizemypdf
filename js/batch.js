@@ -157,10 +157,22 @@
       return it.file.arrayBuffer()
         .then(function (ab) {
           var bytes = new Uint8Array(ab);
+
+          /* Check it is a PDF before the shortcut below, not after. A file
+             that is not one is always smaller than the target, so it used to
+             take the shortcut and be counted among the successes: an empty
+             file and a text file renamed .pdf both came back reported as
+             "compressed", which is worse than saying nothing at all. */
+          var head = new TextDecoder('latin1').decode(bytes.subarray(0, 1024));
+          if (bytes.length === 0) throw new Error('the file is empty');
+          if (head.indexOf('%PDF-') === -1) throw new Error('not a PDF inside');
+
           // already small enough: hand it back untouched rather than
-          // rasterising it into something larger
+          // rasterising it into something larger. Opened first so a corrupt
+          // file cannot slip through on size alone.
           if (bytes.length <= targetBytes) {
-            return { bytes: bytes, keptText: true };
+            return PDFLib.PDFDocument.load(bytes.slice(0), { ignoreEncryption: true })
+              .then(function () { return { bytes: bytes, keptText: true }; });
           }
           return PDFCompress.toTarget(bytes, targetBytes, function () {}, function () {});
         })
@@ -173,8 +185,11 @@
         .catch(function (err) {
           console.error(it.name, err);
           it.state = 'failed';
-          it.note = /password|encrypt/i.test(err && err.message || '')
-            ? 'password-protected' : 'could not read';
+          var m = err && err.message || '';
+          it.note = /password|encrypt/i.test(m) ? 'password-protected'
+                  : /empty/i.test(m) ? 'empty file'
+                  : /not a PDF/i.test(m) ? 'not a PDF'
+                  : 'could not read';
         })
         .then(function () {
           done++;

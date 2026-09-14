@@ -1910,30 +1910,50 @@ pages.push({
   h1: 'All tools',
   body: `
 <h1>All tools</h1>
-<p class="lede">Nineteen tools, all free, all running entirely in your browser. No account, no upload, no watermark, no file size limit imposed by us.</p>
+<p class="lede">Twenty-four tools, all free, all running entirely in your browser. No account, no upload, no watermark, no file size limit imposed by us.</p>
 
 <div class="privacy-badge">&#128274; Every tool here runs on your device</div>
 
-<div class="grid">
-  <a href="index.html"><strong>Compress PDF</strong><small>Hit an exact size in KB &mdash; 100, 200, 500 or any number a form demands.</small></a>
-  <a href="batch-compress-pdf.html"><strong>Compress many at once</strong><small>One target, a whole folder of PDFs, downloaded individually or as a ZIP.</small></a>
-  <a href="merge-pdf.html"><strong>Merge PDFs</strong><small>Combine any number of files into one, in the order you choose.</small></a>
-  <a href="extract-images-from-pdf.html"><strong>Extract images</strong><small>Pull out the embedded pictures at the resolution they are stored.</small></a>
-  <a href="compare-pdf.html"><strong>Compare two PDFs</strong><small>See which words changed between two versions, page by page.</small></a>
-  <a href="scan-to-pdf.html"><strong>Scan to PDF</strong><small>Photograph pages with your phone camera, no app and no pairing.</small></a>
-  <a href="fill-pdf-form.html"><strong>Fill a PDF form</strong><small>Type into a fillable form and save the answers into the file.</small></a>
-  <a href="ocr-pdf.html"><strong>OCR a scan</strong><small>Make a scanned PDF searchable, with the engine running on your device.</small></a>
-  <a href="sign-pdf.html"><strong>Sign PDF</strong><small>Draw or type a signature and click the page to place it.</small></a>
-  <a href="crop-pdf.html"><strong>Crop PDF</strong><small>Trim margins with a live preview, or detect where the content stops.</small></a>
-  <a href="organise-pdf.html"><strong>Organise pages</strong><small>Reorder, rotate and remove pages with every page on screen.</small></a>
-  <a href="split-pdf.html"><strong>Split PDF</strong><small>Extract specific pages, or break one document into several files.</small></a>
-  <a href="compress-image-to-size.html"><strong>Compress an image</strong><small>Hit an exact size in KB for a photo, signature or scan.</small></a>
-  <a href="jpg-to-pdf.html"><strong>Images to PDF</strong><small>Turn JPGs, PNGs or photos of documents into a single PDF.</small></a>
-  <a href="pdf-to-jpg.html"><strong>PDF to images</strong><small>Render every page as a JPG or PNG at your chosen resolution.</small></a>
-  <a href="rotate-pdf.html"><strong>Rotate PDF</strong><small>Fix sideways pages. Lossless &mdash; rotation is only metadata.</small></a>
-  <a href="delete-pages-from-pdf.html"><strong>Delete pages</strong><small>Remove the pages you do not want and keep the rest.</small></a>
-  <a href="add-page-numbers-to-pdf.html"><strong>Add page numbers</strong><small>Stamp numbers in the position and format you choose.</small></a>
-  <a href="watermark-pdf.html"><strong>Add a watermark</strong><small>Label pages DRAFT or CONFIDENTIAL across the page.</small></a>
+<div class="cats">
+  <input type="radio" name="cat" id="cat-all" class="vh" checked>
+  <label for="cat-all">All</label>
+  <input type="radio" name="cat" id="cat-size" class="vh">
+  <label for="cat-size">Size</label>
+  <input type="radio" name="cat" id="cat-org" class="vh">
+  <label for="cat-org">Pages</label>
+  <input type="radio" name="cat" id="cat-conv" class="vh">
+  <label for="cat-conv">Convert</label>
+  <input type="radio" name="cat" id="cat-edit" class="vh">
+  <label for="cat-edit">Edit</label>
+  <input type="radio" name="cat" id="cat-sec" class="vh">
+  <label for="cat-sec">Privacy</label>
+
+<div class="grid toolgrid">
+  <a class="ic ic-compress c-size" href="index.html"><strong>Compress PDF</strong><small>Hit an exact size in KB &mdash; 100, 200, 500 or any number a form demands.</small></a>
+  <a class="ic ic-batch c-size" href="batch-compress-pdf.html"><strong>Compress many at once</strong><small>One target, a whole folder of PDFs, downloaded individually or as a ZIP.</small></a>
+  <a class="ic ic-imgsize c-size" href="compress-image-to-size.html"><strong>Compress an image</strong><small>Hit an exact size in KB for a photo, signature or scan.</small></a>
+  <a class="ic ic-merge c-org" href="merge-pdf.html"><strong>Merge PDFs</strong><small>Combine any number of files into one, in the order you choose.</small></a>
+  <a class="ic ic-split c-org" href="split-pdf.html"><strong>Split PDF</strong><small>Break one document into several files, or pull out a range.</small></a>
+  <a class="ic ic-pages c-org" href="extract-pages-from-pdf.html"><strong>Extract pages</strong><small>Keep only the pages you name, as one new file.</small></a>
+  <a class="ic ic-del c-org" href="delete-pages-from-pdf.html"><strong>Delete pages</strong><small>Remove the pages you do not want and keep the rest.</small></a>
+  <a class="ic ic-organise c-org" href="organise-pdf.html"><strong>Organise pages</strong><small>Reorder, rotate and remove pages with every page on screen.</small></a>
+  <a class="ic ic-rotate c-org" href="rotate-pdf.html"><strong>Rotate PDF</strong><small>Fix sideways pages. Lossless &mdash; rotation is only metadata.</small></a>
+  <a class="ic ic-crop c-org c-edit" href="crop-pdf.html"><strong>Crop PDF</strong><small>Trim margins with a live preview, or detect where the content stops.</small></a>
+  <a class="ic ic-img2pdf c-conv" href="jpg-to-pdf.html"><strong>Images to PDF</strong><small>Turn JPGs, PNGs or photos of documents into a single PDF.</small></a>
+  <a class="ic ic-pdf2img c-conv" href="pdf-to-jpg.html"><strong>PDF to images</strong><small>Render every page as a JPG or PNG at your chosen resolution.</small></a>
+  <a class="ic ic-text c-conv" href="pdf-to-text.html"><strong>PDF to text</strong><small>Extract the words as plain text or Markdown, and take them away.</small></a>
+  <a class="ic ic-scan c-conv" href="scan-to-pdf.html"><strong>Scan to PDF</strong><small>Photograph pages with your phone camera, no app and no pairing.</small></a>
+  <a class="ic ic-images c-conv" href="extract-images-from-pdf.html"><strong>Extract images</strong><small>Pull out the embedded pictures at the resolution they are stored.</small></a>
+  <a class="ic ic-ocr c-conv c-edit" href="ocr-pdf.html"><strong>OCR a scan</strong><small>Make a scanned PDF searchable, with the engine running on your device.</small></a>
+  <a class="ic ic-sign c-edit" href="sign-pdf.html"><strong>Sign PDF</strong><small>Draw or type a signature and click the page to place it.</small></a>
+  <a class="ic ic-forms c-edit" href="fill-pdf-form.html"><strong>Fill a PDF form</strong><small>Type into a fillable form and save the answers into the file.</small></a>
+  <a class="ic ic-flatten c-edit" href="flatten-pdf.html"><strong>Flatten PDF</strong><small>Make form answers part of the page so nothing can edit or lose them.</small></a>
+  <a class="ic ic-pagenum c-edit" href="add-page-numbers-to-pdf.html"><strong>Add page numbers</strong><small>Stamp numbers in the position and format you choose.</small></a>
+  <a class="ic ic-mark c-edit" href="watermark-pdf.html"><strong>Add a watermark</strong><small>Label pages DRAFT or CONFIDENTIAL across the page.</small></a>
+  <a class="ic ic-compare c-edit" href="compare-pdf.html"><strong>Compare two PDFs</strong><small>See which words changed between two versions, page by page.</small></a>
+  <a class="ic ic-redact c-sec" href="redact-pdf.html"><strong>Redact PDF</strong><small>Black out text so it is destroyed, not covered over.</small></a>
+  <a class="ic ic-unlock c-sec" href="unlock-pdf.html"><strong>Remove a password</strong><small>For a file you can already open. Clears printing locks too.</small></a>
+</div>
 </div>
 
 <h2>Which tools change your file, and which do not</h2>
@@ -1943,6 +1963,8 @@ pages.push({
   <tbody>
     <tr><td>Merge</td><td>Yes</td><td>Page objects are copied between documents</td></tr>
     <tr><td>Split</td><td>Yes</td><td>Page objects are copied into a new document</td></tr>
+    <tr><td>Extract pages</td><td>Yes</td><td>The pages you keep are copied unchanged</td></tr>
+    <tr><td>Flatten</td><td>Yes</td><td>Field values are drawn in; nothing is re-encoded</td></tr>
     <tr><td>Rotate</td><td>Yes</td><td>A number in the page metadata changes</td></tr>
     <tr><td>Compress &mdash; Lossless mode</td><td>Yes</td><td>Metadata stripped, file structure repacked</td></tr>
     <tr><td>Delete pages</td><td>Yes</td><td>Remaining page objects are copied unchanged</td></tr>
@@ -1954,6 +1976,8 @@ pages.push({
     <tr><td>Add page numbers</td><td>Mostly</td><td>Text is drawn on; the page beneath is untouched</td></tr>
     <tr><td>Add watermark</td><td>Mostly</td><td>Text is drawn on; the page beneath is untouched</td></tr>
     <tr><td>Compress &mdash; Target size</td><td><strong>No</strong></td><td>Pages become images; the text layer is lost</td></tr>
+    <tr><td>Redact</td><td><strong>No</strong></td><td>Pages become images &mdash; which is the entire point</td></tr>
+    <tr><td>Remove a password</td><td><strong>No</strong></td><td>Pages become images; it is the only way to write an unlocked file</td></tr>
     <tr><td>PDF to images</td><td><strong>No</strong></td><td>Pages become pixels; not reversible</td></tr>
     <tr><td>Images to PDF</td><td><strong>No</strong></td><td>Images are re-encoded as JPEG</td></tr>
     <tr><td>Scan to PDF</td><td><strong>No</strong></td><td>Camera photographs are encoded as JPEG</td></tr>
@@ -1965,8 +1989,9 @@ pages.push({
 <h2>What is not here, and why</h2>
 <p>Everything on this site runs in your browser. That rules out a category of tools other sites offer, and it is worth being straight about which:</p>
 <ul>
-  <li><strong>PDF to Word, Excel or PowerPoint.</strong> Reconstructing an editable document needs layout analysis that is not practical in a browser tab. Any site offering it is uploading your file to a server.</li>
-  <li><strong>Password protection and unlocking.</strong> The library used here does not implement PDF encryption. Removing protection from documents is also not something this site wants to help with.</li>
+  <li><strong>PDF to Word, Excel or PowerPoint.</strong> Reconstructing an editable document needs layout analysis that is not practical in a browser tab. Any site offering it is uploading your file to a server. <a href="pdf-to-text.html">PDF to text</a> will give you the words, but not the layout.</li>
+  <li><strong>Adding a password.</strong> The library used here can read PDF encryption but cannot write it, so there is no way to produce a protected file in the browser.</li>
+  <li><strong>Cracking a password.</strong> Not supported, and never will be. <a href="unlock-pdf.html">Removing a password</a> is possible only when you already know it and type it in yourself.</li>
   <li><strong>Editing text.</strong> PDF was designed as a final format; genuine text editing means rebuilding the document.</li>
 </ul>
 <p>The trade is deliberate: fewer tools, but your documents never leave your device. For a passport scan or a bank statement that is the better bargain.</p>
@@ -2535,6 +2560,487 @@ ${faqBlock(markFaq)}
 `
 });
 
+/* ---- redact ---- */
+
+const redactFaq = [
+  ['Is the text really gone, or just covered?',
+   'Gone. The tool renders each page to an image, paints the boxes onto those pixels and builds a new PDF from them. There is no text layer left in the output, so there is nothing to select, copy or recover. This is the difference that matters: most free redaction tools add a black rectangle as an annotation and leave the words in the file underneath it.'],
+  ['How do I check it worked?',
+   'Open the downloaded file and try to select the text. You will not be able to, anywhere on the page - the whole document is now images. If you can still select text, you are looking at the original file rather than the redacted one.'],
+  ['What is the catch?',
+   'The output is images, so no text in the document is selectable or searchable any more, and the file is usually larger than the original. That is the price of genuine redaction. If you need a specific file size afterwards, run the result through the compressor.'],
+  ['Does it remove metadata too?',
+   'Yes. Author, title, producer and keywords are all cleared, because those fields routinely survive edits people assume have cleaned a document.'],
+  ['Can I redact a scanned PDF?',
+   'Yes, and it is the ideal case. A scan is already images, so rebuilding it loses nothing at all - you get genuine redaction at no cost in quality.'],
+  ['Is my file uploaded?',
+   'No. The pages are rendered and rebuilt in your browser.']
+];
+
+pages.push({
+  slug: 'redact-pdf.html',
+  title: `Redact a PDF — Permanently Remove Text, No Upload | ${NAME}`,
+  desc: 'Black out text in a PDF so it is actually deleted, not just covered. Pages are rebuilt from pixels, so nothing can be copied from underneath. Runs in your browser, nothing is uploaded.',
+  h1: 'Redact a PDF',
+  faq: redactFaq,
+  scripts: [PDFLIB_CDN, 'js/thumbs.js', 'js/raster.js', 'js/pageops.js', 'js/redact.js'],
+  body: `
+<h1>Redact a PDF</h1>
+<p class="lede">Drag a box over anything that must not survive. The text underneath is destroyed, not hidden &mdash; and nothing is uploaded.</p>
+
+<div class="privacy-badge">&#128274; Your file never leaves this device</div>
+
+<div class="tool">
+  <label class="drop" id="drop" for="file">
+      <strong>Choose a PDF or drop it here</strong>
+    <small>Nothing is uploaded &mdash; redaction happens in your browser</small>
+      <input type="file" id="file" accept="application/pdf,.pdf" class="vh">
+    </label>
+
+  <div class="controls" id="controls">
+    <p class="note" id="info" style="margin-top:0"></p>
+
+    <div id="redWrap" style="display:none">
+      <div class="pagebar">
+        <button class="btn ghost" id="prev" type="button">&larr; Previous</button>
+        <span class="pagelabel" id="pageLabel"></span>
+        <button class="btn ghost" id="next" type="button">Next &rarr;</button>
+      </div>
+      <div class="redstage" id="stage">
+        <canvas id="stageCanvas"></canvas>
+        <div class="redlayer" id="stageLayer"></div>
+      </div>
+      <p class="hint" id="redInfo">Drag across anything that must not survive.</p>
+      <div class="cropbtns">
+        <button class="btn ghost" id="clearPage" type="button">Clear this page</button>
+        <button class="btn ghost" id="clearAll" type="button">Clear all</button>
+      </div>
+    </div>
+
+    <div class="row" style="margin-top:16px">
+      <div><button class="btn" id="go" disabled>Redact and rebuild</button></div>
+    </div>
+    <div class="status" id="status" role="status" aria-live="polite"></div>
+    <div class="result" id="result">
+      <div class="big" id="rBig"></div>
+      <div class="meta" id="rMeta"></div>
+      <button class="btn" id="dl">Download PDF</button>
+    </div>
+  </div>
+</div>
+
+<h2>Why a black box is not redaction</h2>
+<p>This is the single most consequential misunderstanding about PDFs, and it has embarrassed governments, law firms and newspapers repeatedly.</p>
+<p>A PDF page is a list of drawing instructions. When you draw a filled rectangle over a paragraph in most editors, you add one more instruction to the end of that list: <em>put a black box here</em>. The instruction that draws the paragraph is still there, earlier in the list. The words are rendered, then covered. Select the area and copy it and the text arrives on your clipboard exactly as it was written. Delete the rectangle and the paragraph reappears.</p>
+<p>The same is true of white boxes, of highlighter annotations set to opaque, and of anything else that works by drawing on top. If the original instruction is still in the file, the content is still in the file.</p>
+
+<div class="note"><strong>What this tool does instead.</strong> Every page is rendered to an image, the boxes are painted onto those pixels, and a new PDF is built from the images. The drawing instructions &mdash; all of them, including the ones that drew your sensitive text &mdash; are discarded. There is nothing underneath, because there is no underneath.</div>
+
+<h2>What it costs</h2>
+<p>Honesty about the trade-off, because the site applies the same rule to its compressor: rebuilding from pixels means the output contains no text layer at all. Nothing in the document is selectable or searchable afterwards, not just the redacted parts. The file is often larger than the original too, since photographs of text compress worse than text.</p>
+<p>For a scan, this costs nothing whatsoever &mdash; the pages were already images. For a text document it is a real loss, and it is the only way to be certain.</p>
+
+<table>
+  <thead><tr><th>Approach</th><th>Text recoverable?</th><th>Keeps text layer?</th></tr></thead>
+  <tbody>
+    <tr><td>Black rectangle drawn on top</td><td><strong>Yes &mdash; trivially</strong></td><td>Yes</td></tr>
+    <tr><td>Highlight annotation, opaque</td><td><strong>Yes &mdash; trivially</strong></td><td>Yes</td></tr>
+    <tr><td>Delete the page entirely</td><td>No, for that page</td><td>Yes</td></tr>
+    <tr><td>Rebuild from pixels (this tool)</td><td>No</td><td>No</td></tr>
+  </tbody>
+</table>
+
+<h2>How to use it</h2>
+<ol>
+  <li>Open the PDF. The first page appears on screen.</li>
+  <li>Drag across anything sensitive. Boxes can overlap; draw as many as you need.</li>
+  <li>Click a box to remove it if you misjudged the edge.</li>
+  <li>Move through the document with Previous and Next. Boxes on other pages are remembered.</li>
+  <li>Click <strong>Redact and rebuild</strong>, then check the result before sending it.</li>
+</ol>
+<p>Draw generously. A box that clips the top of a line of text can leave the ascenders readable, and a partial word is often enough to guess the whole one.</p>
+
+<h2>Common questions</h2>
+${faqBlock(redactFaq)}
+
+<h2>Other tools</h2>
+<div class="grid">
+  <a href="delete-pages-from-pdf.html"><strong>Delete pages</strong><small>When the whole page should go, not part of it.</small></a>
+  <a href="index.html"><strong>Compress a PDF</strong><small>Hit an exact size after redacting.</small></a>
+  <a href="tools.html"><strong>All tools</strong><small>Everything on this site.</small></a>
+</div>
+`
+});
+
+/* ---- unlock ---- */
+
+const unlockFaq = [
+  ['Can this open a PDF if I do not know the password?',
+   'No, and it never will. You supply the password; the tool uses it to open the file exactly as any reader would. There is no cracking, no guessing and no recovery here. A document you cannot already open stays shut.'],
+  ['Then what is it for?',
+   'Two things. Removing an open-password from a file you legitimately have the password for, so you stop typing it every time. And clearing the other kind of lock - the restriction that lets a file open but refuses printing or copying - which does not need a password at all.'],
+  ['Why does the text stop being selectable?',
+   'Because of how the file is rebuilt. The library this site uses can read an encrypted PDF but cannot write a decrypted one, so the tool renders the pages and assembles a new document from the images. That produces a genuinely unlocked file, at the cost of the text layer. If your document is a scan, it was already images and nothing is lost.'],
+  ['My PDF opens fine but will not let me print. Will this help?',
+   'Yes, and this is the easier case. That is an owner restriction rather than a password, so no password is needed - just open the file here and rebuild it. The restriction is a flag that readers agree to honour, and it does not survive.'],
+  ['Is my file uploaded?',
+   'No. The password is used in your browser and never sent anywhere, because there is nowhere for it to be sent.']
+];
+
+pages.push({
+  slug: 'unlock-pdf.html',
+  title: `Remove a PDF Password You Already Know — No Upload | ${NAME}`,
+  desc: 'Remove the password or printing restriction from a PDF you can already open. Runs in your browser, nothing is uploaded. No password cracking.',
+  h1: 'Remove a PDF password',
+  faq: unlockFaq,
+  scripts: [PDFLIB_CDN, 'js/thumbs.js', 'js/raster.js', 'js/unlock.js'],
+  body: `
+<h1>Remove a PDF password</h1>
+<p class="lede">For a file you can already open. Type the password once here and get a copy that does not ask again &mdash; without uploading anything.</p>
+
+<div class="privacy-badge">&#128274; Your file and your password never leave this device</div>
+
+<div class="note"><strong>This tool does not crack passwords.</strong> You have to know the password already. If you do not, nothing here will help, and that is deliberate.</div>
+
+<div class="tool">
+  <label class="drop" id="drop" for="file">
+      <strong>Choose a PDF or drop it here</strong>
+    <small>Nothing is uploaded &mdash; the password is used in your browser</small>
+      <input type="file" id="file" accept="application/pdf,.pdf" class="vh">
+    </label>
+
+  <div class="controls" id="controls">
+    <p class="note" id="openNote" style="display:none;margin-top:0"></p>
+
+    <div id="pwWrap" style="display:none">
+      <div class="row">
+        <div class="field">
+          <label for="pw">Password</label>
+          <input type="password" id="pw" autocomplete="off" placeholder="The password you already have">
+        </div>
+        <div><button class="btn ghost" id="pwGo" type="button">Unlock</button></div>
+      </div>
+      <p class="hint" id="pwNote"></p>
+    </div>
+
+    <div class="row">
+      <div><button class="btn" id="go" disabled>Remove the password</button></div>
+    </div>
+    <div class="status" id="status" role="status" aria-live="polite"></div>
+    <div class="result" id="result">
+      <div class="big" id="rBig"></div>
+      <div class="meta" id="rMeta"></div>
+      <button class="btn" id="dl">Download PDF</button>
+    </div>
+  </div>
+</div>
+
+<h2>The two kinds of lock</h2>
+<p>PDF has two separate mechanisms and they behave completely differently, which is why the same question gets contradictory answers online.</p>
+<table>
+  <thead><tr><th></th><th>User password</th><th>Owner password</th></tr></thead>
+  <tbody>
+    <tr><td>Also called</td><td>Open password</td><td>Permissions, restrictions</td></tr>
+    <tr><td>Can you open the file?</td><td>Not without the password</td><td>Yes, normally</td></tr>
+    <tr><td>What it blocks</td><td>Everything</td><td>Printing, copying, editing</td></tr>
+    <tr><td>How strong is it?</td><td>Real encryption</td><td>A flag readers agree to respect</td></tr>
+    <tr><td>Needed here?</td><td>Yes, type it in</td><td>No &mdash; just open the file</td></tr>
+  </tbody>
+</table>
+<p>The second row explains a great deal of frustration. An owner password is not security in any meaningful sense: the file is not encrypted against you, it simply carries a note asking software to refuse. Most readers comply. Rebuilding the document leaves the note behind.</p>
+
+<div class="note"><strong>The trade-off, stated plainly.</strong> The output is rebuilt from rendered pages, so text in the new file is part of the image and is no longer selectable. This is the same trade the compressor makes in Target Size mode. For a scanned document it costs nothing; for a text document it is a real loss.</div>
+
+<h2>When you should not use this</h2>
+<p>If the document is not yours and the password was not given to you, do not. The restriction is there for a reason, and this page requires the password precisely so that it cannot be used to get around one.</p>
+
+<h2>Common questions</h2>
+${faqBlock(unlockFaq)}
+
+<h2>Other tools</h2>
+<div class="grid">
+  <a href="index.html"><strong>Compress a PDF</strong><small>Hit an exact size after unlocking.</small></a>
+  <a href="ocr-pdf.html"><strong>OCR a scan</strong><small>Put a searchable text layer back on an image-only PDF.</small></a>
+  <a href="tools.html"><strong>All tools</strong><small>Everything on this site.</small></a>
+</div>
+`
+});
+
+/* ---- flatten ---- */
+
+const flattenFaq = [
+  ['What does flattening actually change?',
+   'A filled form stores its answers as separate interactive objects sitting on top of the page. Flattening draws those answers into the page itself and deletes the objects. The document looks identical and reads identically - but the answers are now part of the page rather than something a later viewer can edit or accidentally clear.'],
+  ['Is it lossless?',
+   'Yes. Nothing is rendered or re-encoded. Text stays selectable, images keep their resolution, and the file usually gets slightly smaller because the form machinery is gone.'],
+  ['Can it be undone?',
+   'No. That is the point. Keep your original if you may need to change the answers later.'],
+  ['Why does my form print blank, or lose its answers when emailed?',
+   'This is the problem flattening solves. Some readers - particularly built-in browser and mobile viewers - do not reliably render or preserve form field values. Flattened answers are ordinary page content and print everywhere.'],
+  ['What about comments and highlights?',
+   'Those are annotations rather than form fields, and the checkbox above removes them outright rather than drawing them in. Use it when you want a clean copy for sending; leave it off if the markup should stay.'],
+  ['Is my file uploaded?',
+   'No. Everything happens in your browser.']
+];
+
+pages.push({
+  slug: 'flatten-pdf.html',
+  title: `Flatten a PDF — Make Form Answers Permanent | ${NAME}`,
+  desc: 'Flatten a PDF so filled form fields become part of the page and cannot be edited or lost. Lossless, runs entirely in your browser, nothing is uploaded. Free, no signup.',
+  h1: 'Flatten a PDF',
+  faq: flattenFaq,
+  scripts: [PDFLIB_CDN, 'js/pageops.js', 'js/flatten.js'],
+  body: `
+<h1>Flatten a PDF</h1>
+<p class="lede">Turn filled-in form answers into part of the page, so nothing can edit them, clear them or fail to print them. Lossless, and nothing is uploaded.</p>
+
+<div class="privacy-badge">&#128274; Your file never leaves this device</div>
+
+<div class="tool">
+  <label class="drop" id="drop" for="file">
+      <strong>Choose a PDF or drop it here</strong>
+    <small>Nothing is uploaded &mdash; flattening happens in your browser</small>
+      <input type="file" id="file" accept="application/pdf,.pdf" class="vh">
+    </label>
+
+  <div class="controls" id="controls">
+    <p class="note" id="info" style="margin-top:0"></p>
+    <p class="hint" id="flatInfo"></p>
+    <div class="checkrow">
+      <input type="checkbox" id="dropAnnots">
+      <label for="dropAnnots">Also remove comments, highlights and other markup</label>
+    </div>
+    <div class="row" style="margin-top:14px">
+      <div><button class="btn" id="go">Flatten</button></div>
+    </div>
+    <div class="status" id="status" role="status" aria-live="polite"></div>
+    <div class="result" id="result">
+      <div class="big" id="rBig"></div>
+      <div class="meta" id="rMeta"></div>
+      <button class="btn" id="dl">Download PDF</button>
+    </div>
+  </div>
+</div>
+
+<h2>Why a filled form is not a finished document</h2>
+<p>When you type into a fillable PDF, the text you typed is not on the page. It lives in a form field object that floats above the page and is drawn by the reader at display time. The page underneath is still blank where your answer appears.</p>
+<p>Most of the time nobody notices. The problems arrive at the edges:</p>
+<ul>
+  <li><strong>It prints blank.</strong> Some readers print the page and not the fields, particularly older or embedded viewers.</li>
+  <li><strong>The answers vanish.</strong> Open the file in a viewer that does not save field values, save it, and the answers are gone.</li>
+  <li><strong>Anyone can change them.</strong> A recipient can edit your figures and the document will look untouched.</li>
+  <li><strong>It uploads differently than it looks.</strong> A portal that extracts page content rather than field values reads an empty form.</li>
+</ul>
+<p>Flattening removes the whole category of problem: after it, what the page shows is what the page contains.</p>
+
+<div class="note"><strong>This is permanent, and it is meant to be.</strong> Once flattened the answers cannot be edited back into fields. Keep the original if the document may need changing.</div>
+
+<h2>Flattened or not</h2>
+<table>
+  <thead><tr><th></th><th>Left as a form</th><th>Flattened</th></tr></thead>
+  <tbody>
+    <tr><td>Answers editable later</td><td>Yes</td><td>No</td></tr>
+    <tr><td>Prints reliably everywhere</td><td>Not always</td><td>Yes</td></tr>
+    <tr><td>Survives being re-saved</td><td>Not always</td><td>Yes</td></tr>
+    <tr><td>Text still selectable</td><td>Yes</td><td>Yes</td></tr>
+    <tr><td>File size</td><td>Slightly larger</td><td>Slightly smaller</td></tr>
+  </tbody>
+</table>
+
+<h2>Common questions</h2>
+${faqBlock(flattenFaq)}
+
+<h2>Other tools</h2>
+<div class="grid">
+  <a href="fill-pdf-form.html"><strong>Fill in a form</strong><small>Type the answers first, then flatten them here.</small></a>
+  <a href="sign-pdf.html"><strong>Sign a PDF</strong><small>Place a signature before flattening.</small></a>
+  <a href="tools.html"><strong>All tools</strong><small>Everything on this site.</small></a>
+</div>
+`
+});
+
+/* ---- pdf to text ---- */
+
+const toTextFaq = [
+  ['Will the formatting survive?',
+   'No, and nothing that extracts text from a PDF can promise otherwise. A PDF stores glyphs at coordinates, not paragraphs, so line and paragraph structure has to be inferred from position. Ordinary prose comes out well. Multi-column layouts, tables and sidebars come out in the order the file stores them, which is not always the order you read them.'],
+  ['What does the Markdown option add?',
+   'One inference: a line set in noticeably larger type than the body text, and short enough to be a title rather than a sentence, is written as a heading. It is right often enough to be useful on reports and specifications, and wrong often enough that you should read the result before trusting it.'],
+  ['It returned nothing. Why?',
+   'The PDF almost certainly has no text in it. A scan or a photographed document is a picture of words, not words - there is nothing to extract. Run it through the OCR tool first, which adds a real text layer, then come back here.'],
+  ['Is this the same as PDF to Word?',
+   'No. This gives you the words. PDF to Word tries to reconstruct an editable document with its layout intact, which needs analysis that is not practical in a browser tab - any site offering it is uploading your file to a server.'],
+  ['Is my file uploaded?',
+   'No. The text is extracted in your browser and the result never leaves it.']
+];
+
+pages.push({
+  slug: 'pdf-to-text.html',
+  title: `PDF to Text or Markdown — Free, No Upload | ${NAME}`,
+  desc: 'Extract the text from a PDF as plain text or Markdown. Copy it or download it. Runs entirely in your browser, nothing is uploaded. Free, no signup.',
+  h1: 'PDF to text',
+  faq: toTextFaq,
+  scripts: ['js/thumbs.js', 'js/pdf2text.js'],
+  body: `
+<h1>PDF to text or Markdown</h1>
+<p class="lede">Pull the words out of a PDF and take them away as plain text or Markdown. Nothing is uploaded.</p>
+
+<div class="privacy-badge">&#128274; Your file never leaves this device</div>
+
+<div class="tool">
+  <label class="drop" id="drop" for="file">
+      <strong>Choose a PDF or drop it here</strong>
+    <small>Nothing is uploaded &mdash; the text is read in your browser</small>
+      <input type="file" id="file" accept="application/pdf,.pdf" class="vh">
+    </label>
+
+  <div class="controls" id="controls">
+    <div class="row">
+      <div class="field">
+        <label for="fmt">Format</label>
+        <select id="fmt">
+          <option value="txt">Plain text &mdash; .txt</option>
+          <option value="md">Markdown &mdash; .md, headings guessed</option>
+        </select>
+      </div>
+    </div>
+    <div class="status" id="status" role="status" aria-live="polite"></div>
+    <div class="result" id="result">
+      <div class="big" id="rBig"></div>
+      <div class="meta" id="rMeta"></div>
+      <button class="btn" id="dl">Download</button>
+      <button class="btn ghostbtn" id="copy" type="button">Copy to clipboard</button>
+    </div>
+    <div class="preview" id="preview">
+      <h4>The first part of what you will get</h4>
+      <pre class="textpreview" id="previewText"></pre>
+    </div>
+  </div>
+</div>
+
+<div class="note" id="empty" style="display:none"><strong>There is no text in this PDF.</strong> It is almost certainly a scan &mdash; a picture of words rather than words. Run it through <a href="ocr-pdf.html">the OCR tool</a> first to add a real text layer, then come back here.</div>
+
+<h2>What a PDF actually stores</h2>
+<p>This explains every oddity in the output, so it is worth thirty seconds. A PDF page does not contain paragraphs, sentences or even lines. It contains instructions of the form <em>draw these glyphs at this position in this font</em>. That is all.</p>
+<p>Everything else is reconstruction. Lines are recovered by grouping glyphs that share a vertical position. Paragraphs are guessed from the gaps. Reading order is assumed to follow the order the instructions appear in the file, which is usually but not always the order a human reads.</p>
+<p>So: a novel or a report extracts cleanly. A two-column academic paper may interleave the columns. A table becomes a run of cell contents with the grid gone, because the grid was lines drawn separately from the numbers.</p>
+
+<h2>When this is the right tool</h2>
+<ul>
+  <li>Quoting from a document without retyping it.</li>
+  <li>Getting a transcript into a notes app, an editor or a chat window.</li>
+  <li>Counting words, or searching text a viewer will not search.</li>
+  <li>Feeding a document into something that wants plain text.</li>
+</ul>
+<p>It is not the right tool if you need the layout back. Nothing that runs in a browser tab will give you that.</p>
+
+<h2>Common questions</h2>
+${faqBlock(toTextFaq)}
+
+<h2>Other tools</h2>
+<div class="grid">
+  <a href="ocr-pdf.html"><strong>OCR a scan</strong><small>Add a text layer to an image-only PDF, then extract it here.</small></a>
+  <a href="compare-pdf.html"><strong>Compare two PDFs</strong><small>See which words changed between versions.</small></a>
+  <a href="tools.html"><strong>All tools</strong><small>Everything on this site.</small></a>
+</div>
+`
+});
+
+/* ---- extract pages ----
+   The same engine as split-pdf.html, which opens in range mode by default.
+   A separate page because "extract pages" and "split" are different searches
+   made by people wanting the same operation, and the split page cannot rank
+   for both from one title. */
+
+const extractPagesFaq = [
+  ['How is this different from splitting?',
+   'It is the same operation asked from the other end. Extracting keeps the pages you name and discards the rest, in one file. Splitting can also break a document into several files at a fixed interval. Both are on this page; the method box switches between them.'],
+  ['Does it reduce quality?',
+   'No. The pages you keep are copied across as complete objects. Nothing is re-encoded, text stays selectable and images keep their resolution.'],
+  ['Can I keep pages in a different order?',
+   'Yes. The pages come out in the order you write them, so 5, 1-2 gives you page five followed by pages one and two. Use the page organiser if you want to rearrange visually.'],
+  ['Will the file get smaller?',
+   'Usually, roughly in proportion to what you dropped - though not always, because a PDF shares resources such as fonts and images between pages. Run the result through the compressor if you need a specific size.'],
+  ['Is my file uploaded?',
+   'No. Everything happens in your browser.']
+];
+
+pages.push({
+  slug: 'extract-pages-from-pdf.html',
+  title: `Extract Pages from a PDF — Free, No Upload | ${NAME}`,
+  desc: 'Pull specific pages out of a PDF into a new file. Lossless, keeps quality, runs entirely in your browser with nothing uploaded. Free, no signup, no watermark.',
+  h1: 'Extract pages from a PDF',
+  faq: extractPagesFaq,
+  scripts: [PDFLIB_CDN, 'js/thumbs.js', 'js/split.js'],
+  body: `
+<h1>Extract pages from a PDF</h1>
+<p class="lede">Name the pages you want and get them as one new file. Quality is untouched, and nothing is uploaded.</p>
+
+<div class="privacy-badge">&#128274; Your file never leaves this device</div>
+
+<div class="tool">
+  <label class="drop" id="drop" for="file">
+      <strong>Choose a PDF or drop it here</strong>
+    <small>Nothing is uploaded &mdash; pages are extracted in your browser</small>
+      <input type="file" id="file" accept="application/pdf,.pdf" class="vh">
+    </label>
+
+  <div class="controls" id="controls">
+    <p class="note" id="info" style="margin-top:0"></p>
+    <p class="hint" id="thumbHint" style="display:none"></p>
+    <div class="thumbs" id="thumbs"></div>
+    <div class="row">
+      <div class="field">
+        <label for="mode">Method</label>
+        <select id="mode">
+          <option value="range">Extract pages &mdash; one file</option>
+          <option value="chunks">Split into files &mdash; several</option>
+        </select>
+      </div>
+      <div class="field" id="rangeField">
+        <label for="range">Pages to keep</label>
+        <input type="text" id="range" placeholder="1-3, 5, 8-10">
+      </div>
+      <div class="field" id="chunkField" style="display:none">
+        <label for="chunk">Pages per file</label>
+        <input type="number" id="chunk" min="1" value="1">
+      </div>
+      <div><button class="btn" id="go">Extract</button></div>
+    </div>
+
+    <div class="bar" id="bar" role="progressbar" aria-valuemin="0" aria-valuemax="100"><i id="barFill"></i></div>
+    <div class="status" id="status" role="status" aria-live="polite"></div>
+    <div class="outputs" id="outputs"></div>
+  </div>
+</div>
+
+<h2>How to write the range</h2>
+<table>
+  <thead><tr><th>You want</th><th>Type</th></tr></thead>
+  <tbody>
+    <tr><td>Just page 3</td><td><code>3</code></td></tr>
+    <tr><td>Pages 5 to 9</td><td><code>5-9</code></td></tr>
+    <tr><td>Page 1 and pages 8 to 10</td><td><code>1, 8-10</code></td></tr>
+    <tr><td>Page 5 first, then pages 1 and 2</td><td><code>5, 1-2</code></td></tr>
+  </tbody>
+</table>
+<p>Click the page previews instead if you would rather not count: the range box fills itself in as you click, and the two stay in step.</p>
+
+<h2>Why extract rather than delete</h2>
+<p>The two tools reach the same file by opposite routes, and the right one is whichever needs less typing. Pulling three pages out of a ninety-page report is an extraction. Removing the blank versos from a ten-page duplex scan is a deletion. Doing either the wrong way round means listing far more numbers than you need to, and every extra number is a chance to get one wrong.</p>
+
+<h2>Common questions</h2>
+${faqBlock(extractPagesFaq)}
+
+<h2>Other tools</h2>
+<div class="grid">
+  <a href="split-pdf.html"><strong>Split a PDF</strong><small>Break one document into several files at a fixed interval.</small></a>
+  <a href="delete-pages-from-pdf.html"><strong>Delete pages</strong><small>Say which pages to remove instead of which to keep.</small></a>
+  <a href="organise-pdf.html"><strong>Organise pages</strong><small>Reorder and rotate with every page on screen.</small></a>
+</div>
+`
+});
+
 /* ---- legal / trust pages ---- */
 
 pages.push({
@@ -2597,7 +3103,7 @@ pages.push({
 
 <h2>What this site cannot help with</h2>
 <ul>
-  <li><strong>Recovering a lost PDF password.</strong> Not supported, and not something that will be added.</li>
+  <li><strong>Recovering a lost PDF password.</strong> Not supported, and not something that will be added. <a href="unlock-pdf.html">Removing</a> a password you already know is a different question, and that one the site does answer.</li>
   <li><strong>Recovering an original from a compressed file.</strong> Compression discards data permanently. Keep your originals.</li>
   <li><strong>Why a specific portal rejected your upload.</strong> Only that portal's operators can answer this; their stated limits are often incomplete.</li>
 </ul>

@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Extract Pages from a PDF — Free, No Upload | SizeMyPDF</title>
+<meta name="description" content="Pull specific pages out of a PDF into a new file. Lossless, keeps quality, runs entirely in your browser with nothing uploaded. Free, no signup, no watermark.">
+<link rel="canonical" href="https://sizemypdf.com/extract-pages-from-pdf.html">
+<meta property="og:title" content="Extract Pages from a PDF — Free, No Upload | SizeMyPDF">
+<meta property="og:description" content="Pull specific pages out of a PDF into a new file. Lossless, keeps quality, runs entirely in your browser with nothing uploaded. Free, no signup, no watermark.">
+<meta property="og:url" content="https://sizemypdf.com/extract-pages-from-pdf.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="SizeMyPDF">
+<meta property="og:image" content="https://sizemypdf.com/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="favicon.ico" sizes="48x48">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="icon" type="image/png" sizes="96x96" href="icon-96.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="manifest" href="site.webmanifest">
+<meta name="theme-color" content="#2f6df6">
+<link rel="stylesheet" href="css/style.css?v=42944e7e">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5619759216593458" crossorigin="anonymous"></script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "How is this different from splitting?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "It is the same operation asked from the other end. Extracting keeps the pages you name and discards the rest, in one file. Splitting can also break a document into several files at a fixed interval. Both are on this page; the method box switches between them."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does it reduce quality?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. The pages you keep are copied across as complete objects. Nothing is re-encoded, text stays selectable and images keep their resolution."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I keep pages in a different order?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. The pages come out in the order you write them, so 5, 1-2 gives you page five followed by pages one and two. Use the page organiser if you want to rearrange visually."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Will the file get smaller?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Usually, roughly in proportion to what you dropped - though not always, because a PDF shares resources such as fonts and images between pages. Run the result through the compressor if you need a specific size."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is my file uploaded?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. Everything happens in your browser."
+      }
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://sizemypdf.com/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Extract pages from a PDF",
+      "item": "https://sizemypdf.com/extract-pages-from-pdf.html"
+    }
+  ]
+}
+</script>
+
+</head>
+<body>
+
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site">
+  <div class="wrap">
+    <a class="logo" href="index.html">Size<span>My</span>PDF</a>
+    <nav class="main">
+      <a href="tools.html">All&nbsp;tools</a>
+      <a href="merge-pdf.html">Merge</a>
+      <a href="split-pdf.html">Split</a>
+      <a href="batch-compress-pdf.html">Batch</a>
+      <a href="compress-image-to-size.html">Image</a>
+      <a href="about.html">About</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap" id="main">
+<noscript>
+  <p class="noscript"><strong>These tools need JavaScript turned on.</strong>
+  Not as a tracking tax: the point of this site is that your file is never
+  uploaded, which means the work has to happen in your browser, and that is what
+  JavaScript is here. There is no server to do it instead. Nothing is sent
+  anywhere either way.</p>
+</noscript>
+
+<h1>Extract pages from a PDF</h1>
+<p class="lede">Name the pages you want and get them as one new file. Quality is untouched, and nothing is uploaded.</p>
+
+<div class="privacy-badge">&#128274; Your file never leaves this device</div>
+
+<div class="tool">
+  <label class="drop" id="drop" for="file">
+      <strong>Choose a PDF or drop it here</strong>
+    <small>Nothing is uploaded &mdash; pages are extracted in your browser</small>
+      <input type="file" id="file" accept="application/pdf,.pdf" class="vh">
+    </label>
+
+  <div class="controls" id="controls">
+    <p class="note" id="info" style="margin-top:0"></p>
+    <p class="hint" id="thumbHint" style="display:none"></p>
+    <div class="thumbs" id="thumbs"></div>
+    <div class="row">
+      <div class="field">
+        <label for="mode">Method</label>
+        <select id="mode">
+          <option value="range">Extract pages &mdash; one file</option>
+          <option value="chunks">Split into files &mdash; several</option>
+        </select>
+      </div>
+      <div class="field" id="rangeField">
+        <label for="range">Pages to keep</label>
+        <input type="text" id="range" placeholder="1-3, 5, 8-10">
+      </div>
+      <div class="field" id="chunkField" style="display:none">
+        <label for="chunk">Pages per file</label>
+        <input type="number" id="chunk" min="1" value="1">
+      </div>
+      <div><button class="btn" id="go">Extract</button></div>
+    </div>
+
+    <div class="bar" id="bar" role="progressbar" aria-valuemin="0" aria-valuemax="100"><i id="barFill"></i></div>
+    <div class="status" id="status" role="status" aria-live="polite"></div>
+    <div class="outputs" id="outputs"></div>
+  </div>
+</div>
+
+<h2>How to write the range</h2>
+<div class="tablewrap"><table>
+  <thead><tr><th>You want</th><th>Type</th></tr></thead>
+  <tbody>
+    <tr><td>Just page 3</td><td><code>3</code></td></tr>
+    <tr><td>Pages 5 to 9</td><td><code>5-9</code></td></tr>
+    <tr><td>Page 1 and pages 8 to 10</td><td><code>1, 8-10</code></td></tr>
+    <tr><td>Page 5 first, then pages 1 and 2</td><td><code>5, 1-2</code></td></tr>
+  </tbody>
+</table></div>
+<p>Click the page previews instead if you would rather not count: the range box fills itself in as you click, and the two stay in step.</p>
+
+<h2>Why extract rather than delete</h2>
+<p>The two tools reach the same file by opposite routes, and the right one is whichever needs less typing. Pulling three pages out of a ninety-page report is an extraction. Removing the blank versos from a ten-page duplex scan is a deletion. Doing either the wrong way round means listing far more numbers than you need to, and every extra number is a chance to get one wrong.</p>
+
+<h2>Common questions</h2>
+<details><summary>How is this different from splitting?</summary><p>It is the same operation asked from the other end. Extracting keeps the pages you name and discards the rest, in one file. Splitting can also break a document into several files at a fixed interval. Both are on this page; the method box switches between them.</p></details>
+<details><summary>Does it reduce quality?</summary><p>No. The pages you keep are copied across as complete objects. Nothing is re-encoded, text stays selectable and images keep their resolution.</p></details>
+<details><summary>Can I keep pages in a different order?</summary><p>Yes. The pages come out in the order you write them, so 5, 1-2 gives you page five followed by pages one and two. Use the page organiser if you want to rearrange visually.</p></details>
+<details><summary>Will the file get smaller?</summary><p>Usually, roughly in proportion to what you dropped - though not always, because a PDF shares resources such as fonts and images between pages. Run the result through the compressor if you need a specific size.</p></details>
+<details><summary>Is my file uploaded?</summary><p>No. Everything happens in your browser.</p></details>
+
+<h2>Other tools</h2>
+<div class="grid">
+  <a href="split-pdf.html"><strong>Split a PDF</strong><small>Break one document into several files at a fixed interval.</small></a>
+  <a href="delete-pages-from-pdf.html"><strong>Delete pages</strong><small>Say which pages to remove instead of which to keep.</small></a>
+  <a href="organise-pdf.html"><strong>Organise pages</strong><small>Reorder and rotate with every page on screen.</small></a>
+</div>
+
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <nav>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+      <a href="privacy.html">Privacy Policy</a>
+      <a href="terms.html">Terms</a>
+    </nav>
+    <div class="copy">&copy; <span id="yr">2026</span> SizeMyPDF &middot; Files are processed in your browser and never uploaded.</div>
+  </div>
+</footer>
+<script src="vendor/pdf-lib.min.js"></script>
+<script src="js/thumbs.js?v=0eaa5514"></script>
+<script src="js/split.js?v=f10697d5"></script>
+<script>document.getElementById('yr').textContent=new Date().getFullYear();
+if('serviceWorker' in navigator){addEventListener('load',function(){navigator.serviceWorker.register('/sw.js').catch(function(){});});}</script>
+</body>
+</html>

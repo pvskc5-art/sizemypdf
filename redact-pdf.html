@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Redact a PDF — Permanently Remove Text, No Upload | SizeMyPDF</title>
+<meta name="description" content="Black out text in a PDF so it is actually deleted, not just covered. Pages are rebuilt from pixels, so nothing can be copied from underneath. Runs in your browser, nothing is uploaded.">
+<link rel="canonical" href="https://sizemypdf.com/redact-pdf.html">
+<meta property="og:title" content="Redact a PDF — Permanently Remove Text, No Upload | SizeMyPDF">
+<meta property="og:description" content="Black out text in a PDF so it is actually deleted, not just covered. Pages are rebuilt from pixels, so nothing can be copied from underneath. Runs in your browser, nothing is uploaded.">
+<meta property="og:url" content="https://sizemypdf.com/redact-pdf.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="SizeMyPDF">
+<meta property="og:image" content="https://sizemypdf.com/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="favicon.ico" sizes="48x48">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="icon" type="image/png" sizes="96x96" href="icon-96.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="manifest" href="site.webmanifest">
+<meta name="theme-color" content="#2f6df6">
+<link rel="stylesheet" href="css/style.css?v=42944e7e">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5619759216593458" crossorigin="anonymous"></script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Is the text really gone, or just covered?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Gone. The tool renders each page to an image, paints the boxes onto those pixels and builds a new PDF from them. There is no text layer left in the output, so there is nothing to select, copy or recover. This is the difference that matters: most free redaction tools add a black rectangle as an annotation and leave the words in the file underneath it."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How do I check it worked?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Open the downloaded file and try to select the text. You will not be able to, anywhere on the page - the whole document is now images. If you can still select text, you are looking at the original file rather than the redacted one."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What is the catch?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The output is images, so no text in the document is selectable or searchable any more, and the file is usually larger than the original. That is the price of genuine redaction. If you need a specific file size afterwards, run the result through the compressor."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does it remove metadata too?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. Author, title, producer and keywords are all cleared, because those fields routinely survive edits people assume have cleaned a document."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I redact a scanned PDF?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes, and it is the ideal case. A scan is already images, so rebuilding it loses nothing at all - you get genuine redaction at no cost in quality."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is my file uploaded?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. The pages are rendered and rebuilt in your browser."
+      }
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://sizemypdf.com/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Redact a PDF",
+      "item": "https://sizemypdf.com/redact-pdf.html"
+    }
+  ]
+}
+</script>
+
+</head>
+<body>
+
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site">
+  <div class="wrap">
+    <a class="logo" href="index.html">Size<span>My</span>PDF</a>
+    <nav class="main">
+      <a href="tools.html">All&nbsp;tools</a>
+      <a href="merge-pdf.html">Merge</a>
+      <a href="split-pdf.html">Split</a>
+      <a href="batch-compress-pdf.html">Batch</a>
+      <a href="compress-image-to-size.html">Image</a>
+      <a href="about.html">About</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap" id="main">
+<noscript>
+  <p class="noscript"><strong>These tools need JavaScript turned on.</strong>
+  Not as a tracking tax: the point of this site is that your file is never
+  uploaded, which means the work has to happen in your browser, and that is what
+  JavaScript is here. There is no server to do it instead. Nothing is sent
+  anywhere either way.</p>
+</noscript>
+
+<h1>Redact a PDF</h1>
+<p class="lede">Drag a box over anything that must not survive. The text underneath is destroyed, not hidden &mdash; and nothing is uploaded.</p>
+
+<div class="privacy-badge">&#128274; Your file never leaves this device</div>
+
+<div class="tool">
+  <label class="drop" id="drop" for="file">
+      <strong>Choose a PDF or drop it here</strong>
+    <small>Nothing is uploaded &mdash; redaction happens in your browser</small>
+      <input type="file" id="file" accept="application/pdf,.pdf" class="vh">
+    </label>
+
+  <div class="controls" id="controls">
+    <p class="note" id="info" style="margin-top:0"></p>
+
+    <div id="redWrap" style="display:none">
+      <div class="pagebar">
+        <button class="btn ghost" id="prev" type="button">&larr; Previous</button>
+        <span class="pagelabel" id="pageLabel"></span>
+        <button class="btn ghost" id="next" type="button">Next &rarr;</button>
+      </div>
+      <div class="redstage" id="stage">
+        <canvas id="stageCanvas"></canvas>
+        <div class="redlayer" id="stageLayer"></div>
+      </div>
+      <p class="hint" id="redInfo">Drag across anything that must not survive.</p>
+      <div class="cropbtns">
+        <button class="btn ghost" id="clearPage" type="button">Clear this page</button>
+        <button class="btn ghost" id="clearAll" type="button">Clear all</button>
+      </div>
+    </div>
+
+    <div class="row" style="margin-top:16px">
+      <div><button class="btn" id="go" disabled>Redact and rebuild</button></div>
+    </div>
+    <div class="status" id="status" role="status" aria-live="polite"></div>
+    <div class="result" id="result">
+      <div class="big" id="rBig"></div>
+      <div class="meta" id="rMeta"></div>
+      <button class="btn" id="dl">Download PDF</button>
+    </div>
+  </div>
+</div>
+
+<h2>Why a black box is not redaction</h2>
+<p>This is the single most consequential misunderstanding about PDFs, and it has embarrassed governments, law firms and newspapers repeatedly.</p>
+<p>A PDF page is a list of drawing instructions. When you draw a filled rectangle over a paragraph in most editors, you add one more instruction to the end of that list: <em>put a black box here</em>. The instruction that draws the paragraph is still there, earlier in the list. The words are rendered, then covered. Select the area and copy it and the text arrives on your clipboard exactly as it was written. Delete the rectangle and the paragraph reappears.</p>
+<p>The same is true of white boxes, of highlighter annotations set to opaque, and of anything else that works by drawing on top. If the original instruction is still in the file, the content is still in the file.</p>
+
+<div class="note"><strong>What this tool does instead.</strong> Every page is rendered to an image, the boxes are painted onto those pixels, and a new PDF is built from the images. The drawing instructions &mdash; all of them, including the ones that drew your sensitive text &mdash; are discarded. There is nothing underneath, because there is no underneath.</div>
+
+<h2>What it costs</h2>
+<p>Honesty about the trade-off, because the site applies the same rule to its compressor: rebuilding from pixels means the output contains no text layer at all. Nothing in the document is selectable or searchable afterwards, not just the redacted parts. The file is often larger than the original too, since photographs of text compress worse than text.</p>
+<p>For a scan, this costs nothing whatsoever &mdash; the pages were already images. For a text document it is a real loss, and it is the only way to be certain.</p>
+
+<div class="tablewrap"><table>
+  <thead><tr><th>Approach</th><th>Text recoverable?</th><th>Keeps text layer?</th></tr></thead>
+  <tbody>
+    <tr><td>Black rectangle drawn on top</td><td><strong>Yes &mdash; trivially</strong></td><td>Yes</td></tr>
+    <tr><td>Highlight annotation, opaque</td><td><strong>Yes &mdash; trivially</strong></td><td>Yes</td></tr>
+    <tr><td>Delete the page entirely</td><td>No, for that page</td><td>Yes</td></tr>
+    <tr><td>Rebuild from pixels (this tool)</td><td>No</td><td>No</td></tr>
+  </tbody>
+</table></div>
+
+<h2>How to use it</h2>
+<ol>
+  <li>Open the PDF. The first page appears on screen.</li>
+  <li>Drag across anything sensitive. Boxes can overlap; draw as many as you need.</li>
+  <li>Click a box to remove it if you misjudged the edge.</li>
+  <li>Move through the document with Previous and Next. Boxes on other pages are remembered.</li>
+  <li>Click <strong>Redact and rebuild</strong>, then check the result before sending it.</li>
+</ol>
+<p>Draw generously. A box that clips the top of a line of text can leave the ascenders readable, and a partial word is often enough to guess the whole one.</p>
+
+<h2>Common questions</h2>
+<details><summary>Is the text really gone, or just covered?</summary><p>Gone. The tool renders each page to an image, paints the boxes onto those pixels and builds a new PDF from them. There is no text layer left in the output, so there is nothing to select, copy or recover. This is the difference that matters: most free redaction tools add a black rectangle as an annotation and leave the words in the file underneath it.</p></details>
+<details><summary>How do I check it worked?</summary><p>Open the downloaded file and try to select the text. You will not be able to, anywhere on the page - the whole document is now images. If you can still select text, you are looking at the original file rather than the redacted one.</p></details>
+<details><summary>What is the catch?</summary><p>The output is images, so no text in the document is selectable or searchable any more, and the file is usually larger than the original. That is the price of genuine redaction. If you need a specific file size afterwards, run the result through the compressor.</p></details>
+<details><summary>Does it remove metadata too?</summary><p>Yes. Author, title, producer and keywords are all cleared, because those fields routinely survive edits people assume have cleaned a document.</p></details>
+<details><summary>Can I redact a scanned PDF?</summary><p>Yes, and it is the ideal case. A scan is already images, so rebuilding it loses nothing at all - you get genuine redaction at no cost in quality.</p></details>
+<details><summary>Is my file uploaded?</summary><p>No. The pages are rendered and rebuilt in your browser.</p></details>
+
+<h2>Other tools</h2>
+<div class="grid">
+  <a href="delete-pages-from-pdf.html"><strong>Delete pages</strong><small>When the whole page should go, not part of it.</small></a>
+  <a href="index.html"><strong>Compress a PDF</strong><small>Hit an exact size after redacting.</small></a>
+  <a href="tools.html"><strong>All tools</strong><small>Everything on this site.</small></a>
+</div>
+
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <nav>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+      <a href="privacy.html">Privacy Policy</a>
+      <a href="terms.html">Terms</a>
+    </nav>
+    <div class="copy">&copy; <span id="yr">2026</span> SizeMyPDF &middot; Files are processed in your browser and never uploaded.</div>
+  </div>
+</footer>
+<script src="vendor/pdf-lib.min.js"></script>
+<script src="js/thumbs.js?v=0eaa5514"></script>
+<script src="js/raster.js?v=6c3fa68e"></script>
+<script src="js/pageops.js?v=58486394"></script>
+<script src="js/redact.js?v=34dbbb9f"></script>
+<script>document.getElementById('yr').textContent=new Date().getFullYear();
+if('serviceWorker' in navigator){addEventListener('load',function(){navigator.serviceWorker.register('/sw.js').catch(function(){});});}</script>
+</body>
+</html>

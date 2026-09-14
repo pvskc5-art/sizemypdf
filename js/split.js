@@ -187,7 +187,9 @@
       }
       say('Extracting ' + parsed.indices.length + ' pages…');
       job = buildFrom(parsed.indices).then(function (bytes) {
-        addOutput(parsed.indices.length + ' pages', bytes, srcName + '-pages.pdf');
+        addOutput(parsed.indices.length +
+                  (parsed.indices.length === 1 ? ' page' : ' pages'),
+                  bytes, srcName + '-pages.pdf');
         return { count: 1, pages: parsed.indices.length };
       });
 

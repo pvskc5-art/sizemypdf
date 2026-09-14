@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Flatten a PDF — Make Form Answers Permanent | SizeMyPDF</title>
+<meta name="description" content="Flatten a PDF so filled form fields become part of the page and cannot be edited or lost. Lossless, runs entirely in your browser, nothing is uploaded. Free, no signup.">
+<link rel="canonical" href="https://sizemypdf.com/flatten-pdf.html">
+<meta property="og:title" content="Flatten a PDF — Make Form Answers Permanent | SizeMyPDF">
+<meta property="og:description" content="Flatten a PDF so filled form fields become part of the page and cannot be edited or lost. Lossless, runs entirely in your browser, nothing is uploaded. Free, no signup.">
+<meta property="og:url" content="https://sizemypdf.com/flatten-pdf.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="SizeMyPDF">
+<meta property="og:image" content="https://sizemypdf.com/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="favicon.ico" sizes="48x48">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="icon" type="image/png" sizes="96x96" href="icon-96.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="manifest" href="site.webmanifest">
+<meta name="theme-color" content="#2f6df6">
+<link rel="stylesheet" href="css/style.css?v=42944e7e">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5619759216593458" crossorigin="anonymous"></script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What does flattening actually change?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "A filled form stores its answers as separate interactive objects sitting on top of the page. Flattening draws those answers into the page itself and deletes the objects. The document looks identical and reads identically - but the answers are now part of the page rather than something a later viewer can edit or accidentally clear."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is it lossless?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. Nothing is rendered or re-encoded. Text stays selectable, images keep their resolution, and the file usually gets slightly smaller because the form machinery is gone."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can it be undone?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. That is the point. Keep your original if you may need to change the answers later."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Why does my form print blank, or lose its answers when emailed?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "This is the problem flattening solves. Some readers - particularly built-in browser and mobile viewers - do not reliably render or preserve form field values. Flattened answers are ordinary page content and print everywhere."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What about comments and highlights?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Those are annotations rather than form fields, and the checkbox above removes them outright rather than drawing them in. Use it when you want a clean copy for sending; leave it off if the markup should stay."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is my file uploaded?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. Everything happens in your browser."
+      }
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://sizemypdf.com/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Flatten a PDF",
+      "item": "https://sizemypdf.com/flatten-pdf.html"
+    }
+  ]
+}
+</script>
+
+</head>
+<body>
+
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site">
+  <div class="wrap">
+    <a class="logo" href="index.html">Size<span>My</span>PDF</a>
+    <nav class="main">
+      <a href="tools.html">All&nbsp;tools</a>
+      <a href="merge-pdf.html">Merge</a>
+      <a href="split-pdf.html">Split</a>
+      <a href="batch-compress-pdf.html">Batch</a>
+      <a href="compress-image-to-size.html">Image</a>
+      <a href="about.html">About</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap" id="main">
+<noscript>
+  <p class="noscript"><strong>These tools need JavaScript turned on.</strong>
+  Not as a tracking tax: the point of this site is that your file is never
+  uploaded, which means the work has to happen in your browser, and that is what
+  JavaScript is here. There is no server to do it instead. Nothing is sent
+  anywhere either way.</p>
+</noscript>
+
+<h1>Flatten a PDF</h1>
+<p class="lede">Turn filled-in form answers into part of the page, so nothing can edit them, clear them or fail to print them. Lossless, and nothing is uploaded.</p>
+
+<div class="privacy-badge">&#128274; Your file never leaves this device</div>
+
+<div class="tool">
+  <label class="drop" id="drop" for="file">
+      <strong>Choose a PDF or drop it here</strong>
+    <small>Nothing is uploaded &mdash; flattening happens in your browser</small>
+      <input type="file" id="file" accept="application/pdf,.pdf" class="vh">
+    </label>
+
+  <div class="controls" id="controls">
+    <p class="note" id="info" style="margin-top:0"></p>
+    <p class="hint" id="flatInfo"></p>
+    <div class="checkrow">
+      <input type="checkbox" id="dropAnnots">
+      <label for="dropAnnots">Also remove comments, highlights and other markup</label>
+    </div>
+    <div class="row" style="margin-top:14px">
+      <div><button class="btn" id="go">Flatten</button></div>
+    </div>
+    <div class="status" id="status" role="status" aria-live="polite"></div>
+    <div class="result" id="result">
+      <div class="big" id="rBig"></div>
+      <div class="meta" id="rMeta"></div>
+      <button class="btn" id="dl">Download PDF</button>
+    </div>
+  </div>
+</div>
+
+<h2>Why a filled form is not a finished document</h2>
+<p>When you type into a fillable PDF, the text you typed is not on the page. It lives in a form field object that floats above the page and is drawn by the reader at display time. The page underneath is still blank where your answer appears.</p>
+<p>Most of the time nobody notices. The problems arrive at the edges:</p>
+<ul>
+  <li><strong>It prints blank.</strong> Some readers print the page and not the fields, particularly older or embedded viewers.</li>
+  <li><strong>The answers vanish.</strong> Open the file in a viewer that does not save field values, save it, and the answers are gone.</li>
+  <li><strong>Anyone can change them.</strong> A recipient can edit your figures and the document will look untouched.</li>
+  <li><strong>It uploads differently than it looks.</strong> A portal that extracts page content rather than field values reads an empty form.</li>
+</ul>
+<p>Flattening removes the whole category of problem: after it, what the page shows is what the page contains.</p>
+
+<div class="note"><strong>This is permanent, and it is meant to be.</strong> Once flattened the answers cannot be edited back into fields. Keep the original if the document may need changing.</div>
+
+<h2>Flattened or not</h2>
+<div class="tablewrap"><table>
+  <thead><tr><th></th><th>Left as a form</th><th>Flattened</th></tr></thead>
+  <tbody>
+    <tr><td>Answers editable later</td><td>Yes</td><td>No</td></tr>
+    <tr><td>Prints reliably everywhere</td><td>Not always</td><td>Yes</td></tr>
+    <tr><td>Survives being re-saved</td><td>Not always</td><td>Yes</td></tr>
+    <tr><td>Text still selectable</td><td>Yes</td><td>Yes</td></tr>
+    <tr><td>File size</td><td>Slightly larger</td><td>Slightly smaller</td></tr>
+  </tbody>
+</table></div>
+
+<h2>Common questions</h2>
+<details><summary>What does flattening actually change?</summary><p>A filled form stores its answers as separate interactive objects sitting on top of the page. Flattening draws those answers into the page itself and deletes the objects. The document looks identical and reads identically - but the answers are now part of the page rather than something a later viewer can edit or accidentally clear.</p></details>
+<details><summary>Is it lossless?</summary><p>Yes. Nothing is rendered or re-encoded. Text stays selectable, images keep their resolution, and the file usually gets slightly smaller because the form machinery is gone.</p></details>
+<details><summary>Can it be undone?</summary><p>No. That is the point. Keep your original if you may need to change the answers later.</p></details>
+<details><summary>Why does my form print blank, or lose its answers when emailed?</summary><p>This is the problem flattening solves. Some readers - particularly built-in browser and mobile viewers - do not reliably render or preserve form field values. Flattened answers are ordinary page content and print everywhere.</p></details>
+<details><summary>What about comments and highlights?</summary><p>Those are annotations rather than form fields, and the checkbox above removes them outright rather than drawing them in. Use it when you want a clean copy for sending; leave it off if the markup should stay.</p></details>
+<details><summary>Is my file uploaded?</summary><p>No. Everything happens in your browser.</p></details>
+
+<h2>Other tools</h2>
+<div class="grid">
+  <a href="fill-pdf-form.html"><strong>Fill in a form</strong><small>Type the answers first, then flatten them here.</small></a>
+  <a href="sign-pdf.html"><strong>Sign a PDF</strong><small>Place a signature before flattening.</small></a>
+  <a href="tools.html"><strong>All tools</strong><small>Everything on this site.</small></a>
+</div>
+
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <nav>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+      <a href="privacy.html">Privacy Policy</a>
+      <a href="terms.html">Terms</a>
+    </nav>
+    <div class="copy">&copy; <span id="yr">2026</span> SizeMyPDF &middot; Files are processed in your browser and never uploaded.</div>
+  </div>
+</footer>
+<script src="vendor/pdf-lib.min.js"></script>
+<script src="js/pageops.js?v=58486394"></script>
+<script src="js/flatten.js?v=0974ed73"></script>
+<script>document.getElementById('yr').textContent=new Date().getFullYear();
+if('serviceWorker' in navigator){addEventListener('load',function(){navigator.serviceWorker.register('/sw.js').catch(function(){});});}</script>
+</body>
+</html>

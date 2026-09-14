@@ -22,7 +22,7 @@
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="manifest" href="site.webmanifest">
 <meta name="theme-color" content="#2f6df6">
-<link rel="stylesheet" href="css/style.css?v=965b5aca">
+<link rel="stylesheet" href="css/style.css?v=42944e7e">
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5619759216593458" crossorigin="anonymous"></script>
 <script type="application/ld+json">
 {
@@ -68,30 +68,50 @@
 
 
 <h1>All tools</h1>
-<p class="lede">Nineteen tools, all free, all running entirely in your browser. No account, no upload, no watermark, no file size limit imposed by us.</p>
+<p class="lede">Twenty-four tools, all free, all running entirely in your browser. No account, no upload, no watermark, no file size limit imposed by us.</p>
 
 <div class="privacy-badge">&#128274; Every tool here runs on your device</div>
 
-<div class="grid">
-  <a href="index.html"><strong>Compress PDF</strong><small>Hit an exact size in KB &mdash; 100, 200, 500 or any number a form demands.</small></a>
-  <a href="batch-compress-pdf.html"><strong>Compress many at once</strong><small>One target, a whole folder of PDFs, downloaded individually or as a ZIP.</small></a>
-  <a href="merge-pdf.html"><strong>Merge PDFs</strong><small>Combine any number of files into one, in the order you choose.</small></a>
-  <a href="extract-images-from-pdf.html"><strong>Extract images</strong><small>Pull out the embedded pictures at the resolution they are stored.</small></a>
-  <a href="compare-pdf.html"><strong>Compare two PDFs</strong><small>See which words changed between two versions, page by page.</small></a>
-  <a href="scan-to-pdf.html"><strong>Scan to PDF</strong><small>Photograph pages with your phone camera, no app and no pairing.</small></a>
-  <a href="fill-pdf-form.html"><strong>Fill a PDF form</strong><small>Type into a fillable form and save the answers into the file.</small></a>
-  <a href="ocr-pdf.html"><strong>OCR a scan</strong><small>Make a scanned PDF searchable, with the engine running on your device.</small></a>
-  <a href="sign-pdf.html"><strong>Sign PDF</strong><small>Draw or type a signature and click the page to place it.</small></a>
-  <a href="crop-pdf.html"><strong>Crop PDF</strong><small>Trim margins with a live preview, or detect where the content stops.</small></a>
-  <a href="organise-pdf.html"><strong>Organise pages</strong><small>Reorder, rotate and remove pages with every page on screen.</small></a>
-  <a href="split-pdf.html"><strong>Split PDF</strong><small>Extract specific pages, or break one document into several files.</small></a>
-  <a href="compress-image-to-size.html"><strong>Compress an image</strong><small>Hit an exact size in KB for a photo, signature or scan.</small></a>
-  <a href="jpg-to-pdf.html"><strong>Images to PDF</strong><small>Turn JPGs, PNGs or photos of documents into a single PDF.</small></a>
-  <a href="pdf-to-jpg.html"><strong>PDF to images</strong><small>Render every page as a JPG or PNG at your chosen resolution.</small></a>
-  <a href="rotate-pdf.html"><strong>Rotate PDF</strong><small>Fix sideways pages. Lossless &mdash; rotation is only metadata.</small></a>
-  <a href="delete-pages-from-pdf.html"><strong>Delete pages</strong><small>Remove the pages you do not want and keep the rest.</small></a>
-  <a href="add-page-numbers-to-pdf.html"><strong>Add page numbers</strong><small>Stamp numbers in the position and format you choose.</small></a>
-  <a href="watermark-pdf.html"><strong>Add a watermark</strong><small>Label pages DRAFT or CONFIDENTIAL across the page.</small></a>
+<div class="cats">
+  <input type="radio" name="cat" id="cat-all" class="vh" checked>
+  <label for="cat-all">All</label>
+  <input type="radio" name="cat" id="cat-size" class="vh">
+  <label for="cat-size">Size</label>
+  <input type="radio" name="cat" id="cat-org" class="vh">
+  <label for="cat-org">Pages</label>
+  <input type="radio" name="cat" id="cat-conv" class="vh">
+  <label for="cat-conv">Convert</label>
+  <input type="radio" name="cat" id="cat-edit" class="vh">
+  <label for="cat-edit">Edit</label>
+  <input type="radio" name="cat" id="cat-sec" class="vh">
+  <label for="cat-sec">Privacy</label>
+
+<div class="grid toolgrid">
+  <a class="ic ic-compress c-size" href="index.html"><strong>Compress PDF</strong><small>Hit an exact size in KB &mdash; 100, 200, 500 or any number a form demands.</small></a>
+  <a class="ic ic-batch c-size" href="batch-compress-pdf.html"><strong>Compress many at once</strong><small>One target, a whole folder of PDFs, downloaded individually or as a ZIP.</small></a>
+  <a class="ic ic-imgsize c-size" href="compress-image-to-size.html"><strong>Compress an image</strong><small>Hit an exact size in KB for a photo, signature or scan.</small></a>
+  <a class="ic ic-merge c-org" href="merge-pdf.html"><strong>Merge PDFs</strong><small>Combine any number of files into one, in the order you choose.</small></a>
+  <a class="ic ic-split c-org" href="split-pdf.html"><strong>Split PDF</strong><small>Break one document into several files, or pull out a range.</small></a>
+  <a class="ic ic-pages c-org" href="extract-pages-from-pdf.html"><strong>Extract pages</strong><small>Keep only the pages you name, as one new file.</small></a>
+  <a class="ic ic-del c-org" href="delete-pages-from-pdf.html"><strong>Delete pages</strong><small>Remove the pages you do not want and keep the rest.</small></a>
+  <a class="ic ic-organise c-org" href="organise-pdf.html"><strong>Organise pages</strong><small>Reorder, rotate and remove pages with every page on screen.</small></a>
+  <a class="ic ic-rotate c-org" href="rotate-pdf.html"><strong>Rotate PDF</strong><small>Fix sideways pages. Lossless &mdash; rotation is only metadata.</small></a>
+  <a class="ic ic-crop c-org c-edit" href="crop-pdf.html"><strong>Crop PDF</strong><small>Trim margins with a live preview, or detect where the content stops.</small></a>
+  <a class="ic ic-img2pdf c-conv" href="jpg-to-pdf.html"><strong>Images to PDF</strong><small>Turn JPGs, PNGs or photos of documents into a single PDF.</small></a>
+  <a class="ic ic-pdf2img c-conv" href="pdf-to-jpg.html"><strong>PDF to images</strong><small>Render every page as a JPG or PNG at your chosen resolution.</small></a>
+  <a class="ic ic-text c-conv" href="pdf-to-text.html"><strong>PDF to text</strong><small>Extract the words as plain text or Markdown, and take them away.</small></a>
+  <a class="ic ic-scan c-conv" href="scan-to-pdf.html"><strong>Scan to PDF</strong><small>Photograph pages with your phone camera, no app and no pairing.</small></a>
+  <a class="ic ic-images c-conv" href="extract-images-from-pdf.html"><strong>Extract images</strong><small>Pull out the embedded pictures at the resolution they are stored.</small></a>
+  <a class="ic ic-ocr c-conv c-edit" href="ocr-pdf.html"><strong>OCR a scan</strong><small>Make a scanned PDF searchable, with the engine running on your device.</small></a>
+  <a class="ic ic-sign c-edit" href="sign-pdf.html"><strong>Sign PDF</strong><small>Draw or type a signature and click the page to place it.</small></a>
+  <a class="ic ic-forms c-edit" href="fill-pdf-form.html"><strong>Fill a PDF form</strong><small>Type into a fillable form and save the answers into the file.</small></a>
+  <a class="ic ic-flatten c-edit" href="flatten-pdf.html"><strong>Flatten PDF</strong><small>Make form answers part of the page so nothing can edit or lose them.</small></a>
+  <a class="ic ic-pagenum c-edit" href="add-page-numbers-to-pdf.html"><strong>Add page numbers</strong><small>Stamp numbers in the position and format you choose.</small></a>
+  <a class="ic ic-mark c-edit" href="watermark-pdf.html"><strong>Add a watermark</strong><small>Label pages DRAFT or CONFIDENTIAL across the page.</small></a>
+  <a class="ic ic-compare c-edit" href="compare-pdf.html"><strong>Compare two PDFs</strong><small>See which words changed between two versions, page by page.</small></a>
+  <a class="ic ic-redact c-sec" href="redact-pdf.html"><strong>Redact PDF</strong><small>Black out text so it is destroyed, not covered over.</small></a>
+  <a class="ic ic-unlock c-sec" href="unlock-pdf.html"><strong>Remove a password</strong><small>For a file you can already open. Clears printing locks too.</small></a>
+</div>
 </div>
 
 <h2>Which tools change your file, and which do not</h2>
@@ -101,6 +121,8 @@
   <tbody>
     <tr><td>Merge</td><td>Yes</td><td>Page objects are copied between documents</td></tr>
     <tr><td>Split</td><td>Yes</td><td>Page objects are copied into a new document</td></tr>
+    <tr><td>Extract pages</td><td>Yes</td><td>The pages you keep are copied unchanged</td></tr>
+    <tr><td>Flatten</td><td>Yes</td><td>Field values are drawn in; nothing is re-encoded</td></tr>
     <tr><td>Rotate</td><td>Yes</td><td>A number in the page metadata changes</td></tr>
     <tr><td>Compress &mdash; Lossless mode</td><td>Yes</td><td>Metadata stripped, file structure repacked</td></tr>
     <tr><td>Delete pages</td><td>Yes</td><td>Remaining page objects are copied unchanged</td></tr>
@@ -112,6 +134,8 @@
     <tr><td>Add page numbers</td><td>Mostly</td><td>Text is drawn on; the page beneath is untouched</td></tr>
     <tr><td>Add watermark</td><td>Mostly</td><td>Text is drawn on; the page beneath is untouched</td></tr>
     <tr><td>Compress &mdash; Target size</td><td><strong>No</strong></td><td>Pages become images; the text layer is lost</td></tr>
+    <tr><td>Redact</td><td><strong>No</strong></td><td>Pages become images &mdash; which is the entire point</td></tr>
+    <tr><td>Remove a password</td><td><strong>No</strong></td><td>Pages become images; it is the only way to write an unlocked file</td></tr>
     <tr><td>PDF to images</td><td><strong>No</strong></td><td>Pages become pixels; not reversible</td></tr>
     <tr><td>Images to PDF</td><td><strong>No</strong></td><td>Images are re-encoded as JPEG</td></tr>
     <tr><td>Scan to PDF</td><td><strong>No</strong></td><td>Camera photographs are encoded as JPEG</td></tr>
@@ -123,8 +147,9 @@
 <h2>What is not here, and why</h2>
 <p>Everything on this site runs in your browser. That rules out a category of tools other sites offer, and it is worth being straight about which:</p>
 <ul>
-  <li><strong>PDF to Word, Excel or PowerPoint.</strong> Reconstructing an editable document needs layout analysis that is not practical in a browser tab. Any site offering it is uploading your file to a server.</li>
-  <li><strong>Password protection and unlocking.</strong> The library used here does not implement PDF encryption. Removing protection from documents is also not something this site wants to help with.</li>
+  <li><strong>PDF to Word, Excel or PowerPoint.</strong> Reconstructing an editable document needs layout analysis that is not practical in a browser tab. Any site offering it is uploading your file to a server. <a href="pdf-to-text.html">PDF to text</a> will give you the words, but not the layout.</li>
+  <li><strong>Adding a password.</strong> The library used here can read PDF encryption but cannot write it, so there is no way to produce a protected file in the browser.</li>
+  <li><strong>Cracking a password.</strong> Not supported, and never will be. <a href="unlock-pdf.html">Removing a password</a> is possible only when you already know it and type it in yourself.</li>
   <li><strong>Editing text.</strong> PDF was designed as a final format; genuine text editing means rebuilding the document.</li>
 </ul>
 <p>The trade is deliberate: fewer tools, but your documents never leave your device. For a passport scan or a bank statement that is the better bargain.</p>
